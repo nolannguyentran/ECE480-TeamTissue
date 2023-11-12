@@ -1,31 +1,57 @@
 import wx
+from datetime import datetime
 length = 800
 width = 480
+current_date_time = datetime.now()
+now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
+
+
+
+def onClick(event):
+    print("Button Pressed")
+
 class MyFrame(wx.Frame):
        def __init__(self, parent, ID, title):
         wx.Frame.__init__(self, parent, ID, title, size=(length, width))
-    
-        panel_1 = wx.Panel(self,-1, style=wx.BORDER_RAISED)
-        panel_2 = wx.Panel(self,-1, style=wx.BORDER_RAISED)
-        panel_3 = wx.Panel(self,-1, style=wx.BORDER_RAISED)
-        panel_4 = wx.Panel(self,-1,style=wx.BORDER_RAISED)
-        panel_5 = wx.Panel(self,-1,style=wx.BORDER_RAISED)
-    
-        panel_1.SetBackgroundColour((53,62,108))
-        panel_2.SetBackgroundColour((53,62,108))
-        
-        panel_3.SetBackgroundColour((33,37,41))
-        panel_4.SetBackgroundColour((33,37,41))
-   
-        window_sizer = wx.BoxSizer(wx.VERTICAL)
-        middle_sizer = wx.BoxSizer(wx.HORIZONTAL)       #For housing middle panel
 
+        
+
+    
+        panel_1 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
+        panel_2 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
+        panel_3 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
+        panel_4 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
+    
+        panel_1.SetBackgroundColour((53, 62, 108))        #For housing name, date, and time
+        panel_2.SetBackgroundColour((33, 37, 41))         #For housing live-view display
+        panel_3.SetBackgroundColour((33, 37, 41))         #For housing buttons
+        panel_4.SetBackgroundColour((53, 62, 108))        #For housing navigation buttons
+
+        button_a = wx.Button(panel_3, wx.ID_ANY, 'Motor A')
+        button_b = wx.Button(panel_3, wx.ID_ANY, 'Motor B')
+        button_c = wx.Button(panel_3, wx.ID_ANY, 'Motor C')
+        button_d = wx.Button(panel_3, wx.ID_ANY, 'Motor D')
+
+        text_1 = wx.StaticText(panel_1, label = now, style=wx.ALIGN_RIGHT)
+   
+        window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
+        middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
+        grid_sizer = wx.GridSizer(2, 2, 5, 5)             #For housing the four motor buttons
+
+        middle_sizer.Add(panel_2, 1, wx.EXPAND)
         middle_sizer.Add(panel_3, 1, wx.EXPAND)
-        middle_sizer.Add(panel_4, 1, wx.EXPAND)
+
+        grid_sizer.Add(button_a, 0, wx.EXPAND)
+        grid_sizer.Add(button_b, 0, wx.EXPAND)
+        grid_sizer.Add(button_c, 0, wx.EXPAND)
+        grid_sizer.Add(button_d, 0, wx.EXPAND)
+
+        panel_3.SetSizer(grid_sizer)
+        
 
         window_sizer.Add(panel_1, 1, wx.EXPAND)
         window_sizer.Add(middle_sizer, 10, wx.EXPAND)
-        window_sizer.Add(panel_2, 2, wx.EXPAND)
+        window_sizer.Add(panel_4, 2, wx.EXPAND)
 
    
         self.SetAutoLayout(True)
@@ -34,6 +60,6 @@ class MyFrame(wx.Frame):
    
    
 app = wx.App(False)
-frame = MyFrame(None, -1, "Sizer Test")
+frame = MyFrame(None, -1, "BioReactor")
 frame.Show()
 app.MainLoop()
