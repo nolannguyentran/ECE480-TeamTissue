@@ -18,10 +18,10 @@ class MyFrame(wx.Frame):
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
 
-        panel_1 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
-        panel_2 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
-        panel_3 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
-        panel_4 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
+        panel_1 = wx.Panel(self, -1,)
+        panel_2 = wx.Panel(self, -1,)
+        panel_3 = wx.Panel(self, -1,)
+        panel_4 = wx.Panel(self, -1,)
     
         panel_1.SetBackgroundColour((53, 62, 108))        #For housing name, date, and time
         panel_2.SetBackgroundColour((33, 37, 41))         #For housing live-view display
