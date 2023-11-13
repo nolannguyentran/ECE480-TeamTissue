@@ -56,7 +56,7 @@ class MyFrame(wx.Frame):
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
         motor_grid_sizer = wx.GridSizer(2, 2, 10, 10)     #For housing the four motor buttons
-        navigation_grid_sizer = wx.GridSizer(1, 3, 5, 5)  #For housig the three navigation buttons
+        navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
 
         middle_sizer.Add(panel_2, 1, wx.EXPAND)
         middle_sizer.Add(panel_3, 1, wx.EXPAND)
