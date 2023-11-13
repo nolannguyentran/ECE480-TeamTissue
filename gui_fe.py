@@ -14,7 +14,9 @@ class MyFrame(wx.Frame):
        def __init__(self, parent, ID, title):
         wx.Frame.__init__(self, parent, ID, title, size=(length, width))
 
-        bmp_1 = wx.Bitmap("./pictures/dashboard.png", wx.BITMAP_TYPE_ANY)
+        dashboard_img = wx.Bitmap("./pictures/dashboard.png")
+        jobs_img = wx.Bitmap("./pictures/jobs.png")
+        settings_img = wx.Bitmap("./pictures/settings.png")
 
         panel_1 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
         panel_2 = wx.Panel(self, -1, style=wx.BORDER_RAISED)
@@ -31,9 +33,9 @@ class MyFrame(wx.Frame):
         button_c = wx.Button(panel_3, wx.ID_ANY, 'Motor C')
         button_d = wx.Button(panel_3, wx.ID_ANY, 'Motor D')
 
-        button_home = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = bmp_1)
-        button_jobs = wx.Button(panel_4, wx.ID_ANY, 'Jobs')
-        button_settings = wx.Button(panel_4, wx.ID_ANY, 'Settings')
+        button_home = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = dashboard_img)
+        button_jobs = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = jobs_img)
+        button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
 
         button_a.SetBackgroundColour((89, 99, 182))
         button_b.SetBackgroundColour((89, 99, 182))
