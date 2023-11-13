@@ -42,6 +42,7 @@ class MyFrame(wx.Frame):
         button_settings.SetBackgroundColour((0, 0, 0))
 
         text_1 = wx.StaticText(panel_1, label = now, style=wx.ALIGN_RIGHT)
+        text_1.SetForegroundColour((255, 255, 255))
    
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
@@ -63,7 +64,7 @@ class MyFrame(wx.Frame):
 
         panel_3.SetSizer(motor_grid_sizer)
         panel_4.SetSizer(navigation_grid_sizer)
-        
+
         window_sizer.Add(panel_1, 1, wx.EXPAND)
         window_sizer.Add(middle_sizer, 10, wx.EXPAND)
         window_sizer.Add(panel_4, 2, wx.EXPAND)
