@@ -5,8 +5,6 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
-
-
 def onClick(event):
     print("Button Pressed")
 
