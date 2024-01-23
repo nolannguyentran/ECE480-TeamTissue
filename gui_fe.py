@@ -9,8 +9,10 @@ def on_click(event):
     identity = event.GetEventObject().GetLabel()
     print(identity + " is selected!")
 
+
+
 class MyFrame(wx.Frame):
-       def __init__(self, parent, ID, title):
+    def __init__(self, parent, ID, title):
         wx.Frame.__init__(self, parent, ID, title, size=(length, width))
 
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
@@ -45,7 +47,7 @@ class MyFrame(wx.Frame):
         button_jobs.SetBackgroundColour((0, 0, 0))
         button_settings.SetBackgroundColour((0, 0, 0))
 
-        button_a.Bind(wx.EVT_BUTTON, on_click)
+        button_a.Bind(wx.EVT_BUTTON, self.on_test)
         button_b.Bind(wx.EVT_BUTTON, on_click)
         button_c.Bind(wx.EVT_BUTTON, on_click)
         button_d.Bind(wx.EVT_BUTTON, on_click)
@@ -71,6 +73,71 @@ class MyFrame(wx.Frame):
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
         
         panel_3.SetSizer(motor_grid_sizer)
+        panel_4.SetSizer(navigation_grid_sizer)
+
+        window_sizer.Add(panel_1, 1, wx.EXPAND)
+        window_sizer.Add(middle_sizer, 10, wx.EXPAND)
+        window_sizer.Add(panel_4, 2, wx.EXPAND)
+   
+        self.SetAutoLayout(True)
+        self.SetSizer(window_sizer)
+        self.Layout()
+
+    def on_test(self, event):
+        frame = MySecondFrame()
+        #self.Hide()
+        frame.Show()
+        
+
+class MySecondFrame(wx.Frame):
+       def __init__(self):
+        wx.Frame.__init__(self, None, size=(length, width))
+
+        dashboard_img = wx.Bitmap("./pictures/dashboard.png")
+        jobs_img = wx.Bitmap("./pictures/jobs.png")
+        settings_img = wx.Bitmap("./pictures/settings.png")
+
+        panel_1 = wx.Panel(self, -1,)       #For housing name, date, and time
+        panel_2 = wx.Panel(self, -1,)       #For housing live-view display
+        panel_3 = wx.Panel(self, -1,)       #For housing buttons
+        panel_4 = wx.Panel(self, -1,)       #For housing navigation buttons
+    
+        panel_1.SetBackgroundColour((53, 62, 108))        
+        panel_2.SetBackgroundColour((33, 37, 41))         
+        panel_3.SetBackgroundColour((33, 37, 41))         
+        panel_4.SetBackgroundColour((53, 62, 108))       
+
+       
+
+
+        button_home = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = dashboard_img)
+        button_jobs = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = jobs_img)
+        button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
+
+        
+        button_home.SetBackgroundColour((0, 0, 0))
+        button_jobs.SetBackgroundColour((0, 0, 0))
+        button_settings.SetBackgroundColour((0, 0, 0))
+
+       
+
+        text_1 = wx.StaticText(panel_1, label = now, style=wx.ALIGN_RIGHT)
+        text_1.SetForegroundColour((255, 255, 255))
+   
+        window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
+        middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
+       
+        navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
+
+        middle_sizer.Add(panel_2, 1, wx.EXPAND)
+        middle_sizer.Add(panel_3, 1, wx.EXPAND)
+
+        
+        navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
+        navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
+        navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
+        
+        
         panel_4.SetSizer(navigation_grid_sizer)
 
         window_sizer.Add(panel_1, 1, wx.EXPAND)
