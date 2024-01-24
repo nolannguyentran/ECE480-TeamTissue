@@ -113,17 +113,22 @@ class MySecondFrame(wx.Frame):
         panel_5.SetBackgroundColour((53, 62, 108))
 
         font = wx.Font(20, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
-        font_2 = wx.Font(20, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
-        t_1 = wx.StaticText(panel_2, label = "Capsule: "+self.name, style = wx.ALIGN_CENTER) 
+        font_2 = wx.Font(10, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
+        
+        t_1 = wx.StaticText(panel_2, label = "Capsule: "+self.name) 
         t_1.SetFont(font)
-        t_2 = wx.StaticText(panel_4, label = "Please select which type of test to conduct with Capsule: "+self.name, style = wx.ALIGN_CENTER)
+        t_2 = wx.StaticText(panel_4, label = "Please select which type of test to conduct with Capsule: "+self.name)
         t_2.SetFont(font_2)
       
-        text_sizer_2 = wx.BoxSizer(wx.VERTICAL)
-        text_sizer_2.Add(t_1,0,wx.ALIGN_CENTER)
+        text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
+        text_sizer_2.Add((0,0), 1, wx.EXPAND)
+        text_sizer_2.Add(t_1, 0, wx.ALIGN_CENTER)
+        text_sizer_2.Add((0,0), 1, wx.EXPAND)
 
-        text_sizer_3 = wx.BoxSizer(wx.VERTICAL)
+        text_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)
+        text_sizer_3.Add((0,0), 1, wx.EXPAND)
         text_sizer_3.Add(t_2,0,wx.ALIGN_CENTER)
+        text_sizer_3.Add((0,0), 1, wx.EXPAND)
 
         button_compression = wx.Button(panel_3, wx.ID_ANY, 'Compression Test')
         button_tensile = wx.Button(panel_3, wx.ID_ANY, 'Tensile Test')
