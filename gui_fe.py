@@ -101,8 +101,8 @@ class MySecondFrame(wx.Frame):
         settings_img = wx.Bitmap("./pictures/settings.png")
 
         panel_1 = wx.Panel(self, -1,)       #For housing name, date, and time
-        panel_2 = wx.Panel(self, -1,)       #For housing Motor name
-        panel_3 = wx.Panel(self, -1,)       #For housing buttons
+        panel_2 = wx.Panel(self, -1,)       #For capsule name
+        panel_3 = wx.Panel(self, -1,)       #For housing two test selection buttons
         panel_4 = wx.Panel(self, -1,)       #For housing instructions
         panel_5 = wx.Panel(self, -1,)       #For housing navigation buttons
     
@@ -120,12 +120,12 @@ class MySecondFrame(wx.Frame):
         t_2 = wx.StaticText(panel_4, label = "Please select which type of test to conduct with Capsule: "+self.name)
         t_2.SetFont(font_2)
       
-        text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)
+        text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning Capsule Name in center
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
         text_sizer_2.Add(t_1, 0, wx.ALIGN_CENTER)
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
 
-        text_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)
+        text_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning instructions in center
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
         text_sizer_3.Add(t_2,0,wx.ALIGN_CENTER)
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
