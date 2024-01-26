@@ -19,6 +19,12 @@ def on_motor_click(event):
     frame = MySecondFrame(capsule_name)
     frame.Show()
 
+def on_compression_test_click(event):
+    print("compression test selected")
+
+def on_tensile_test_click(event):
+    print("tensile test selected")
+
 class MyFrame(wx.Frame):
     def __init__(self, parent, ID, title):
         wx.Frame.__init__(self, parent, ID, title, size=(length, width))
@@ -112,45 +118,48 @@ class MySecondFrame(wx.Frame):
         panel_4.SetBackgroundColour((33, 37, 41))               
         panel_5.SetBackgroundColour((53, 62, 108))
 
-        font = wx.Font(20, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
-        font_2 = wx.Font(10, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
+        font_1 = wx.Font(20, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
+        font_2 = wx.Font(14, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
         
-        t_1 = wx.StaticText(panel_2, label = "Capsule: "+self.name) 
-        t_1.SetFont(font)
-        t_2 = wx.StaticText(panel_4, label = "Please select which type of test to conduct with Capsule: "+self.name)
-        t_2.SetFont(font_2)
+        t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
+        t_1 = wx.StaticText(panel_1, label = now)
+        t_2 = wx.StaticText(panel_2, label = "Capsule: "+self.name) 
+        t_2.SetFont(font_1)
+        t_3 = wx.StaticText(panel_4, label = "Please select which type of test to conduct with Capsule: "+self.name)
+        t_3.SetFont(font_2)
       
+        text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
+        text_sizer_1.Add(t_0, 1, wx.EXPAND)
+        text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
+        text_sizer_1.Add(t_1, 0, wx.EXPAND)
+
         text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning Capsule Name in center
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
-        text_sizer_2.Add(t_1, 0, wx.ALIGN_CENTER)
+        text_sizer_2.Add(t_2, 0, wx.ALIGN_CENTER)
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
 
         text_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning instructions in center
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
-        text_sizer_3.Add(t_2,0,wx.ALIGN_CENTER)
+        text_sizer_3.Add(t_3,0,wx.ALIGN_CENTER)
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
 
         button_compression = wx.Button(panel_3, wx.ID_ANY, 'Compression Test')
         button_tensile = wx.Button(panel_3, wx.ID_ANY, 'Tensile Test')
 
-        button_compression.SetSize((100,50))
-        button_tensile.SetSize((100,50))
-
         button_compression.SetBackgroundColour((89, 99, 182))
-        button_tensile.SetBackgroundColour((89, 99, 182))   
+        button_tensile.SetBackgroundColour((89, 99, 182))
+
+        button_compression.Bind(wx.EVT_BUTTON, on_compression_test_click)
+        button_tensile.Bind(wx.EVT_BUTTON, on_tensile_test_click)   
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
-
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
         button_settings.SetBackgroundColour((0, 0, 0))
 
-        text_1 = wx.StaticText(panel_1, label = now, style=wx.ALIGN_RIGHT)
-        text_1.SetForegroundColour((255, 255, 255))
-   
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.GridSizer(1, 2, 20, 20)         #For housing middle panel
        
@@ -163,11 +172,11 @@ class MySecondFrame(wx.Frame):
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
         
+        panel_1.SetSizer(text_sizer_1)
         panel_2.SetSizer(text_sizer_2)
         panel_3.SetSizer(middle_sizer)
         panel_4.SetSizer(text_sizer_3)
         panel_5.SetSizer(navigation_grid_sizer)
-
 
         window_sizer.Add(panel_1, 1, wx.EXPAND)
         window_sizer.Add(panel_2, 2, wx.EXPAND)
