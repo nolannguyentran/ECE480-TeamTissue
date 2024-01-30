@@ -221,7 +221,11 @@ class MyThirdFrame(wx.Frame):
         t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.name) 
         t_2.SetFont(font_1)
         
-      
+        strain_text = wx.StaticText(panel_3, label = "Strain:")
+        strain_input = wx.TextCtrl(panel_3)
+        rate_text = wx.StaticText(panel_3, label = "Rate:")
+        rate_input = wx.TextCtrl(panel_3)
+
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
@@ -232,10 +236,9 @@ class MyThirdFrame(wx.Frame):
         text_sizer_2.Add(t_2, 0, wx.ALIGN_CENTER)
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
 
-
         button_start = wx.Button(panel_4, wx.ID_ANY, 'START')
         button_start.SetBackgroundColour((190, 37, 66))
-        
+
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
@@ -246,19 +249,27 @@ class MyThirdFrame(wx.Frame):
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
-       
-        navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
+
+        user_field_sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        user_field_sizer.Add(strain_text, 1, wx.EXPAND)
+        user_field_sizer.Add(strain_input, 0, wx.EXPAND)
+        user_field_sizer.Add((0,0), 1, wx.EXPAND)
+        user_field_sizer.Add(rate_text, 1, wx.EXPAND)
+        user_field_sizer.Add(rate_input, 0, wx.EXPAND)
+        user_field_sizer.Add((0,0), 1, wx.EXPAND)
 
         middle_sizer.Add(panel_3, 1, wx.EXPAND)
         middle_sizer.Add(panel_4, 1, wx.EXPAND)
-        
+       
+        navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
         
         panel_1.SetSizer(text_sizer_1)
         panel_2.SetSizer(text_sizer_2)
-        #panel_3.SetSizer(middle_sizer)
+        panel_3.SetSizer(user_field_sizer)
         #panel_4.SetSizer(text_sizer_3)
         panel_5.SetSizer(navigation_grid_sizer)
 
