@@ -38,41 +38,51 @@ import time
 STEP_PIN = 27
 DIR_PIN = 29
 
+# Define Directions
+CW = 1          # Clockwise 
+CCW = 0         # CounterClockwise
+
 # Set GPIO mode and setup pins
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(STEP_PIN, GPIO.OUT)
 GPIO.setup(DIR_PIN, GPIO.OUT)
 
-# Function to step the motor
-def step_motor(steps, direction):
-    # Set direction
-    GPIO.output(DIR_PIN, direction)
+GPIO.output(DIR, CW)
 
-    # Step the motor for the specified number of steps
-    for _ in range(steps):
-        GPIO.output(STEP_PIN, GPIO.HIGH)
-        time.sleep(0.0001)  # Adjust this delay as needed for your motor
-        GPIO.output(STEP_PIN, GPIO.LOW)
-        time.sleep(0.0001)  # Adjust this delay as needed for your motor
+try:
+	# Run forever.
+	while True:
 
-# Main program
-if __name__ == "__main__":
-    try:
-        # Rotate motor 200 steps clockwise
-        step_motor(200, GPIO.HIGH)
-        time.sleep(1)  # Wait for 1 second
+		"""Change Direction: Changing direction requires time to switch. The
+		time is dictated by the stepper motor and controller. """
+		sleep(1.0)
+		# Esablish the direction you want to go
+		GPIO.output(DIR,CW)
 
-        # Rotate motor 200 steps counterclockwise
-        step_motor(200, GPIO.LOW)
-        time.sleep(1)  # Wait for 1 second
+		# Run for 200 steps. This will change based on how you set you controller
+		for x in range(200):
 
-        # Stop motor
-        GPIO.output(STEP_PIN, GPIO.LOW)
-        GPIO.output(DIR_PIN, GPIO.LOW)
+			# Set one coil winding to high
+			GPIO.output(STEP,GPIO.HIGH)
+			# Allow it to get there.
+			sleep(.005) # Dictates how fast stepper motor will run
+			# Set coil winding to low
+			GPIO.output(STEP,GPIO.LOW)
+			sleep(.005) # Dictates how fast stepper motor will run
 
-    except KeyboardInterrupt:
-        # Clean up GPIO on Ctrl+C
-        GPIO.cleanup()
+		"""Change Direction: Changing direction requires time to switch. The
+		time is dictated by the stepper motor and controller. """
+		sleep(1.0)
+		GPIO.output(DIR,CCW)
+		for x in range(200):
+			GPIO.output(STEP,GPIO.HIGH)
+			sleep(.005)
+			GPIO.output(STEP,GPIO.LOW)
+			sleep(.005)
 
+# Once finished clean everything up
+except KeyboardInterrupt:
+	print("cleanup")
+	GPIO.cleanup()
 
 #Code source: https://www.youtube.com/watch?v=LUbhPKBL_IU
