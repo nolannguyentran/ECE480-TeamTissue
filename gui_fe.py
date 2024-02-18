@@ -1,4 +1,6 @@
 import wx
+import frame_6
+
 from datetime import datetime
 length = 800
 width = 480
@@ -8,33 +10,40 @@ now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
 def on_motor_click(event):
     identity = event.GetEventObject().GetLabel()    #Returns which capsule selected
-    global frame_2
-    frame_2 = MySecondFrame(identity)
-    frame_2.Show()
+    global test_selection_frame
+    test_selection_frame = TestSelectionFrame(identity)
+    test_selection_frame.Show()
 
 def on_compression_test_click(event, motor_name):
-    #print("compression test selected")
     identity = event.GetEventObject().GetLabel()    #Returns which test selected
-    frame_2.Destroy()
-    global frame_3
-    frame_3 = MyThirdFrame(motor_name, identity)
-    frame_3.Show()
+    test_selection_frame.Destroy()
+    global strain_rate_frame
+    strain_rate_frame = TestInput(motor_name, identity)
+    strain_rate_frame.Show()
 
 def on_tensile_test_click(event, motor_name):
-    #print("tensile test selected")
     identity = event.GetEventObject().GetLabel()    #Returns which test selected
-    frame_2.Destroy()
-    global frame_3
-    frame_3 = MyThirdFrame(motor_name, identity)
-    frame_3.Show()
+    test_selection_frame.Destroy()
+    global strain_rate_frame
+    strain_rate_frame = TestInput(motor_name, identity)
+    strain_rate_frame.Show()
 
 def on_start_test_click(event, motor_name, test_name):
     identity = event.GetEventObject().GetLabel()
-    frame_3.Destroy()
-    frame_4 = MyFourthFrame(motor_name, test_name)
-    frame_4.Show()
+    strain_rate_frame.Destroy()
+    global live_test_frame
+    live_test_frame = TestOutput(motor_name, test_name)
+    live_test_frame.Show()
 
-class MyFrame(wx.Frame):
+def on_home_click(event, name):
+    identity = event.GetEventObject().GetLabel()
+    global sixth_frame
+    sixth_frame = frame_6.SixthFrame(identity)
+    sixth_frame.Show()
+
+
+
+class HomeFrame(wx.Frame):
     def __init__(self, parent, ID, title):
         wx.Frame.__init__(self, parent, ID, title, size=(length, width))
 
@@ -57,10 +66,11 @@ class MyFrame(wx.Frame):
         button_c = wx.Button(panel_3, wx.ID_ANY, 'Capsule: C')
         button_d = wx.Button(panel_3, wx.ID_ANY, 'Capsule: D')
 
-
         button_home = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
+
+        button_home.Disable()
 
         button_a.SetBackgroundColour((89, 99, 182))
         button_b.SetBackgroundColour((89, 99, 182))
@@ -106,7 +116,7 @@ class MyFrame(wx.Frame):
         self.SetSizer(window_sizer)
         self.Layout()
 
-class MySecondFrame(wx.Frame):
+class TestSelectionFrame(wx.Frame):
        def __init__(self, name):
         wx.Frame.__init__(self, None, size=(length, width))
 
@@ -159,11 +169,14 @@ class MySecondFrame(wx.Frame):
         button_tensile.SetBackgroundColour((89, 99, 182))
 
         button_compression.Bind(wx.EVT_BUTTON, lambda event: on_compression_test_click(event, self.name))
-        button_tensile.Bind(wx.EVT_BUTTON, lambda event: on_tensile_test_click(event, self.name))   
+        button_tensile.Bind(wx.EVT_BUTTON, lambda event: on_tensile_test_click(event, self.name))
+
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
+
+        button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.name))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
@@ -197,12 +210,12 @@ class MySecondFrame(wx.Frame):
         self.SetSizer(window_sizer)
         self.Layout()
 
-class MyThirdFrame(wx.Frame):
-    def __init__(self, motor_name, name):
+class TestInput(wx.Frame):
+    def __init__(self, motor_name, test_type):
         wx.Frame.__init__(self, None, size=(length, width))
 
-        self.motor_name = motor_name
-        self.name = name                    #Test type name
+        self.motor_name = motor_name        #Capsule name
+        self.test_type = test_type          #Test type name
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
@@ -224,7 +237,7 @@ class MyThirdFrame(wx.Frame):
         
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
         t_1 = wx.StaticText(panel_1, label = now)
-        t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.name) 
+        t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type) 
         t_2.SetFont(font_1)
         
         strain_text = wx.StaticText(panel_3, label = "Strain:")
@@ -245,7 +258,7 @@ class MyThirdFrame(wx.Frame):
         button_start = wx.Button(panel_4, wx.ID_ANY, 'START')
         button_start.SetBackgroundColour((190, 37, 66))
 
-        button_start.Bind(wx.EVT_BUTTON, lambda event: on_start_test_click(event, self.motor_name, self.name))
+        button_start.Bind(wx.EVT_BUTTON, lambda event: on_start_test_click(event, self.motor_name, self.test_type))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
@@ -290,12 +303,12 @@ class MyThirdFrame(wx.Frame):
         self.SetSizer(window_sizer)
         self.Layout()
 
-class MyFourthFrame(wx.Frame):
-    def __init__(self, motor_name, name):
+class TestOutput(wx.Frame):
+    def __init__(self, motor_name, test_type):
         wx.Frame.__init__(self, None, size=(length, width))
 
-        self.motor_name = motor_name
-        self.name = name
+        self.motor_name = motor_name        #Test type
+        self.test_type = test_type                    #Capsule name
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
@@ -315,7 +328,7 @@ class MyFourthFrame(wx.Frame):
         
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
         t_1 = wx.StaticText(panel_1, label = now)
-        t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.name) 
+        t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type) 
         t_2.SetFont(font_1)
         
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
@@ -341,8 +354,6 @@ class MyFourthFrame(wx.Frame):
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
-
-     
 
         middle_sizer.Add(panel_2, 1, wx.EXPAND)
         middle_sizer.Add(panel_3, 1, wx.EXPAND)
@@ -370,6 +381,6 @@ class MyFourthFrame(wx.Frame):
    
 app = wx.App(False)
 global home_frame
-home_frame = MyFrame(None, -1, "BioReactor")
+home_frame = HomeFrame(None, -1, "BioReactor")
 home_frame.Show()
 app.MainLoop()
