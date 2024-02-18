@@ -1,5 +1,5 @@
 import wx
-import frame_6
+
 
 from datetime import datetime
 length = 800
