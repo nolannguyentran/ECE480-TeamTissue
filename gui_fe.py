@@ -1,6 +1,5 @@
 import wx
 
-
 from datetime import datetime
 length = 800
 width = 480
@@ -85,8 +84,15 @@ class HomeFrame(wx.Frame):
         button_c.Bind(wx.EVT_BUTTON, on_motor_click)
         button_d.Bind(wx.EVT_BUTTON, on_motor_click)
 
-        text_1 = wx.StaticText(panel_1, label = now, style=wx.ALIGN_RIGHT)
-        text_1.SetForegroundColour((255, 255, 255))
+        t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
+        t_0.SetForegroundColour((255, 255, 255))
+        t_1 = wx.StaticText(panel_1, label = now)
+        t_1.SetForegroundColour((255, 255, 255))
+
+        text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
+        text_sizer_1.Add(t_0, 1, wx.EXPAND)
+        text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
+        text_sizer_1.Add(t_1, 0, wx.EXPAND)
    
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
@@ -105,6 +111,7 @@ class HomeFrame(wx.Frame):
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
         
+        panel_1.SetSizer(text_sizer_1)
         panel_3.SetSizer(motor_grid_sizer)
         panel_4.SetSizer(navigation_grid_sizer)
 
@@ -141,11 +148,15 @@ class TestSelectionFrame(wx.Frame):
         font_2 = wx.Font(14, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
         
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
+        t_0.SetForegroundColour((255, 255, 255))
         t_1 = wx.StaticText(panel_1, label = now)
+        t_1.SetForegroundColour((255, 255, 255))
         t_2 = wx.StaticText(panel_2, label = self.name) 
         t_2.SetFont(font_1)
+        t_2.SetForegroundColour((255, 255, 255))
         t_3 = wx.StaticText(panel_4, label = "Please select which type of test to conduct with "+self.name)
         t_3.SetFont(font_2)
+        t_3.SetForegroundColour((255, 255, 255))
       
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
@@ -235,10 +246,13 @@ class TestInput(wx.Frame):
         font_1 = wx.Font(20, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         font_2 = wx.Font(14, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
         
-        t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
+        t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark]
+        t_0.SetForegroundColour((255, 255, 255))
         t_1 = wx.StaticText(panel_1, label = now)
+        t_1.SetForegroundColour((255, 255, 255))
         t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type) 
         t_2.SetFont(font_1)
+        t_2.SetForegroundColour((255, 255, 255))
         
         strain_text = wx.StaticText(panel_3, label = "Strain:")
         strain_input = wx.TextCtrl(panel_3)
@@ -327,9 +341,12 @@ class TestOutput(wx.Frame):
         font_2 = wx.Font(14, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
         
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
+        t_0.SetForegroundColour((255, 255, 255))
         t_1 = wx.StaticText(panel_1, label = now)
+        t_1.SetForegroundColour((255, 255, 255))
         t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type) 
         t_2.SetFont(font_1)
+        t_2.SetForegroundColour((255, 255, 255))
         
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
