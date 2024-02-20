@@ -46,11 +46,16 @@ CCW = 0         # CounterClockwise
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(STEP_PIN, GPIO.OUT)
 GPIO.setup(DIR_PIN, GPIO.OUT)
+try:
+	# Run forever.
+	while True:
+		GPIO.output(DIR, CW)
+		sleep(.5)
+		GPIO.output(DIR, CW)	
 
-while(1) {
-	GPIO.output(DIR, CW)
-	sleep(.5)
-	GPIO.output(DIR, CCW)	
-}
+# Once finished clean everything up
+except KeyboardInterrupt:
+	print("cleanup")
+	GPIO.cleanup()
 
 #Code source: https://www.youtube.com/watch?v=LUbhPKBL_IU
