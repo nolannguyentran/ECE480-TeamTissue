@@ -35,8 +35,8 @@ import RPi.GPIO as GPIO
 import time
 
 # Define GPIO pins
-STEP_PIN = 27
-DIR_PIN = 29
+STEP_PIN = 29
+DIR_PIN = 31
 
 # Define Directions
 CW = 1          # Clockwise 
@@ -49,9 +49,14 @@ GPIO.setup(DIR_PIN, GPIO.OUT)
 try:
 	# Run forever.
 	while True:
-		GPIO.output(DIR, CW)
-		sleep(.5)
-		GPIO.output(DIR, CW)	
+		GPIO.output(STEP_PIN, HIGH)
+		GPIO.output(DIR_PIN, CW)
+		sleep(5)
+		GPIO.output(STEP_PIN, LOW)
+		sleep(1)
+		GPIO.output(STEP_PIN, HIGH)
+		GPIO.output(DIR_PIN, CCW)	
+		sleep(5)
 
 # Once finished clean everything up
 except KeyboardInterrupt:
