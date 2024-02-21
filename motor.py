@@ -32,35 +32,37 @@
 #     sleep(delay)
 
 import RPi.GPIO as GPIO
-import time
+from time import sleep
 
 # Define GPIO pins
-STEP_PIN = 29
-DIR_PIN = 31
+# Motor 1 GPIO setup
+STEP_PIN_S1 = 29
+DIR_PIN_S1 = 31
 
 # Define Directions
 CW = 1          # Clockwise 
 CCW = 0         # CounterClockwise
 
 # Set GPIO mode and setup pins
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(STEP_PIN, GPIO.OUT)
-GPIO.setup(DIR_PIN, GPIO.OUT)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(STEP_PIN_S1, GPIO.OUT)
+GPIO.setup(DIR_PIN_S1, GPIO.OUT)
+GPIO.output(DIR_PIN_S1, CW)
+
 try:
 	# Run forever.
 	while True:
-		GPIO.output(STEP_PIN, HIGH)
-		GPIO.output(DIR_PIN, CW)
+		GPIO.output(DIR_PIN_S1, CW)
+		GPIO.output(STEP_PIN_S1, GPIO.HIGH)
 		sleep(5)
-		GPIO.output(STEP_PIN, LOW)
+		GPIO.output(STEP_PIN_S1, GPIO.LOW)
 		sleep(1)
-		GPIO.output(STEP_PIN, HIGH)
-		GPIO.output(DIR_PIN, CCW)	
+		GPIO.output(DIR_PIN_S1, CCW)
+		GPIO.output(STEP_PIN_S1, GPIO.HIGH)
 		sleep(5)
 
 # Once finished clean everything up
 except KeyboardInterrupt:
-	print("cleanup")
 	GPIO.cleanup()
 
 #Code source: https://www.youtube.com/watch?v=LUbhPKBL_IU
