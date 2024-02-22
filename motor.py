@@ -1,68 +1,47 @@
-# from time import sleep
-# import RPi.GPIO as GPIO
-
-
-# #Config for stepper motor 1
-# DIR_PIN_S1 = 29        # Direction GPIO Pin motor 1
-# STEP_PIN_S1 = 27       # Step GPIO Pin motor 1 
-# CW = 1          # Clockwise 
-# CCW = 0         # CounterClockwise
-# SPR = 202       # Steps per Revolution (365 / 1.8)
-
-# GPIO.setmode(GPIO.BCM)
-# GPIO.setup(DIR_PIN_S1, GPIO.OUT)
-# GPIO.setup(STEP_PIN_S1, GPIO.OUT)
-# GPIO.output(DIR_PIN_S1, CW)    #set initial rotation to cw
-
-# step_count = SPR    #rotation
-# delay = 0.005       # 1 sec / 202
-
-# for i in range(step_count):
-#     GPIO.output(STEP_PIN_S1, GPIO.HIGH)
-#     sleep(delay)
-#     GPIO.output(STEP_PIN_S1, GPIO.LOW)
-#     sleep(delay)
-
-# sleep(0.5)
-# GPIO.output(DIR_PIN_S1, CCW)   #set rotation to ccw
-# for i in range(step_count):
-#     GPIO.output(STEP_PIN_S1, GPIO.HIGH)
-#     sleep(delay)
-#     GPIO.output(STEP_PIN_S1, GPIO.LOW)
-#     sleep(delay)
-
 import RPi.GPIO as GPIO
 from time import sleep
 
+# number of steps per revolution = 360/motor's step angle, which 
+# for the haydon motor, the step angle is 1.8 from the data sheet
+# therefore the number of steps required to complete one revolution is:
+# 360/1.8 = 200
+
+
 # Define GPIO pins
 # Motor 1 GPIO setup
-STEP_PIN_S1 = 29
-DIR_PIN_S1 = 31
+STEP_PIN_S1 = 33
+DIR_PIN_S1 = 35
 
 # Define Directions
 CW = 1          # Clockwise 
 CCW = 0         # CounterClockwise
 
+GPIO.setwarnings(False)
+
 # Set GPIO mode and setup pins
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 GPIO.setup(STEP_PIN_S1, GPIO.OUT)
 GPIO.setup(DIR_PIN_S1, GPIO.OUT)
 GPIO.output(DIR_PIN_S1, CW)
 
-try:
-	# Run forever.
-	while True:
-		GPIO.output(DIR_PIN_S1, CW)
-		GPIO.output(STEP_PIN_S1, GPIO.HIGH)
-		sleep(5)
-		GPIO.output(STEP_PIN_S1, GPIO.LOW)
-		sleep(1)
-		GPIO.output(DIR_PIN_S1, CCW)
-		GPIO.output(STEP_PIN_S1, GPIO.HIGH)
-		sleep(5)
+for x in range(500):		#turn in the CW direction
+	GPIO.output(STEP_PIN_S1, GPIO.HIGH)
+	sleep(0.005)
+	GPIO.output(STEP_PIN_S1, GPIO.LOW)
+	sleep(0.005)
+
+sleep(1.0)
+
+GPIO.output(DIR_PIN_S1, CCW) #turn in the CCW direction
+
+for x in range(10000):
+	GPIO.output(STEP_PIN_S1, GPIO.HIGH)
+	sleep(0.005)
+	GPIO.output(STEP_PIN_S1, GPIO.LOW)
+	sleep(0.005)
 
 # Once finished clean everything up
-except KeyboardInterrupt:
-	GPIO.cleanup()
+#except KeyboardInterrupt:
+#	GPIO.cleanup()
 
-#Code source: https://www.youtube.com/watch?v=LUbhPKBL_IU
+#Code source: https://danielwilczak101.medium.com/control-a-stepper-motor-using-python-and-a-raspberry-pi-11f67d5a8d6d
