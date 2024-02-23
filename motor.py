@@ -1,16 +1,30 @@
 import RPi.GPIO as GPIO
 from time import sleep
+#Import variables from loadcell.py for PID control
+#from loadcell import LOADCELLOUTPUT1, LOADCELLOUTPUT2, LOADCELLOUTPUT3, LOADCELLOUTPUT4
 
 # number of steps per revolution = 360/motor's step angle, which 
 # for the haydon motor, the step angle is 1.8 from the data sheet
 # therefore the number of steps required to complete one revolution is:
 # 360/1.8 = 200
 
-
 # Define GPIO pins
 # Motor 1 GPIO setup
 STEP_PIN_S1 = 33
 DIR_PIN_S1 = 35
+# Motor 2 GPIO setup -- ##CHANGE GPIO DEPENDING ON CURRENT WIRING##
+# STEP_PIN_S2 = 
+# DIR_PIN_S2 = 
+# # Motor 3 GPIO setup
+# STEP_PIN_S3 = 
+# DIR_PIN_S3 = 
+# # Motor 4 GPIO setup
+# STEP_PIN_S4 = 
+# DIR_PIN_S4 = 
+
+#List of all Motor channels to be set - add as implemented to the list
+STEP_CHANNELS = [STEP_PIN_S1]	#, STEP_PIN_S2, STEP_PIN_S3, STEP_PIN_S4]
+DIR_CHANNELS = [DIR_PIN_S1]		#, STEP_PIN_S2, STEP_PIN_S3, STEP_PIN_S4]
 
 # Define Directions
 CW = 1          # Clockwise 
@@ -18,12 +32,13 @@ CCW = 0         # CounterClockwise
 
 GPIO.setwarnings(False)
 
-# Set GPIO mode and setup pins
+# Set GPIO mode and setup pins for motors 1-4
 GPIO.setmode(GPIO.BOARD)
-GPIO.setup(STEP_PIN_S1, GPIO.OUT)
-GPIO.setup(DIR_PIN_S1, GPIO.OUT)
-GPIO.output(DIR_PIN_S1, CW)
+GPIO.setup(STEP_CHANNELS, GPIO.OUT, initial = GPIO.LOW)
+GPIO.setup(DIR_CHANNELS, GPIO.OUT, initial = GPIO.LOW)
 
+GPIO.output(DIR_PIN_S1, CW) #turn in the CCW direction
+##Current Test code for motor operation
 for x in range(500):		#turn in the CW direction
 	GPIO.output(STEP_PIN_S1, GPIO.HIGH)
 	sleep(0.005)
