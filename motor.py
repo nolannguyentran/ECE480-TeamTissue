@@ -8,10 +8,11 @@ from time import sleep
 # therefore the number of steps required to complete one revolution is:
 # 360/1.8 = 200
 
+
 # Define GPIO pins
 # Motor 1 GPIO setup
-STEP_PIN_S1 = 33
-DIR_PIN_S1 = 35
+#STEP_PIN_S1 = 33
+#DIR_PIN_S1 = 35
 # Motor 2 GPIO setup -- ##CHANGE GPIO DEPENDING ON CURRENT WIRING##
 # STEP_PIN_S2 = 
 # DIR_PIN_S2 = 
@@ -23,37 +24,73 @@ DIR_PIN_S1 = 35
 # DIR_PIN_S4 = 
 
 #List of all Motor channels to be set - add as implemented to the list
-STEP_CHANNELS = [STEP_PIN_S1]	#, STEP_PIN_S2, STEP_PIN_S3, STEP_PIN_S4]
-DIR_CHANNELS = [DIR_PIN_S1]		#, STEP_PIN_S2, STEP_PIN_S3, STEP_PIN_S4]
+#STEP_CHANNELS = [STEP_PIN_S1]	#, STEP_PIN_S2, STEP_PIN_S3, STEP_PIN_S4]
+#DIR_CHANNELS = [DIR_PIN_S1]		#, STEP_PIN_S2, STEP_PIN_S3, STEP_PIN_S4]
 
 # Define Directions
-CW = 1          # Clockwise 
-CCW = 0         # CounterClockwise
 
-GPIO.setwarnings(False)
+motor_dict = {					#dictionary containing respective step/dir pin for each motor configuration
+	'A':{
+		'step_pin':33,
+		'dir_pin': 35
+	},
+	'B':{
+		'step_pin':1,
+		'dir_pin': 2
+	},
+	'C':{
+		'step_pin':3,
+		'dir_pin': 4
+	},
+	'D':{
+		'step_pin':5,
+		'dir_pin': 6
+	},
+}
 
-# Set GPIO mode and setup pins for motors 1-4
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(STEP_CHANNELS, GPIO.OUT, initial = GPIO.LOW)
-GPIO.setup(DIR_CHANNELS, GPIO.OUT, initial = GPIO.LOW)
+def initialize_motors():
+	CW = 1          # Clockwise 
+	CCW = 0         # CounterClockwise
 
-GPIO.output(DIR_PIN_S1, CW) #turn in the CCW direction
-##Current Test code for motor operation
-for x in range(500):		#turn in the CW direction
-	GPIO.output(STEP_PIN_S1, GPIO.HIGH)
-	sleep(0.005)
-	GPIO.output(STEP_PIN_S1, GPIO.LOW)
-	sleep(0.005)
+	starting_rotation = CW
+	returning_rotation = CCW
 
-sleep(1.0)
+	GPIO.setwarnings(False)
 
-GPIO.output(DIR_PIN_S1, CCW) #turn in the CCW direction
+	# Set GPIO mode and setup pins for motors 1-4
+	GPIO.setmode(GPIO.BOARD)
+	for motor in motor_dict:
+    	GPIO.setup(motor_dict[motor]['step_pin'], GPIO.OUT, initial = GPIO.LOW)
+		#GPIO.setup(STEP_CHANNELS, GPIO.OUT, initial = GPIO.LOW)
+	for motor in motor_dict:
+    	GPIO.setup(motor_dict[motor]['dir_pin'], GPIO.OUT, initial = GPIO.LOW)
+		#GPIO.setup(DIR_CHANNELS, GPIO.OUT, initial = GPIO.LOW)
 
-for x in range(10000):
-	GPIO.output(STEP_PIN_S1, GPIO.HIGH)
-	sleep(0.005)
-	GPIO.output(STEP_PIN_S1, GPIO.LOW)
-	sleep(0.005)
+def run_motor(motor_name, test_name):
+	if test_name=='Compression Test':
+		starting_rotation = CW
+		returning_rotation = CCW
+		
+	else:
+		starting_rotation = CCW
+		returning_rotation = CW
+		
+	GPIO.output(motor_dict[motor_name]['dir_pin'], starting_rotation)
+
+	for step in range(500):
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+		sleep(0.005)
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+		sleep(0.005)
+	
+	sleep(1.0)
+	GPIO.output(motor_dict[motor_name]['dir_pin'], returning_rotation)
+
+	for step in range(10000):
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+		sleep(0.005)
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+		sleep(0.005)
 
 # Once finished clean everything up
 #except KeyboardInterrupt:

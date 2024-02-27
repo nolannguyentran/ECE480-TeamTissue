@@ -1,4 +1,7 @@
 import wx
+import loadcell
+
+
 
 from datetime import datetime
 length = 800
@@ -35,10 +38,11 @@ def on_start_test_click(event, motor_name, test_name):
     live_test_frame.Show()
 
 def on_home_click(event, name):
-    identity = event.GetEventObject().GetLabel()
-    global sixth_frame
-    sixth_frame = frame_6.SixthFrame(identity)
-    sixth_frame.Show()
+    #identity = event.GetEventObject().GetLabel()
+    #global sixth_frame
+    #sixth_frame = frame_6.SixthFrame(identity)
+    #sixth_frame.Show()
+    loadcell.status(name)
 
 
 
