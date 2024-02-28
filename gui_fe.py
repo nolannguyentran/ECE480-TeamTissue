@@ -1,5 +1,5 @@
 import wx
-import loadcell
+import gui_be
 
 
 
@@ -42,7 +42,7 @@ def on_home_click(event, name):
     #global sixth_frame
     #sixth_frame = frame_6.SixthFrame(identity)
     #sixth_frame.Show()
-    loadcell.status(name)
+    gui_be.status(name)
 
 
 
