@@ -1,8 +1,6 @@
 import wx
 import gui_be
 
-
-
 from datetime import datetime
 length = 800
 width = 480

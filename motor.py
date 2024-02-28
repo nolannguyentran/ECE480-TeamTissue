@@ -48,6 +48,7 @@ motor_dict = {					#dictionary containing respective step/dir pin for each motor
 	},
 }
 
+# function to initialize and set up the four motors
 def initialize_motors():
 	CW = 1          # Clockwise 
 	CCW = 0         # CounterClockwise
@@ -66,6 +67,7 @@ def initialize_motors():
     	 GPIO.setup(motor_dict[motor]['dir_pin'], GPIO.OUT, initial = GPIO.LOW)
 		#GPIO.setup(DIR_CHANNELS, GPIO.OUT, initial = GPIO.LOW)
 
+# function to run a motor depending on type of test - compression/tensile
 def run_motor(motor_name, test_name):
 	if test_name=='Compression Test':
 		starting_rotation = CW
