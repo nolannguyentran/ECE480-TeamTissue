@@ -44,32 +44,32 @@ def read_raw_value(samples=2):
         sample_count -= 1
     return int(sample_sum / samples)
 
+
+# Instantiate and calibrate load cell inputs
+print("*** Instantiate and calibrate load cells")
+# Enable NAU7802 digital and analog power
+enabled = nau7802.enable(True)
+print("Digital and analog power enabled:", enabled)
+
+print("REMOVE WEIGHTS FROM LOAD CELLS")
+time.sleep(3)
+
+nau7802.channel = 1
+zero_channel()  # Calibrate and zero channel
+nau7802.channel = 2
+zero_channel()  # Calibrate and zero channel
+
+print("READY")
+
 ## Main loop: Read load cells and display raw values
 while True:
-
-    # Instantiate and calibrate load cell inputs
-    print("*** Instantiate and calibrate load cells")
-    # Enable NAU7802 digital and analog power
-    enabled = nau7802.enable(True)
-    print("Digital and analog power enabled:", enabled)
-
-    print("REMOVE WEIGHTS FROM LOAD CELLS")
-    time.sleep(3)
-
-    nau7802.channel = 1
-    zero_channel()  # Calibrate and zero channel
-    nau7802.channel = 2
-    zero_channel()  # Calibrate and zero channel
-
-    print("READY")
-
     print("=====")
     nau7802.channel = 1
     value = nau7802.read()
     print("channel %1.0f raw value: %7.0f" % (nau7802.channel, value))
 
-#     nau7802.channel = 2
-#     value = nau7802.read()
-#     print("channel %1.0f raw value: %7.0f" % (nau7802.channel, value))
+    nau7802.channel = 2
+    value = nau7802.read()
+    print("channel %1.0f raw value: %7.0f" % (nau7802.channel, value))
 
 # #Code Source: https://github.com/adafruit/CircuitPython_NAU7802/blob/main/examples/nau7802_simpletest.py 
