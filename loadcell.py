@@ -8,20 +8,21 @@ i2c = busio.I2C(board.scl, board.SDA)
 
 print("I2C divees found: ", [hex(i) for i in i2c.scan()])
 
-nau7802 = 0x26
+nau7802 = 0x2a
 
 if not nau7802 in i2c.scan():
     print("Could not find NAU7802")
     sys.exit()
 
-def get_nau7802_id():
-    i2c.writeto(nau7802, bytes([0xd0]), stop=False)
-    result = bytearray(1)
-    i2c.readfrom_into(nau7802, result)
-    print("NAU7802: ", int.from_bytes(result, "big"))
+def read_nau7802(data):
+    value = data[0] << 8 | data[1]
+    return value
 
-if __name__ == "__main__":
-    get_nau7802_id() 
+while True:
+    result = bytearray(2)
+    i2c.readfrom_into(nau7802, result)
+    print(read_nau7802(result))
+    time.sleep(0.5)
 
 
 # # SPDX-FileCopyrightText: 2023 Cedar Grove Maker Studios
