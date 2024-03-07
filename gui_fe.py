@@ -7,7 +7,16 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
-
+def get_current_frame(frame_name):                       #determines which frame user is currently in, assign to existing global frame name class
+    global current_frame
+    match frame_name:
+        case 'TestSelectionFrame':
+            current_frame = test_selection_frame
+        case 'TestInput':
+            current_frame = strain_rate_frame
+        case 'TestOutput':
+            current_frame = live_test_frame
+            
 def on_motor_click(event):
     identity = event.GetEventObject().GetLabel()    #Returns which capsule selected
     global test_selection_frame
@@ -35,13 +44,12 @@ def on_start_test_click(event, motor_name, test_name):
     live_test_frame = TestOutput(motor_name, test_name)
     live_test_frame.Show()
 
-def on_home_click(event, name):
-    #identity = event.GetEventObject().GetLabel()
-    #global sixth_frame
-    #sixth_frame = frame_6.SixthFrame(identity)
-    #sixth_frame.Show()
-    gui_be.status(name)
-
+def on_home_click(event, frame_name):
+    #gui_be.test()
+    get_current_frame(frame_name)
+    current_frame.Destroy()
+    #HomeFrame.test()
+    
 
 
 class HomeFrame(wx.Frame):
@@ -62,6 +70,7 @@ class HomeFrame(wx.Frame):
         panel_3.SetBackgroundColour((33, 37, 41))         
         panel_4.SetBackgroundColour((53, 62, 108))       
 
+        global button_a
         button_a = wx.Button(panel_3, wx.ID_ANY, 'Capsule: A')
         button_b = wx.Button(panel_3, wx.ID_ANY, 'Capsule: B')
         button_c = wx.Button(panel_3, wx.ID_ANY, 'Capsule: C')
@@ -124,6 +133,9 @@ class HomeFrame(wx.Frame):
         self.SetAutoLayout(True)
         self.SetSizer(window_sizer)
         self.Layout()
+    #def test():                            -------------------maybe disable button of motors or change color to reflect status
+        #print("hello worlds")
+        #button_a.SetBackgroundColour((255,255,255))
 
 class TestSelectionFrame(wx.Frame):
        def __init__(self, name):
@@ -189,7 +201,7 @@ class TestSelectionFrame(wx.Frame):
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
-        button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.name))
+        button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
@@ -257,8 +269,10 @@ class TestInput(wx.Frame):
         t_2.SetForegroundColour((255, 255, 255))
         
         strain_text = wx.StaticText(panel_3, label = "Strain:")
+        strain_text.SetForegroundColour((255, 255, 255))
         strain_input = wx.TextCtrl(panel_3)
         rate_text = wx.StaticText(panel_3, label = "Rate:")
+        rate_text.SetForegroundColour((255, 255, 255))
         rate_input = wx.TextCtrl(panel_3)
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
@@ -273,12 +287,15 @@ class TestInput(wx.Frame):
 
         button_start = wx.Button(panel_4, wx.ID_ANY, 'START')
         button_start.SetBackgroundColour((190, 37, 66))
+ 
 
         button_start.Bind(wx.EVT_BUTTON, lambda event: on_start_test_click(event, self.motor_name, self.test_type))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
+
+        button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
@@ -286,7 +303,7 @@ class TestInput(wx.Frame):
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
-
+        test_button_sizer = wx.GridSizer(3,1,10,10) #--------------------------------------------------------------->
         user_field_sizer = wx.BoxSizer(wx.VERTICAL)
         
         user_field_sizer.Add(strain_text, 1, wx.EXPAND)
@@ -298,6 +315,10 @@ class TestInput(wx.Frame):
 
         middle_sizer.Add(panel_3, 1, wx.EXPAND)
         middle_sizer.Add(panel_4, 1, wx.EXPAND)
+
+        test_button_sizer.Add((0,0), 0, wx.EXPAND)
+        test_button_sizer.Add(button_start, 0, wx.EXPAND)
+        test_button_sizer.Add((0,0), 0, wx.EXPAND)
        
         navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
@@ -307,7 +328,7 @@ class TestInput(wx.Frame):
         panel_1.SetSizer(text_sizer_1)
         panel_2.SetSizer(text_sizer_2)
         panel_3.SetSizer(user_field_sizer)
-        #panel_4.SetSizer(text_sizer_3)
+        panel_4.SetSizer(test_button_sizer)
         panel_5.SetSizer(navigation_grid_sizer)
 
         window_sizer.Add(panel_1, 1, wx.EXPAND)
@@ -366,6 +387,8 @@ class TestOutput(wx.Frame):
         button_home = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
+
+        button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))

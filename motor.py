@@ -29,6 +29,7 @@ from time import sleep
 
 # Define Directions
 
+
 motor_dict = {					#dictionary containing respective step/dir pin for each motor configuration
 	'A':{
 		'step_pin':33,
@@ -50,6 +51,8 @@ motor_dict = {					#dictionary containing respective step/dir pin for each motor
 
 # function to initialize and set up the four motors
 def initialize_motors():
+	global CW
+	global CCW
 	CW = 1          # Clockwise 
 	CCW = 0         # CounterClockwise
 
@@ -61,11 +64,11 @@ def initialize_motors():
 	# Set GPIO mode and setup pins for motors 1-4
 	GPIO.setmode(GPIO.BOARD)
 	for motor in motor_dict:
-		 GPIO.setup(motor_dict[motor]['step_pin'], GPIO.OUT, initial = GPIO.LOW)
-		#GPIO.setup(STEP_CHANNELS, GPIO.OUT, initial = GPIO.LOW)
+		GPIO.setup(motor_dict[motor]['step_pin'], GPIO.OUT, initial = GPIO.LOW)
+	
 	for motor in motor_dict:
-    	 GPIO.setup(motor_dict[motor]['dir_pin'], GPIO.OUT, initial = GPIO.LOW)
-		#GPIO.setup(DIR_CHANNELS, GPIO.OUT, initial = GPIO.LOW)
+		GPIO.setup(motor_dict[motor]['dir_pin'], GPIO.OUT, initial = GPIO.LOW)
+
 
 # function to run a motor depending on type of test - compression/tensile
 def run_motor(motor_name, test_name):
@@ -80,19 +83,19 @@ def run_motor(motor_name, test_name):
 	GPIO.output(motor_dict[motor_name]['dir_pin'], starting_rotation)
 
 	for step in range(500):
-		 GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
-		 sleep(0.005)
-		 GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
-		 sleep(0.005)
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+		sleep(0.005)
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+		sleep(0.005)
 	
 	sleep(1.0)
 	GPIO.output(motor_dict[motor_name]['dir_pin'], returning_rotation)
 
 	for step in range(10000):
-		 GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
-		 sleep(0.005)
-		 GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
-		 sleep(0.005)
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+		sleep(0.005)
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+		sleep(0.005)
 
 # Once finished clean everything up
 #except KeyboardInterrupt:
