@@ -43,11 +43,11 @@ def on_tensile_test_click(event, motor_name):
     #strain_rate_frame = TestInput(motor_name, identity)
     #strain_rate_frame.Show()
 
-def on_constant_test_click(event, motor_name):
-    identity = event.GetEventObject().GetLabel()    #Returns which test input type selected (constant rate)
+def on_constant_test_click(event, motor_name, test_type):
+    strain_type = event.GetEventObject().GetLabel()    #Returns which strain input type selected (constant rate)
     strain_input_type_frame.Destroy()
     global constant_strain_test_frame
-    constant_strain_test_frame = ConstantStrainTestInput(motor_name, identity)
+    constant_strain_test_frame = ConstantStrainTestInput(motor_name, test_type, strain_type)
     constant_strain_test_frame.Show()
 
 
@@ -317,7 +317,7 @@ class StrainInputTypeFrame(wx.Frame):
         button_wave.SetBackgroundColour((89, 99, 182))
         button_wave.SetForegroundColour((255,255,255))
 
-        #button_constant.Bind(wx.EVT_BUTTON, lambda event: #on_compression_test_click(event, self.name))
+        button_constant.Bind(wx.EVT_BUTTON, lambda event: on_constant_test_click(event, self.name, self.test_type))
         #button_random.Bind(wx.EVT_BUTTON, lambda event: #on_tensile_test_click(event, self.name))
 
 
@@ -361,11 +361,12 @@ class StrainInputTypeFrame(wx.Frame):
         self.Layout()
 
 class ConstantStrainTestInput(wx.Frame):
-    def __init__(self, motor_name, test_type):
+    def __init__(self, motor_name, test_type, strain_type):
         wx.Frame.__init__(self, None, size=(length, width))
 
         self.motor_name = motor_name        #Capsule name
         self.test_type = test_type          #Test type name
+        self.strain_type = strain_type
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
@@ -389,7 +390,7 @@ class ConstantStrainTestInput(wx.Frame):
         t_0.SetForegroundColour((255, 255, 255))
         t_1 = wx.StaticText(panel_1, label = now)
         t_1.SetForegroundColour((255, 255, 255))
-        t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type) 
+        t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type+": "+self.strain_type) 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
         
