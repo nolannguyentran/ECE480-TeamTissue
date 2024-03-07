@@ -1,17 +1,30 @@
 
-#!/usr/bin/python
-# -*- coding:utf-8 -*-
-from smbus import SMBus
+import sys
+import board
+import busio
 import time
 
-address = 0x2a
+i2c = busio.I2C(board.scl, board.SDA)
 
-bus = smbus.SMBus(1)
-while True:
-    bus.write_byte(address,0xEF)
-    time.sleep(0.5)
-    bus.write_byte(address,0xFF)
-time.sleep(0.5)# # SPDX-FileCopyrightText: 2023 Cedar Grove Maker Studios
+print("I2C divees found: ", [hex(i) for i in i2c.scan()])
+
+nau7802 = 0x26
+
+if not nau7802 in i2c.scan():
+    print("Could not find NAU7802")
+    sys.exit()
+
+def get_nau7802_id():
+    i2c.writeto(nau7802, bytes([0xd0]), stop=False)
+    result = bytearray(1)
+    i2c.readfrom_into(nau7802, result)
+    print("NAU7802: ", int.from_bytes(result, "big"))
+
+if __name__ == "__main__":
+    get_nau7802_id() 
+
+
+# # SPDX-FileCopyrightText: 2023 Cedar Grove Maker Studios
 # # SPDX-License-Identifier: MIT
 
 # """
