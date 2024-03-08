@@ -16,8 +16,12 @@ def get_current_frame(frame_name):                       #determines which frame
             current_frame = strain_input_type_frame
         case 'ConstantStrainTestInput':
             current_frame = constant_strain_test_frame
-        case 'TestOutput':
-            current_frame = live_test_frame
+        case 'RandomizedStrainTestInput':
+            current_frame = randomized_strain_test_frame
+        case 'WaveStrainTestInput':
+            current_frame = square_wave_strain_test_frame
+        #case 'TestOutput':
+        #    current_frame = live_test_frame
 
 
 def on_constant_start_test(event):                           #function for start button to start test; call function run_motor (used for constant strain test only)
