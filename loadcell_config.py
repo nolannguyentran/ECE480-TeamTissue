@@ -1,3 +1,30 @@
+
+# import sys
+# import board
+# import busio
+# import time
+
+# i2c = busio.I2C(board.SCL, board.SDA)
+
+# print("I2C divees found: ", [hex(i) for i in i2c.scan()])
+
+# nau7802 = 0x2a
+
+# if not nau7802 in i2c.scan():
+#     print("Could not find NAU7802")
+#     sys.exit()
+
+# def read_nau7802(data):
+#     value = data[0] << 8 | data[1]
+#     return value
+
+# while True:
+#     result = bytearray(2)
+#     i2c.readfrom_into(nau7802, result)
+#     print(result)
+#     time.sleep(0.5)
+
+
 # SPDX-FileCopyrightText: 2023 Cedar Grove Maker Studios
 # SPDX-License-Identifier: MIT
 
@@ -10,7 +37,7 @@ average count of 2.
 
 import time
 import board
-# import busio
+import busio
 
 from cedargrove_nau7802 import NAU7802
 
@@ -54,10 +81,10 @@ print("Digital and analog power enabled:", enabled)
 print("REMOVE WEIGHTS FROM LOAD CELLS")
 time.sleep(3)
 
-nau7802.channel = 1
-zero_channel()  # Calibrate and zero channel
-nau7802.channel = 2
-zero_channel()  # Calibrate and zero channel
+# nau7802.channel = 1
+# zero_channel()  # Calibrate and zero channel
+# nau7802.channel = 2
+# zero_channel()  # Calibrate and zero channel
 
 print("READY")
 
@@ -66,10 +93,10 @@ while True:
     print("=====")
     nau7802.channel = 1
     value = nau7802.read()
-    print("channel %1.0f raw value: %7.0f" % (nau7802.channel, value))
+    print("channel %1.0f raw value: %7.0f" % (nau7802, value))
 
-    nau7802.channel = 2
-    value = nau7802.read()
-    print("channel %1.0f raw value: %7.0f" % (nau7802.channel, value))
+    # nau7802.channel = 2
+    # value = nau7802.read()
+    # print("channel %1.0f raw value: %7.0f" % (nau7802, value))
 
 # #Code Source: https://github.com/adafruit/CircuitPython_NAU7802/blob/main/examples/nau7802_simpletest.py 
