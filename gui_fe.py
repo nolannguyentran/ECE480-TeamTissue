@@ -12,11 +12,18 @@ def get_current_frame(frame_name):                       #determines which frame
     match frame_name:
         case 'TestSelectionFrame':
             current_frame = test_selection_frame
-        case 'TestInput':
-            current_frame = strain_rate_frame
+        case 'StrainInputTypeFrame':
+            current_frame = strain_input_type_frame
+        case 'ConstantStrainTestInput':
+            current_frame = constant_strain_test_frame
         case 'TestOutput':
             current_frame = live_test_frame
-            
+
+
+def on_start_test(event):                           #function for start button to start test; call function run_motor
+        #print("hello world")
+        print(strain_input.GetValue()) 
+
 def on_motor_click(event):
     identity = event.GetEventObject().GetLabel()    #Returns which capsule selected
     global test_selection_frame
@@ -59,11 +66,12 @@ def on_start_test_click(event, motor_name, test_name):
     live_test_frame.Show()
 
 def on_home_click(event, frame_name):
-    #gui_be.test()
     get_current_frame(frame_name)
     current_frame.Destroy()
     #HomeFrame.test()
-    
+
+#def test(event):
+#    gui_be.randomized_strain(10,100)
 
 
 class HomeFrame(wx.Frame):
@@ -95,6 +103,7 @@ class HomeFrame(wx.Frame):
         button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
 
         button_home.Disable()
+        #button_settings.Bind(wx.EVT_BUTTON, test)
 
         button_a.SetBackgroundColour((89, 99, 182))
         button_a.SetForegroundColour((255,255,255))
@@ -396,7 +405,9 @@ class ConstantStrainTestInput(wx.Frame):
         
         strain_text = wx.StaticText(panel_3, label = "Strain:")
         strain_text.SetForegroundColour((255, 255, 255))
+        global strain_input
         strain_input = wx.TextCtrl(panel_3)
+        #strain_input.Bind(wx.EVT_TEXT, on_key_typed)
         rate_text = wx.StaticText(panel_3, label = "Rate:")
         rate_text.SetForegroundColour((255, 255, 255))
         rate_input = wx.TextCtrl(panel_3)
@@ -413,9 +424,11 @@ class ConstantStrainTestInput(wx.Frame):
 
         button_start = wx.Button(panel_4, wx.ID_ANY, 'START')
         button_start.SetBackgroundColour((190, 37, 66))
+        button_start.SetForegroundColour((255,255,255))
+        button_start.Bind(wx.EVT_BUTTON, on_start_test)
  
 
-        button_start.Bind(wx.EVT_BUTTON, lambda event: on_start_test_click(event, self.motor_name, self.test_type))
+        #button_start.Bind(wx.EVT_BUTTON, lambda event: on_start_test_click(event, self.motor_name, self.test_type))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
@@ -465,6 +478,8 @@ class ConstantStrainTestInput(wx.Frame):
         self.SetAutoLayout(True)
         self.SetSizer(window_sizer)
         self.Layout()
+
+    
 
 class TestOutput(wx.Frame):
     def __init__(self, motor_name, test_type):
