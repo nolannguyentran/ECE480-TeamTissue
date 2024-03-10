@@ -3,6 +3,7 @@ from time import sleep
 import motor_config
 import random
 
+#TODO: Convert data into .CSV file
 
 # Define Directions
 global CW

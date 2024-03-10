@@ -24,7 +24,10 @@ def get_current_frame(frame_name):                       #determines which frame
         #    current_frame = live_test_frame
 
 
-def on_constant_start_test(event):                           #function for start button to start test; call function run_motor (used for constant strain test only)
+#TODO: Add functions for grabing max,min,and rate from each of the different strain type input tests
+
+
+def on_constant_start_test(event):                           #function for start button to start test; call function run_motor (used for constant strain test only) 
         #print("hello world")
         print(constant_strain_input.GetValue()) 
 
