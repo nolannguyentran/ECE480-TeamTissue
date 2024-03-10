@@ -2,7 +2,7 @@ import RPi.GPIO as GPIO
 
 
 # -------------MOTOR CONFIGURATION FILE: SET UP MOTORS BASED ON THEIR GPIO PINS-------------------------------------------------
-
+#motor a = load cell a....etc
 
 #from loadcell import LOADCELLOUTPUT1, LOADCELLOUTPUT2, LOADCELLOUTPUT3, LOADCELLOUTPUT4
 

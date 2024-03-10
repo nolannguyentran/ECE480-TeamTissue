@@ -1,9 +1,11 @@
 import RPi.GPIO as GPIO
 from time import sleep
 import motor_config
+import loadcell_config
 import random
 
 #TODO: Convert data into .CSV file
+#TODO: MAYBE COMBINE TWO INITIALIZATION METHODS (MOTOR AND LOADCELL) INTO 1, SO THAT THEY ARE BOTH CONNECTED!!!!!!
 
 # Define Directions
 global CW

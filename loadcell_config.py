@@ -1,102 +1,69 @@
+import RPi.GPIO as GPIO
+from hx711 import HX711
 
-# import sys
-# import board
-# import busio
-# import time
+# -------------lOAD CELL CONFIGURATION FILE: SET UP LOAD CELLS BASED ON THEIR GPIO PINS & IN RELATION TO MOTORS -------------------------------------------------
+#motor a = load cell a....etc
 
-# i2c = busio.I2C(board.SCL, board.SDA)
+loadcell_dict = {					#dictionary containing respective step/dir pin for each motor configuration
+	'A':{
+		'dout_pin':5,               #data pin
+		'pd_sck_pin': 6,            #clock pin
+		'channel': 'A',
+		'gain': 64,
+        'num_readings': 10
+	},
+	'B':{
+		'dout_pin':1,
+		'pd_sck_pin': 2,
+		'channel': 'A',
+		'gain': 64, 
+        'num_readings': 10
+	},
+	'C':{
+		'dout_pin':3,
+		'pd_sck_pin': 4,
+		'channel': 'A',
+		'gain': 64,
+        'num_readings': 10
+	},
+	'D':{
+		'dout_pin':7,
+		'pd_sck_pin': 8,
+		'channel': 'A',
+		'gain': 64,
+        'num_readings': 10
+	},
+}
 
-# print("I2C divees found: ", [hex(i) for i in i2c.scan()])
+# function to initialize channel, gain, and setup pins for loadcell 1-4
+def initialize_loadcells():
+    global loadcell_A
+    global loadcell_B
+    global loadcell_C
+    global loadcell_D
 
-# nau7802 = 0x2a
+    loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin'], channel=loadcell_dict['A']['channel'], gain=loadcell_dict['A']['gain']) 
+    loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin'], channel=loadcell_dict['B']['channel'], gain=loadcell_dict['B']['gain']) 
+    loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin'], channel=loadcell_dict['C']['channel'], gain=loadcell_dict['C']['gain']) 
+    loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin'], channel=loadcell_dict['D']['channel'], gain=loadcell_dict['D']['gain']) 
 
-# if not nau7802 in i2c.scan():
-#     print("Could not find NAU7802")
-#     sys.exit()
+    loadcell_A.reset()
+    loadcell_B.reset()
+    loadcell_C.reset()
+    loadcell_D.reset()
 
-# def read_nau7802(data):
-#     value = data[0] << 8 | data[1]
-#     return value
-
-# while True:
-#     result = bytearray(2)
-#     i2c.readfrom_into(nau7802, result)
-#     print(result)
-#     time.sleep(0.5)
-
-
-# SPDX-FileCopyrightText: 2023 Cedar Grove Maker Studios
-# SPDX-License-Identifier: MIT
-
-"""
-nau7802_simpletest.py  2023-01-13 2.0.2  Cedar Grove Maker Studios
-
-Instantiates two NAU7802 channels with default gain of 128 and sample
-average count of 2.
-"""
-
-import time
-import board
-import busio
-
-from cedargrove_nau7802 import NAU7802
-
-# Instantiate 24-bit load sensor ADC; two channels, default gain of 128
-nau7802 = NAU7802(board.I2C(), address=0x2A, active_channels=1)
-
-
-def zero_channel():
-    """Initiate internal calibration for current channel.Use when scale is started,
-    a new channel is selected, or to adjust for measurement drift. Remove weight
-    and tare from load cell before executing."""
-    print(
-        "channel %1d calibrate.INTERNAL: %5s"
-        % (nau7802.channel, nau7802.calibrate("INTERNAL"))
-    )
-    print(
-        "channel %1d calibrate.OFFSET:   %5s"
-        % (nau7802.channel, nau7802.calibrate("OFFSET"))
-    )
-    print("...channel %1d zeroed" % nau7802.channel)
-
-
-def read_raw_value(samples=2):
-    """Read and average consecutive raw sample values. Return average raw value."""
-    sample_sum = 0
-    sample_count = samples
-    while sample_count > 0:
-        while not nau7802.available():
-            pass
-        sample_sum = sample_sum + nau7802.read()
-        sample_count -= 1
-    return int(sample_sum / samples)
+def read_data(motor_name):
+    match motor_name:
+        case 'A':
+            loadcell_A.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'B':
+            loadcell_B.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'C':
+            loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'D':
+            loadcell_D.get_raw_data(loadcell_dict[motor_name]['num_readings'])
 
 
-# Instantiate and calibrate load cell inputs
-print("*** Instantiate and calibrate load cells")
-# Enable NAU7802 digital and analog power
-enabled = nau7802.enable(True)
-print("Digital and analog power enabled:", enabled)
-
-print("REMOVE WEIGHTS FROM LOAD CELLS")
-time.sleep(3)
-
-# nau7802.channel = 1
-# zero_channel()  # Calibrate and zero channel
-# nau7802.channel = 2
-# zero_channel()  # Calibrate and zero channel
-
-print("READY")
-
-## Main loop: Read load cells and display raw values
-while True:
-    print("=====")
-    nau7802.channel = 1
-    value = nau7802.read()
-    print("channel %1.0f raw value: %7.0f" % (nau7802, value))
-
-    # nau7802.channel = 2
-    # value = nau7802.read()
-    # print("channel %1.0f raw value: %7.0f" % (nau7802, value))
-
-# #Code Source: https://github.com/adafruit/CircuitPython_NAU7802/blob/main/examples/nau7802_simpletest.py 
+#GPIO.cleanup() -----------------------------------------------------> might add this line everytime close test
+#code source: https://pypi.org/project/hx711/ 
+#code source: https://github.com/mpibpc-mroose/hx711/blob/master/example.py 
