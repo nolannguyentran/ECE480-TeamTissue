@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+from hx711 import HX711  # import the class HX711
 from time import sleep
 import motor_config
 import loadcell_config
@@ -7,6 +8,8 @@ import random
 #TODO: Convert data into .CSV file
 #TODO: MAYBE COMBINE TWO INITIALIZATION METHODS (MOTOR AND LOADCELL) INTO 1, SO THAT THEY ARE BOTH CONNECTED!!!!!!
 #TODO: HAVE A WAY TO NOT DESTROY A FRAME WHEN THE MOTOR IS RUNNING, BUT HIDE IT, HAVE A BOOLEAN PARAMETER THAT CHECKS WHETHER THE MOTOR IS STILL RUNNING
+#TODO: CREATE A PAGE IN SETTINGS TO CALIBRATE WEIGHT
+#TODO: CREATE FUNCTINO TO CALIBRATE LOADCELLS
 
 # Define Directions
 global CW
@@ -15,8 +18,51 @@ CW = 1          # Clockwise
 CCW = 0         # CounterClockwise
 
 
-motor_config.initialize_motors() 		#initialize motors
+#motor_config.initialize_motors() 		#initialize motors
+#loadcell_config.initialize_loadcells()
 motor_dict = motor_config.motor_dict
+loadcell_dict = loadcell_config.loadcell_dict
+
+
+#function to initialize both motors and their respective load cells
+def initialization():
+	
+	GPIO.setwarnings(False)
+
+	# Set GPIO mode and setup pins for motors 1-4
+	GPIO.setmode(GPIO.BOARD)
+	for motor in motor_dict:
+		GPIO.setup(motor_dict[motor]['step_pin'], GPIO.OUT, initial = GPIO.LOW)
+	
+	for motor in motor_dict:
+		GPIO.setup(motor_dict[motor]['dir_pin'], GPIO.OUT, initial = GPIO.LOW)
+	
+	global loadcell_A
+	global loadcell_B
+	global loadcell_C
+	global loadcell_D
+
+	loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin'], channel=loadcell_dict['A']['channel'], gain=loadcell_dict['A']['gain']) 
+	loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin'], channel=loadcell_dict['B']['channel'], gain=loadcell_dict['B']['gain']) 
+	loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin'], channel=loadcell_dict['C']['channel'], gain=loadcell_dict['C']['gain']) 
+	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin'], channel=loadcell_dict['D']['channel'], gain=loadcell_dict['D']['gain']) 
+
+
+def calibrate_loadcells():
+	pass
+
+    
+def read_data(motor_name):		#TODO MUCH MORE WILL BE ADDED
+    match motor_name:
+        case 'A':
+            loadcell_A.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'B':
+            loadcell_B.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'C':
+            loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'D':
+            loadcell_D.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+
 
 
 def randomized_strain(min, max):		#function to select random strain value between lowest and highest
@@ -40,6 +86,7 @@ def run_motor_constant(motor_name, test_name, strain_value, time_duration):		#TO
 		sleep(0.005)
 		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
 		sleep(0.005)
+		#read_data(motor_name)	---------------------------------------------> UNCOMMENT
 	
 	sleep(1.0)
 	GPIO.output(motor_dict[motor_name]['dir_pin'], returning_rotation)
@@ -49,6 +96,7 @@ def run_motor_constant(motor_name, test_name, strain_value, time_duration):		#TO
 		sleep(0.005)
 		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
 		sleep(0.005)
+		#read_data(motor_name)	-----------------------------------------------> UNCOMMENT
 
 # function to run a motor depending on type of test (compression/tensile) - used for square wave input
 def run_motor_wave(motor_name, test_name, min, max, time_duration):				#TODO: have a way to periodically control motor from low to high, high to low (square wave)
@@ -58,15 +106,9 @@ def run_motor_wave(motor_name, test_name, min, max, time_duration):				#TODO: ha
 #except KeyboardInterrupt:
 #	GPIO.cleanup()
 
+
+
+
+
 #Code source: https://danielwilczak101.medium.com/control-a-stepper-motor-using-python-and-a-raspberry-pi-11f67d5a8d6d
 
-
-
-#TODO: Code for controlling loadcells
-
-def test():
-    for motor in a:
-    	print(a[motor]['dir_pin'])
-
-def status(name):
-    print(name)

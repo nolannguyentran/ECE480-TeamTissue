@@ -1,5 +1,6 @@
 import wx
-#import gui_be
+#import gui_be          #REMEMBER TO UN-COMMENT INITIALIZATION AT THE BOTTOM OF THIS FILE!!!
+
 
 from datetime import datetime
 length = 800
@@ -819,5 +820,6 @@ class TestOutput(wx.Frame):
 app = wx.App(False)
 global home_frame
 home_frame = HomeFrame(None, -1, "BioReactor")
+#gui_be.initialization() #initialize motors and load cells
 home_frame.Show()
 app.MainLoop()

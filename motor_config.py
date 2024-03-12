@@ -1,5 +1,3 @@
-import RPi.GPIO as GPIO
-
 
 # -------------MOTOR CONFIGURATION FILE: SET UP MOTORS BASED ON THEIR GPIO PINS-------------------------------------------------
 #motor a = load cell a....etc
@@ -31,16 +29,5 @@ motor_dict = {					#dictionary containing respective step/dir pin for each motor
 	},
 }
 
-# function to initialize and set up the four motors
-def initialize_motors():
-	
-	GPIO.setwarnings(False)
 
-	# Set GPIO mode and setup pins for motors 1-4
-	GPIO.setmode(GPIO.BOARD)
-	for motor in motor_dict:
-		GPIO.setup(motor_dict[motor]['step_pin'], GPIO.OUT, initial = GPIO.LOW)
-	
-	for motor in motor_dict:
-		GPIO.setup(motor_dict[motor]['dir_pin'], GPIO.OUT, initial = GPIO.LOW)
 

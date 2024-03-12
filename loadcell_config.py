@@ -2,6 +2,43 @@
 import RPi.GPIO as GPIO  # import GPIO
 from hx711 import HX711  # import the class HX711
 
+# -------------lOAD CELL CONFIGURATION FILE: SET UP LOAD CELLS BASED ON THEIR GPIO PINS & IN RELATION TO MOTORS -------------------------------------------------
+#motor a = load cell a....etc
+
+loadcell_dict = {					#dictionary containing respective step/dir pin for each motor configuration
+	'A':{
+		'dout_pin':5,               #data pin
+		'pd_sck_pin': 6,            #clock pin
+		'channel': 'A',
+		'gain': 64,
+        'num_readings': 10
+	},
+	'B':{
+		'dout_pin':1,
+		'pd_sck_pin': 2,
+		'channel': 'A',
+		'gain': 64, 
+        'num_readings': 10
+	},
+	'C':{
+		'dout_pin':3,
+		'pd_sck_pin': 4,
+		'channel': 'A',
+		'gain': 64,
+        'num_readings': 10
+	},
+	'D':{
+		'dout_pin':7,
+		'pd_sck_pin': 8,
+		'channel': 'A',
+		'gain': 64,
+        'num_readings': 10
+	},
+}
+
+
+
+
 try:
     GPIO.setmode(GPIO.BOARD)  # set GPIO pin mode to BCM numbering
     # Create an object hx which represents your real hx711 chip
