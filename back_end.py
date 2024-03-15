@@ -5,6 +5,7 @@ from randomized_strain_input import RandomizedStrainTestInput
 from wave_strain_input import WaveStrainTestInput
 from settings import Settings
 from test_output import TestOutput
+from loadcell_calibration import Calibration
 
 def get_current_frame(frame_name):                       #determines which frame user is currently in, assign to existing global frame name class
     global current_frame
@@ -21,6 +22,8 @@ def get_current_frame(frame_name):                       #determines which frame
             current_frame = square_wave_strain_test_frame
         case 'Settings':
             current_frame = settings_frame
+        case 'Calibration':
+            current_frame = loadcell_calibration_frame
         #case 'TestOutput':
         #    current_frame = live_test_frame
 
@@ -84,6 +87,12 @@ def on_settings_click(event, frame_name):
     settings_frame = Settings()
     settings_frame.Show()
 
+def on_calibration_click(event):
+    identity = event.GetEventObject().GetLabel()
+    settings_frame.Destroy()
+    global loadcell_calibration_frame
+    loadcell_calibration_frame = Calibration(identity)
+    loadcell_calibration_frame.Show()
 
 #def on_start_test_click(event, motor_name, test_name):          
 #    identity = event.GetEventObject().GetLabel()
