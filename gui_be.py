@@ -115,4 +115,6 @@ def run_motor_wave(motor_name, test_name, min, max, time_duration):				#TODO: ha
 
 
 #Code source: https://danielwilczak101.medium.com/control-a-stepper-motor-using-python-and-a-raspberry-pi-11f67d5a8d6d
+#code source: https://pypi.org/project/hx711/ 
+#code source: https://github.com/mpibpc-mroose/hx711/blob/master/example.py 
 

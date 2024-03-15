@@ -21,6 +21,8 @@ def get_current_frame(frame_name):                       #determines which frame
             current_frame = randomized_strain_test_frame
         case 'WaveStrainTestInput':
             current_frame = square_wave_strain_test_frame
+        case 'Settings':
+            current_frame = settings_frame
         #case 'TestOutput':
         #    current_frame = live_test_frame
 
@@ -79,6 +81,12 @@ def on_square_wave_test_click(event, motor_name, test_type):    #[strain input t
     square_wave_strain_test_frame = WaveStrainTestInput(motor_name, test_type, strain_type)
     square_wave_strain_test_frame.Show()
 
+def on_settings_click(event, frame_name):
+    get_current_frame(frame_name)
+    current_frame.Destroy()
+    global settings_frame
+    settings_frame = Settings()
+    settings_frame.Show()
 
 #def on_start_test_click(event, motor_name, test_name):          
 #    identity = event.GetEventObject().GetLabel()
@@ -143,6 +151,7 @@ class HomeFrame(wx.Frame):
         button_b.Bind(wx.EVT_BUTTON, on_motor_click)
         button_c.Bind(wx.EVT_BUTTON, on_motor_click)
         button_d.Bind(wx.EVT_BUTTON, on_motor_click)
+       
 
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
         t_0.SetForegroundColour((255, 255, 255))
@@ -246,6 +255,7 @@ class TestSelectionFrame(wx.Frame):
 
         button_compression.Bind(wx.EVT_BUTTON, lambda event: on_compression_test_click(event, self.name))
         button_tensile.Bind(wx.EVT_BUTTON, lambda event: on_tensile_test_click(event, self.name))
+        
 
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
@@ -253,6 +263,7 @@ class TestSelectionFrame(wx.Frame):
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
         button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
@@ -357,6 +368,7 @@ class StrainInputTypeFrame(wx.Frame):
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
         button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
@@ -458,6 +470,7 @@ class ConstantStrainTestInput(wx.Frame):
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
         button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
@@ -572,6 +585,7 @@ class RandomizedStrainTestInput(wx.Frame):
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
         button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
@@ -689,6 +703,7 @@ class WaveStrainTestInput(wx.Frame):
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
         button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
@@ -785,6 +800,7 @@ class TestOutput(wx.Frame):
         button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
 
         button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
@@ -816,6 +832,110 @@ class TestOutput(wx.Frame):
         self.SetSizer(window_sizer)
         self.Layout()
 
+class Settings(wx.Frame):
+       def __init__(self):
+        wx.Frame.__init__(self, None, size=(length, width))
+
+       
+        dashboard_img = wx.Bitmap("./pictures/dashboard.png")
+        jobs_img = wx.Bitmap("./pictures/jobs.png")
+        settings_img = wx.Bitmap("./pictures/settings.png")
+
+        panel_1 = wx.Panel(self, -1,)       #For housing name, date, and time
+        panel_2 = wx.Panel(self, -1,)       #For capsule name
+        panel_3 = wx.Panel(self, -1,)       #For housing two test selection buttons
+        panel_4 = wx.Panel(self, -1,)       #For housing instructions
+        panel_5 = wx.Panel(self, -1,)       #For housing navigation buttons
+    
+        panel_1.SetBackgroundColour((53, 62, 108))        
+        panel_2.SetBackgroundColour((33, 37, 41))         
+        panel_3.SetBackgroundColour((33, 37, 41))
+        panel_4.SetBackgroundColour((33, 37, 41))               
+        panel_5.SetBackgroundColour((53, 62, 108))
+
+        font_1 = wx.Font(20, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
+        font_2 = wx.Font(14, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
+        
+        t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
+        t_0.SetForegroundColour((255, 255, 255))
+        t_1 = wx.StaticText(panel_1, label = now)
+        t_1.SetForegroundColour((255, 255, 255))
+        t_2 = wx.StaticText(panel_2, label = "Settings") 
+        t_2.SetFont(font_1)
+        t_2.SetForegroundColour((255, 255, 255))
+        t_3 = wx.StaticText(panel_4, label = "Please select")
+        t_3.SetFont(font_2)
+        t_3.SetForegroundColour((255, 255, 255))
+      
+        text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
+        text_sizer_1.Add(t_0, 1, wx.EXPAND)
+        text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
+        text_sizer_1.Add(t_1, 0, wx.EXPAND)
+
+        text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning Capsule Name in center
+        text_sizer_2.Add((0,0), 1, wx.EXPAND)
+        text_sizer_2.Add(t_2, 0, wx.ALIGN_CENTER)
+        text_sizer_2.Add((0,0), 1, wx.EXPAND)
+
+        text_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning instructions in center
+        text_sizer_3.Add((0,0), 1, wx.EXPAND)
+        text_sizer_3.Add(t_3,0,wx.ALIGN_CENTER)
+        text_sizer_3.Add((0,0), 1, wx.EXPAND)
+
+        button_constant = wx.Button(panel_3, wx.ID_ANY)
+        button_random = wx.Button(panel_3, wx.ID_ANY, 'Callibrate Load Cells')
+        button_wave = wx.Button(panel_3, wx.ID_ANY)
+
+        button_constant.SetBackgroundColour((89, 99, 182))
+        button_constant.SetForegroundColour((255,255,255))
+        button_random.SetBackgroundColour((89, 99, 182))
+        button_random.SetForegroundColour((255,255,255))
+        button_wave.SetBackgroundColour((89, 99, 182))
+        button_wave.SetForegroundColour((255,255,255))
+
+        #button_constant.Bind(wx.EVT_BUTTON, lambda event: on_constant_test_click(event, self.name, self.test_type))
+        #button_random.Bind(wx.EVT_BUTTON, lambda event: on_random_test_click(event, self.name, self.test_type))
+        #button_wave.Bind(wx.EVT_BUTTON, lambda event: on_square_wave_test_click(event, self.name, self.test_type))
+
+        button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
+        button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
+        button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
+
+        button_home.Bind(wx.EVT_BUTTON, lambda event: on_home_click(event, self.__class__.__name__))
+        button_settings.Disable()
+        
+        button_home.SetBackgroundColour((0, 0, 0))
+        button_jobs.SetBackgroundColour((0, 0, 0))
+        button_settings.SetBackgroundColour((0, 0, 0))
+
+        window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
+        middle_sizer = wx.GridSizer(1, 3, 20, 20)         #For housing middle panel
+       
+        navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
+
+        middle_sizer.Add(button_constant, 0, wx.EXPAND)
+        middle_sizer.Add(button_random, 0, wx.EXPAND)
+        middle_sizer.Add(button_wave, 0, wx.EXPAND)
+        
+        navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
+        navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
+        navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
+        
+        panel_1.SetSizer(text_sizer_1)
+        panel_2.SetSizer(text_sizer_2)
+        panel_3.SetSizer(middle_sizer)
+        panel_4.SetSizer(text_sizer_3)
+        panel_5.SetSizer(navigation_grid_sizer)
+
+        window_sizer.Add(panel_1, 1, wx.EXPAND)
+        window_sizer.Add(panel_2, 2, wx.EXPAND)
+        window_sizer.Add(panel_3, 6, wx.EXPAND)
+        window_sizer.Add(panel_4, 2, wx.EXPAND)
+        window_sizer.Add(panel_5, 2, wx.EXPAND)
+   
+        self.SetAutoLayout(True)
+        self.SetSizer(window_sizer)
+        self.Layout()
    
 app = wx.App(False)
 global home_frame
