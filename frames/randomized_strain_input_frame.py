@@ -1,5 +1,5 @@
 import wx
-import back_end
+import frames.back_end as back_end
 
 from datetime import datetime
 length = 800
@@ -7,7 +7,7 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
-class WaveStrainTestInput(wx.Frame):
+class RandomizedStrainTestInput(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):
         wx.Frame.__init__(self, None, size=(length, width))
 
@@ -41,18 +41,18 @@ class WaveStrainTestInput(wx.Frame):
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
         
-        minimum_strain_text = wx.StaticText(panel_3, label = "wavyMinimum Strain:")
+        minimum_strain_text = wx.StaticText(panel_3, label = "Minimum Strain:")
         minimum_strain_text.SetForegroundColour((255, 255, 255))
-        global wave_strain_min
-        wave_strain_min = wx.TextCtrl(panel_3)
+        global randomized_strain_min
+        randomized_strain_min = wx.TextCtrl(panel_3)
         maximum_strain_text = wx.StaticText(panel_3, label = "Maximum Strain:")
         maximum_strain_text.SetForegroundColour((255, 255, 255))
-        global wave_strain_max
-        wave_strain_max = wx.TextCtrl(panel_3)
+        global randomized_strain_max
+        randomized_strain_max = wx.TextCtrl(panel_3)
         rate_text = wx.StaticText(panel_3, label = "Rate:")
         rate_text.SetForegroundColour((255, 255, 255))
-        global rate_input_wave
-        rate_input_wave = wx.TextCtrl(panel_3)
+        global rate_input_randomized
+        rate_input_randomized = wx.TextCtrl(panel_3)
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
@@ -89,13 +89,13 @@ class WaveStrainTestInput(wx.Frame):
         user_field_sizer = wx.BoxSizer(wx.VERTICAL)
         
         user_field_sizer.Add(minimum_strain_text, 1, wx.EXPAND)
-        user_field_sizer.Add(wave_strain_min, 0, wx.EXPAND)
+        user_field_sizer.Add(randomized_strain_min, 0, wx.EXPAND)
         user_field_sizer.Add((0,0), 1, wx.EXPAND)
         user_field_sizer.Add(maximum_strain_text, 1, wx.EXPAND)
-        user_field_sizer.Add(wave_strain_max, 0, wx.EXPAND)
+        user_field_sizer.Add(randomized_strain_max, 0, wx.EXPAND)
         user_field_sizer.Add((0,0), 1, wx.EXPAND)
         user_field_sizer.Add(rate_text, 1, wx.EXPAND)
-        user_field_sizer.Add(rate_input_wave, 0, wx.EXPAND)
+        user_field_sizer.Add(rate_input_randomized, 0, wx.EXPAND)
         user_field_sizer.Add((0,0), 1, wx.EXPAND)
 
         middle_sizer.Add(panel_3, 1, wx.EXPAND)

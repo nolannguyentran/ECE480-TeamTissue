@@ -1,11 +1,11 @@
-from test_selection_frame import TestSelectionFrame
-from strain_input_type_frame import StrainInputTypeFrame
-from constant_strain_input_frame import ConstantStrainTestInput
-from randomized_strain_input_frame import RandomizedStrainTestInput
-from wave_strain_input_frame import WaveStrainTestInput
-from settings_frame import Settings
-from test_output_frame import TestOutput
-from loadcell_calibration_frame import Calibration
+from frames.test_selection_frame import TestSelectionFrame
+from frames.strain_input_type_frame import StrainInputTypeFrame
+from frames.constant_strain_input_frame import ConstantStrainTestInput
+from frames.randomized_strain_input_frame import RandomizedStrainTestInput
+from frames.wave_strain_input_frame import WaveStrainTestInput
+from frames.settings_frame import Settings
+from frames.test_output_frame import TestOutput
+from frames.loadcell_calibration_frame import Calibration
 
 def get_current_frame(frame_name):                       #determines which frame user is currently in, assign to existing global frame name class
     global current_frame

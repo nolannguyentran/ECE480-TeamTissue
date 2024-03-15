@@ -1,5 +1,5 @@
 import wx
-import back_end
+import frames.back_end as back_end
 
 from datetime import datetime
 length = 800
@@ -7,12 +7,11 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
-class Calibration(wx.Frame):
+class TestSelectionFrame(wx.Frame):
        def __init__(self, name):
         wx.Frame.__init__(self, None, size=(length, width))
 
-        self.name = name        #settings selection name
-       
+        self.name = name                    #Capsule Name
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
@@ -39,7 +38,7 @@ class Calibration(wx.Frame):
         t_2 = wx.StaticText(panel_2, label = self.name) 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
-        t_3 = wx.StaticText(panel_4, label = "Please enter test")
+        t_3 = wx.StaticText(panel_4, label = "Please select which type of test to conduct with "+self.name)
         t_3.SetFont(font_2)
         t_3.SetForegroundColour((255, 255, 255))
       
@@ -58,20 +57,18 @@ class Calibration(wx.Frame):
         text_sizer_3.Add(t_3,0,wx.ALIGN_CENTER)
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
 
-        button_constant = wx.Button(panel_3, wx.ID_ANY)
-        button_random = wx.Button(panel_3, wx.ID_ANY, 'Callibrate')
-        button_wave = wx.Button(panel_3, wx.ID_ANY)
+        button_compression = wx.Button(panel_3, wx.ID_ANY, 'Compression Test')
+        button_tensile = wx.Button(panel_3, wx.ID_ANY, 'Tensile Test')
 
-        button_constant.SetBackgroundColour((89, 99, 182))
-        button_constant.SetForegroundColour((255,255,255))
-        button_random.SetBackgroundColour((89, 99, 182))
-        button_random.SetForegroundColour((255,255,255))
-        button_wave.SetBackgroundColour((89, 99, 182))
-        button_wave.SetForegroundColour((255,255,255))
+        button_compression.SetBackgroundColour((89, 99, 182))
+        button_compression.SetForegroundColour((255,255,255))
+        button_tensile.SetBackgroundColour((89, 99, 182))
+        button_tensile.SetForegroundColour((255,255,255))
 
-        #button_constant.Bind(wx.EVT_BUTTON, lambda event: on_constant_test_click(event, self.name, self.test_type))
-        #button_random.Bind(wx.EVT_BUTTON, lambda event: on_random_test_click(event, self.name, self.test_type))
-        #button_wave.Bind(wx.EVT_BUTTON, lambda event: on_square_wave_test_click(event, self.name, self.test_type))
+        button_compression.Bind(wx.EVT_BUTTON, lambda event: back_end.on_compression_test_click(event, self.name))
+        button_tensile.Bind(wx.EVT_BUTTON, lambda event: back_end.on_tensile_test_click(event, self.name))
+        
+
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
@@ -85,13 +82,12 @@ class Calibration(wx.Frame):
         button_settings.SetBackgroundColour((0, 0, 0))
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
-        middle_sizer = wx.GridSizer(1, 3, 20, 20)         #For housing middle panel
+        middle_sizer = wx.GridSizer(1, 2, 20, 20)         #For housing middle panel
        
         navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
 
-        middle_sizer.Add(button_constant, 0, wx.EXPAND)
-        middle_sizer.Add(button_random, 0, wx.EXPAND)
-        middle_sizer.Add(button_wave, 0, wx.EXPAND)
+        middle_sizer.Add(button_compression, 0, wx.EXPAND)
+        middle_sizer.Add(button_tensile, 0, wx.EXPAND)
         
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
