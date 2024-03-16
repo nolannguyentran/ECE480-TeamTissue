@@ -7,6 +7,21 @@ from frames.settings_frame import Settings
 from frames.test_output_frame import TestOutput
 from frames.loadcell_calibration_frame import Calibration
 
+#import RPi.GPIO as GPIO
+#from hx711 import HX711  # import the class HX711
+from time import sleep
+import motor_config
+
+
+# Define Directions
+global CW
+global CCW
+CW = 1          # Clockwise 
+CCW = 0         # CounterClockwise
+
+motor_dict = motor_config.motor_dict                    #Pass by reference
+#loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
+
 def get_current_frame(frame_name):                       #determines which frame user is currently in, assign to existing global frame name class
     global current_frame
     match frame_name:
@@ -24,13 +39,11 @@ def get_current_frame(frame_name):                       #determines which frame
             current_frame = settings_frame
         case 'Calibration':
             current_frame = loadcell_calibration_frame
-        #case 'TestOutput':
-        #    current_frame = live_test_frame
+        case 'TestOutput':
+            current_frame = live_test_frame
 
 
 #TODO: Add functions for grabing max,min,and rate from each of the different strain type input tests
-
-
 
 
 def on_motor_click(event):
@@ -45,9 +58,6 @@ def on_compression_test_click(event, motor_name):
     global strain_input_type_frame
     strain_input_type_frame = StrainInputTypeFrame(motor_name, identity)
     strain_input_type_frame.Show()
-    #global strain_rate_frame
-    #strain_rate_frame = TestInput(motor_name, identity)
-    #strain_rate_frame.Show()
 
 def on_tensile_test_click(event, motor_name):
     identity = event.GetEventObject().GetLabel()    #Returns which test selected
@@ -55,9 +65,6 @@ def on_tensile_test_click(event, motor_name):
     global strain_input_type_frame
     strain_input_type_frame = StrainInputTypeFrame(motor_name, identity)
     strain_input_type_frame.Show()
-    #global strain_rate_frame
-    #strain_rate_frame = TestInput(motor_name, identity)
-    #strain_rate_frame.Show()
 
 def on_constant_test_click(event, motor_name, test_type):       #[strain input test selection page]
     strain_type = event.GetEventObject().GetLabel()    #Returns which strain input type selected (constant rate)
@@ -94,12 +101,12 @@ def on_calibration_click(event):
     loadcell_calibration_frame = Calibration(identity)
     loadcell_calibration_frame.Show()
 
-#def on_start_test_click(event, motor_name, test_name):          
-#    identity = event.GetEventObject().GetLabel()
-#    constant_strain_test_frame.Destroy()
-#    global live_test_frame
-#    live_test_frame = TestOutput(motor_name, test_name)
-#    live_test_frame.Show()
+def on_start_test_click(event, motor_name, test_type, strain_type):                  #TODO: WILL NEED TO ADD ANOTHER PARAMETER FOR THE STRAIN VALUES 
+    identity = event.GetEventObject().GetLabel()
+    constant_strain_test_frame.Destroy()
+    global live_test_frame
+    live_test_frame = TestOutput(motor_name, test_type, strain_type)
+    live_test_frame.Show()
 
 def on_home_click(event, frame_name):
     get_current_frame(frame_name)
@@ -110,6 +117,63 @@ def on_home_click(event, frame_name):
 #    gui_be.randomized_strain(10,100)
 
 
+#function to initialize both motors and their respective load cells
+""" def initialization():
+	
+	GPIO.setwarnings(False)
+
+	# Set GPIO mode and setup pins for motors 1-4
+	GPIO.setmode(GPIO.BOARD)
+	for motor in motor_dict:
+		GPIO.setup(motor_dict[motor]['step_pin'], GPIO.OUT, initial = GPIO.LOW)
+	
+	for motor in motor_dict:
+		GPIO.setup(motor_dict[motor]['dir_pin'], GPIO.OUT, initial = GPIO.LOW)
+	
+	print("-------MOTORS ARE READY-------")
+	
+	global loadcell_A
+	global loadcell_B
+	global loadcell_C
+	global loadcell_D
+
+	# Create and set up all four load cells objects
+	loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin'], channel=loadcell_dict['A']['channel'], gain=loadcell_dict['A']['gain']) 
+	loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin'], channel=loadcell_dict['B']['channel'], gain=loadcell_dict['B']['gain']) 
+	loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin'], channel=loadcell_dict['C']['channel'], gain=loadcell_dict['C']['gain']) 
+	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin'], channel=loadcell_dict['D']['channel'], gain=loadcell_dict['D']['gain']) 
+
+	print("-------LOAD CELLS ARE READY-------") """
+
+# function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
+""" def run_motor_constant(motor_name, test_name, strain_value, time_duration):		#TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
+	if test_name=='Compression Test':											#TODO: have a way to convert time duration to something equivalent to control or sleep motors 
+		starting_rotation = CW
+		returning_rotation = CCW
+		
+	else:
+		starting_rotation = CCW
+		returning_rotation = CW
+		
+	GPIO.output(motor_dict[motor_name]['dir_pin'], starting_rotation)
+
+	for step in range(500):
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+		sleep(0.005)
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+		sleep(0.005)
+		#read_data(motor_name)	---------------------------------------------> WILL NEED TO UNCOMMENT
+	
+	sleep(1.0)
+	GPIO.output(motor_dict[motor_name]['dir_pin'], returning_rotation)
+
+	for step in range(10000):
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+		sleep(0.005)
+		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+		sleep(0.005)
+		#read_data(motor_name)	-----------------------------------------------> WILL NEED TO UNCOMMENT """
+	
 
 
 

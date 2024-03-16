@@ -3,6 +3,7 @@ import frames.back_end as back_end
 #import gui_be          #REMEMBER TO UN-COMMENT INITIALIZATION AT THE BOTTOM OF THIS FILE!!!
 
 
+
 from datetime import datetime
 length = 800
 width = 480
@@ -105,6 +106,6 @@ class HomeFrame(wx.Frame):
 app = wx.App(False)
 global home_frame
 home_frame = HomeFrame(None, -1, "BioReactor")
-#gui_be.initialization() #initialize motors and load cells
+#back_end.initialization() #initialize motors and load cells
 home_frame.Show()
 app.MainLoop()

@@ -73,7 +73,7 @@ class ConstantStrainTestInput(wx.Frame):
         button_start.Bind(wx.EVT_BUTTON, on_constant_start_test)
  
 
-        #button_start.Bind(wx.EVT_BUTTON, lambda event: on_start_test_click(event, self.motor_name, self.test_type))
+        button_start.Bind(wx.EVT_BUTTON, lambda event: back_end.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)

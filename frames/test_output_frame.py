@@ -8,11 +8,12 @@ current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
 class TestOutput(wx.Frame):
-    def __init__(self, motor_name, test_type):
+    def __init__(self, motor_name, test_type, strain_type):
         wx.Frame.__init__(self, None, size=(length, width))
 
-        self.motor_name = motor_name        #Test type
-        self.test_type = test_type                    #Capsule name
+        self.motor_name = motor_name        #Capsule name
+        self.test_type = test_type          #Test Type
+        self.strain_type = strain_type      #Strain type
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
@@ -34,7 +35,7 @@ class TestOutput(wx.Frame):
         t_0.SetForegroundColour((255, 255, 255))
         t_1 = wx.StaticText(panel_1, label = now)
         t_1.SetForegroundColour((255, 255, 255))
-        t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type) 
+        t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type+": "+self.strain_type) 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
         
