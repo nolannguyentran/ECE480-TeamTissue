@@ -7,7 +7,10 @@ from frames.settings_frame import Settings
 from frames.test_output_frame import TestOutput
 from frames.loadcell_calibration_frame import Calibration
 
-#import RPi.GPIO as GPIO
+import threading
+import time
+
+import RPi.GPIO as GPIO
 #from hx711 import HX711  # import the class HX711
 from time import sleep
 import motor_config
@@ -108,6 +111,9 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     live_test_frame = TestOutput(motor_name, test_type, strain_type)
     live_test_frame.Show()
 
+    thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1))
+    thread.start()
+
 def on_home_click(event, frame_name):
     get_current_frame(frame_name)
     current_frame.Destroy()
@@ -118,7 +124,7 @@ def on_home_click(event, frame_name):
 
 
 #function to initialize both motors and their respective load cells
-""" def initialization():
+def initialization():
 	
 	GPIO.setwarnings(False)
 
@@ -132,7 +138,7 @@ def on_home_click(event, frame_name):
 	
 	print("-------MOTORS ARE READY-------")
 	
-	global loadcell_A
+	""" global loadcell_A
 	global loadcell_B
 	global loadcell_C
 	global loadcell_D
@@ -146,7 +152,7 @@ def on_home_click(event, frame_name):
 	print("-------LOAD CELLS ARE READY-------") """
 
 # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
-""" def run_motor_constant(motor_name, test_name, strain_value, time_duration):		#TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
+def run_motor_constant(motor_name, test_name, strain_value, time_duration):		#TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
 	if test_name=='Compression Test':											#TODO: have a way to convert time duration to something equivalent to control or sleep motors 
 		starting_rotation = CW
 		returning_rotation = CCW
@@ -172,7 +178,7 @@ def on_home_click(event, frame_name):
 		sleep(0.005)
 		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
 		sleep(0.005)
-		#read_data(motor_name)	-----------------------------------------------> WILL NEED TO UNCOMMENT """
+		#read_data(motor_name)	-----------------------------------------------> WILL NEED TO UNCOMMENT
 	
 
 

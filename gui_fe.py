@@ -106,6 +106,6 @@ class HomeFrame(wx.Frame):
 app = wx.App(False)
 global home_frame
 home_frame = HomeFrame(None, -1, "BioReactor")
-#back_end.initialization() #initialize motors and load cells
+back_end.initialization() #initialize motors and load cells
 home_frame.Show()
 app.MainLoop()
