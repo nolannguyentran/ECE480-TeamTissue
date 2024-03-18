@@ -6,11 +6,14 @@ from frames.wave_strain_input_frame import WaveStrainTestInput
 from frames.settings_frame import Settings
 from frames.test_output_frame import TestOutput
 from frames.loadcell_calibration_frame import Calibration
+from frames.home_frame import HomeFrame
 
+
+import wx
 import threading
 import time
 
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 #from hx711 import HX711  # import the class HX711
 from time import sleep
 import motor_config
@@ -24,6 +27,14 @@ CCW = 0         # CounterClockwise
 
 motor_dict = motor_config.motor_dict                    #Pass by reference
 #loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
+
+
+
+def start_program():
+    global home_frame
+    home_frame = HomeFrame(None, -1, "BioReactor")
+    #back_end.initialization() #initialize motors and load cells
+    home_frame.Show()
 
 def get_current_frame(frame_name):                       #determines which frame user is currently in, assign to existing global frame name class
     global current_frame
@@ -110,21 +121,30 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     global live_test_frame
     live_test_frame = TestOutput(motor_name, test_type, strain_type)
     live_test_frame.Show()
-
-    thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1))
+    
+    home_frame.running(motor_name[-1])
+    #thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1,))
+    thread = threading.Thread(target = thread_test, args=(motor_name,))
     thread.start()
 
 def on_home_click(event, frame_name):
     get_current_frame(frame_name)
     current_frame.Destroy()
-    #HomeFrame.test()
+    
 
-#def test(event):
+def thread_test(motor_name):
+    for i in range(10):
+        print(f"{motor_name} running: {i}")
+        time.sleep(1)
+    
+    wx.CallAfter(home_frame.not_running, motor_name[-1])
+    
+
 #    gui_be.randomized_strain(10,100)
 
 
 #function to initialize both motors and their respective load cells
-def initialization():
+""" def initialization():
 	
 	GPIO.setwarnings(False)
 
@@ -138,7 +158,7 @@ def initialization():
 	
 	print("-------MOTORS ARE READY-------")
 	
-	""" global loadcell_A
+	global loadcell_A
 	global loadcell_B
 	global loadcell_C
 	global loadcell_D
@@ -152,7 +172,7 @@ def initialization():
 	print("-------LOAD CELLS ARE READY-------") """
 
 # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
-def run_motor_constant(motor_name, test_name, strain_value, time_duration):		#TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
+""" def run_motor_constant(motor_name, test_name, strain_value, time_duration):		#TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
 	if test_name=='Compression Test':											#TODO: have a way to convert time duration to something equivalent to control or sleep motors 
 		starting_rotation = CW
 		returning_rotation = CCW
@@ -178,7 +198,7 @@ def run_motor_constant(motor_name, test_name, strain_value, time_duration):		#TO
 		sleep(0.005)
 		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
 		sleep(0.005)
-		#read_data(motor_name)	-----------------------------------------------> WILL NEED TO UNCOMMENT
+		#read_data(motor_name)	-----------------------------------------------> WILL NEED TO UNCOMMENT """
 	
 
 
