@@ -7,7 +7,9 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
-
+#--------------------------------------------------------------------------CONSTANT STRAIN TYPE SCREEN---------------------------------------------
+# This is where the user has selected the 'constant strain type' test where the user will enter a constant strain value alongside with time duration
+# that will be used for the test
 
 def on_constant_start_test(event):                           #function for start button to start test; call function run_motor (used for constant strain test only) 
         #print("hello world")

@@ -7,6 +7,9 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
+#--------------------------------------------------------------------------LOAD CELL CALLIBRATION SCREEN---------------------------------------------
+# This is where the user callibrates load cells against a given, known weight to deliver accurate load cell readings
+
 class Calibration(wx.Frame):
        def __init__(self, name):
         wx.Frame.__init__(self, None, size=(length, width))

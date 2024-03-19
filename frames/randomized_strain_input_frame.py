@@ -7,6 +7,10 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
+#--------------------------------------------------------------------------RANDOMIZED STRAIN TYPE SCREEN---------------------------------------------
+# This is where the user has selected the 'randomized strain type' test where the user will enter a min and max strain value in which the program
+# will choose a random value in between as the strain value, alongside with time duration that will be used for the test
+
 class RandomizedStrainTestInput(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):
         wx.Frame.__init__(self, None, size=(length, width))

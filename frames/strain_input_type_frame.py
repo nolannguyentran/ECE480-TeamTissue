@@ -7,6 +7,9 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
+#--------------------------------------------------------------------------STRAIN INPUT SCREEN---------------------------------------------
+# This is where the user can select which type of strain (constant, randomized, or square wavve) to be conducted on
+
 class StrainInputTypeFrame(wx.Frame):
        def __init__(self, motor_name, test_type):
         wx.Frame.__init__(self, None, size=(length, width))

@@ -7,6 +7,9 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
+#--------------------------------------------------------------------------TEST SELECTION SCREEN---------------------------------------------
+# This is where the user can select which test (compression or tensile) to conduct on the previously selected capsule
+
 class TestSelectionFrame(wx.Frame):
        def __init__(self, name):
         wx.Frame.__init__(self, None, size=(length, width))

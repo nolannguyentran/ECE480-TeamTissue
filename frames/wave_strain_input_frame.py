@@ -7,6 +7,10 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
+#--------------------------------------------------------------------------SQUARE WAVE STRAIN TYPE SCREEN---------------------------------------------
+# This is where the user has selected the 'square wave strain type' test where the user will enter a minimum and maximum strain value which will
+# serve as the 'low' and 'high' value for a periodic square wave to oscillate between, alongside with time duration that will be used for the test
+
 class WaveStrainTestInput(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):
         wx.Frame.__init__(self, None, size=(length, width))

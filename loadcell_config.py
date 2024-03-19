@@ -2,10 +2,11 @@
 import RPi.GPIO as GPIO  # import GPIO
 from hx711 import HX711  # import the class HX711
 
-# -------------lOAD CELL CONFIGURATION FILE: SET UP LOAD CELLS BASED ON THEIR GPIO PINS & IN RELATION TO MOTORS -------------------------------------------------
-#motor a = load cell a....etc
+# -------------lOAD CELL CONFIGURATION--------------------------------------------------------------------------------
+# SET UP LOAD CELLS BASED ON THEIR GPIO PINS
 
-loadcell_dict = {					#dictionary containing respective step/dir pin for each motor configuration
+
+loadcell_dict = {					#dictionary containing respective step/dir pin for each load cell configuration
 	'A':{
 		'dout_pin':5,               #data pin
 		'pd_sck_pin': 6,            #clock pin

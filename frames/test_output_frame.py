@@ -7,6 +7,10 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
+#--------------------------------------------------------------------------TEST OUTPUT SCREEN---------------------------------------------
+# This is where the user can see the progress of the test being ran on the capsule, user will also be able to export the load cell 
+# data into a .CSV file with a click of a button
+
 class TestOutput(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):
         wx.Frame.__init__(self, None, size=(length, width))

@@ -18,6 +18,9 @@ import time
 from time import sleep
 import motor_config
 
+#--------------------------------------------------------------------------BACK-END CONTROLS---------------------------------------------
+# This is where the majority of the back-end functionality will reside. Includes functions that control screen navigation, motor control
+# load cell readings, running tests, exporting data, randomizing values, motor and load cell initializations, etc.
 
 # Define Directions
 global CW

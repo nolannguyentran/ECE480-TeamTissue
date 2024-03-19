@@ -7,6 +7,9 @@ width = 480
 current_date_time = datetime.now()
 now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
+#--------------------------------------------------------------------------SETTINGS SCREEN---------------------------------------------
+# This is where the user can select settings options (load cell callibration) they want to configure; serves as the 'Settings'
+
 class Settings(wx.Frame):
        def __init__(self):
         wx.Frame.__init__(self, None, size=(length, width))
