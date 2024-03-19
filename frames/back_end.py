@@ -125,7 +125,7 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     live_test_frame = TestOutput(motor_name, test_type, strain_type)
     live_test_frame.Show()
     
-    home_frame.running(motor_name[-1])
+    home_frame.is_running(motor_name[-1])       #disable button, change color of button to red
     #thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1,))
     thread = threading.Thread(target = thread_test, args=(motor_name,))
     thread.start()
@@ -140,7 +140,7 @@ def thread_test(motor_name):
         print(f"{motor_name} running: {i}")
         time.sleep(1)
     
-    wx.CallAfter(home_frame.not_running, motor_name[-1])
+    wx.CallAfter(home_frame.done_running, motor_name[-1])   #re-enabled button, change color back to default
     
 
 #    gui_be.randomized_strain(10,100)

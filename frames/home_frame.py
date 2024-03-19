@@ -103,25 +103,33 @@ class HomeFrame(wx.Frame):
         self.SetAutoLayout(True)
         self.SetSizer(window_sizer)
         self.Layout()
-    def running(event, motor_name):                            #-------------------maybe disable button of motors or change color to reflect status
+    def is_running(event, motor_name):       #if capsule is being tested, disable respective button and change color to red to indicate test is being ran
         match motor_name:
             case 'A':
+                button_a.Disable()
                 button_a.SetBackgroundColour((255,0,0))
             case 'B':
+                button_b.Disable()
                 button_b.SetBackgroundColour((255,0,0))
             case 'C':
+                button_c.Disable()
                 button_c.SetBackgroundColour((255,0,0))
             case 'D':
+                button_d.Disable()
                 button_d.SetBackgroundColour((255,0,0))
         
-    def not_running(event, motor_name):
+    def done_running(event, motor_name):     #after test is finished, re-enabled button and change color back to default
          match motor_name:
             case 'A':
+                button_a.Enable()
                 button_a.SetBackgroundColour((89,99,182))
             case 'B':
+                button_b.Enable()
                 button_b.SetBackgroundColour((89,99,182))
             case 'C':
+                button_c.Enable()
                 button_c.SetBackgroundColour((89,99,182))
             case 'D':
+                button_d.Enable()
                 button_d.SetBackgroundColour((89,99,182))
     
