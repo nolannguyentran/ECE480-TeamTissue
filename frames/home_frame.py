@@ -43,6 +43,7 @@ class HomeFrame(wx.Frame):
         button_home = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
+        button_exit = wx.Button(panel_4, wx.ID_ANY, 'EXIT')
 
         button_home.Disable()
         #button_settings.Bind(wx.EVT_BUTTON, test)
@@ -58,6 +59,8 @@ class HomeFrame(wx.Frame):
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
         button_settings.SetBackgroundColour((0, 0, 0))
+        button_exit.SetBackgroundColour((0, 0, 0))
+        button_exit.SetForegroundColour((255, 255, 255))
 
         button_a.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_b.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
@@ -78,7 +81,7 @@ class HomeFrame(wx.Frame):
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
         motor_grid_sizer = wx.GridSizer(2, 2, 10, 10)     #For housing the four motor buttons
-        navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
+        navigation_grid_sizer = wx.GridSizer(1, 4, 0, 0)  #For housig the three navigation buttons
 
         middle_sizer.Add(panel_2, 1, wx.EXPAND)
         middle_sizer.Add(panel_3, 1, wx.EXPAND)
@@ -91,6 +94,7 @@ class HomeFrame(wx.Frame):
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
+        navigation_grid_sizer.Add(button_exit, 0, wx.EXPAND)
         
         panel_1.SetSizer(text_sizer_1)
         panel_3.SetSizer(motor_grid_sizer)
@@ -107,16 +111,16 @@ class HomeFrame(wx.Frame):
         match motor_name:
             case 'A':
                 button_a.Disable()
-                button_a.SetBackgroundColour((255,0,0))
+                button_a.SetBackgroundColour((190, 37, 66))
             case 'B':
                 button_b.Disable()
-                button_b.SetBackgroundColour((255,0,0))
+                button_b.SetBackgroundColour((190, 37, 66))
             case 'C':
                 button_c.Disable()
-                button_c.SetBackgroundColour((255,0,0))
+                button_c.SetBackgroundColour((190, 37, 66))
             case 'D':
                 button_d.Disable()
-                button_d.SetBackgroundColour((255,0,0))
+                button_d.SetBackgroundColour((190, 37, 66))
         
     def done_running(event, motor_name):     #after test is finished, re-enabled button and change color back to default
          match motor_name:

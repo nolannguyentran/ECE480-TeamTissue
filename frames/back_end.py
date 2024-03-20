@@ -4,6 +4,7 @@ from frames.constant_strain_input_frame import ConstantStrainTestInput
 from frames.randomized_strain_input_frame import RandomizedStrainTestInput
 from frames.wave_strain_input_frame import WaveStrainTestInput
 from frames.settings_frame import Settings
+from frames.jobs_frame import Jobs
 from frames.test_output_frame import TestOutput
 from frames.loadcell_calibration_frame import Calibration
 from frames.home_frame import HomeFrame
@@ -38,10 +39,12 @@ def start_program():
     home_frame = HomeFrame(None, -1, "BioReactor")
     #back_end.initialization() #initialize motors and load cells
     home_frame.Show()
+    global jobs_frame
+    jobs_frame = Jobs()
 
 def get_current_frame(frame_name):                       #determines which frame user is currently in, assign to existing global frame name class
-    global current_frame
-    match frame_name:
+    global current_frame                                 #TODO: NEED A CHECK IF THE USER IS CURRENTLY ON THE HOME PAGE, IF THEY ARE, DON'T DESTROY THE FRAME, I.E. PRESSING THE SETTINGS, JOBS BUTTON WHEN THE USER IS IN THE HOME DASHBOARD
+    match frame_name:                                    #<---------------------------------might need to add settings and job frame
         case 'TestSelectionFrame':
             current_frame = test_selection_frame
         case 'StrainInputTypeFrame':
@@ -58,16 +61,20 @@ def get_current_frame(frame_name):                       #determines which frame
             current_frame = loadcell_calibration_frame
         case 'TestOutput':
             current_frame = live_test_frame
+        case 'Jobs':                                                   #TODO: BIG PROBLEM , DONT DESTROY JOB, BUT HIDE IT
+            current_frame = jobs_frame
 
 
 #TODO: Add functions for grabing max,min,and rate from each of the different strain type input tests
 
 
-def on_motor_click(event):
+def on_motor_click(event):                          #TODO: ADDED IF STATEMENT DETERMINING WHETHER THE MOTOR IS CURRENTLY RUNNING AND NAVIGATE USER TO THE APPROPIATE PAGE
     identity = event.GetEventObject().GetLabel()    #Returns which capsule selected
     global test_selection_frame
     test_selection_frame = TestSelectionFrame(identity)
     test_selection_frame.Show()
+
+
 
 def on_compression_test_click(event, motor_name):
     identity = event.GetEventObject().GetLabel()    #Returns which test selected
@@ -111,6 +118,13 @@ def on_settings_click(event, frame_name):
     settings_frame = Settings()
     settings_frame.Show()
 
+def on_jobs_click(event, frame_name):
+    get_current_frame(frame_name)
+    current_frame.Destroy()
+    
+    jobs_frame.Show()
+
+
 def on_calibration_click(event):
     identity = event.GetEventObject().GetLabel()
     settings_frame.Destroy()
@@ -126,11 +140,13 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     live_test_frame.Show()
     
     home_frame.is_running(motor_name[-1])       #disable button, change color of button to red
+    jobs_frame.is_running(motor_name, test_type, strain_type)
     #thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1,))
     thread = threading.Thread(target = thread_test, args=(motor_name,))
     thread.start()
 
 def on_home_click(event, frame_name):
+    print("home clicked")
     get_current_frame(frame_name)
     current_frame.Destroy()
     
@@ -141,6 +157,7 @@ def thread_test(motor_name):
         time.sleep(1)
     
     wx.CallAfter(home_frame.done_running, motor_name[-1])   #re-enabled button, change color back to default
+    wx.CallAfter(jobs_frame.done_running, motor_name[-1])
     
 
 #    gui_be.randomized_strain(10,100)
