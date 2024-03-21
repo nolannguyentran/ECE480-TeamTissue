@@ -167,3 +167,22 @@ class Jobs(wx.Frame):
                 button_d.SetBackgroundColour((51,153,51))
                 button_d.Enable()
                 button_d.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
+    def clear_test(event, motor_name):
+        match motor_name[-1]:
+            case 'A':
+                button_a.Disable()
+                button_a.SetLabel('Capsule: A -----[STATUS: No Test Selected]')
+                button_a.SetBackgroundColour((33, 37, 41))
+            case 'B':
+                button_b.Disable()
+                button_b.SetLabel('Capsule: B -----[STATUS: No Test Selected]')
+                button_b.SetBackgroundColour((33, 37, 41))
+            case 'C':
+                button_c.Disable()
+                button_c.SetLabel('Capsule: C -----[STATUS: No Test Selected]')
+                button_c.SetBackgroundColour((33, 37, 41))
+            case 'D':
+                button_d.Disable()
+                button_d.SetLabel('Capsule: D -----[STATUS: No Test Selected]')
+                button_d.SetBackgroundColour((33, 37, 41))
+            

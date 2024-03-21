@@ -79,6 +79,8 @@ class TestOutput(wx.Frame):
         button_export_test.SetBackgroundColour((89, 99, 182))
         button_export_test.SetForegroundColour((255, 255, 255))
 
+        button_clear_test.Bind(wx.EVT_BUTTON, lambda event: back_end.clear_test_results(event, self.motor_name, self.__class__.__name__))
+
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
         button_settings.SetBackgroundColour((0, 0, 0))

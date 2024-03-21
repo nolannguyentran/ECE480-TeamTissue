@@ -64,6 +64,8 @@ def get_current_frame(frame_name):                       #determines which frame
             current_frame = live_test_frame
         case 'Jobs':                                                   #TODO: BIG PROBLEM , DONT DESTROY JOB, BUT HIDE IT
             current_frame = jobs_frame
+        case 'HomeFrame':
+            current_frame = home_frame
 
 
 #TODO: Add functions for grabing max,min,and rate from each of the different strain type input tests
@@ -121,7 +123,8 @@ def on_settings_click(event, frame_name):
 
 def on_jobs_click(event, frame_name):
     get_current_frame(frame_name)
-    current_frame.Destroy()
+    if current_frame != home_frame:
+        current_frame.Destroy()
     
     jobs_frame.Show()
 
@@ -142,7 +145,7 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     
     jobs_frame.Show()
     
-    home_frame.is_running(motor_name[-1])       #disable button, change color of button to red
+    home_frame.is_running(motor_name)       #disable button, change color of button to red
     jobs_frame.is_running(motor_name, test_type, strain_type)
     #thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1,))
     thread = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type,))
@@ -161,7 +164,7 @@ def thread_test(motor_name, test_type, strain_type):
         print(f"{motor_name} running: {i}")
         time.sleep(1)
     
-    wx.CallAfter(home_frame.done_running, motor_name[-1])   #re-enabled button, change color back to default
+    #wx.CallAfter(home_frame.done_running, motor_name)   #re-enabled button, change color back to default
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
     
 
@@ -172,10 +175,14 @@ def on_task_click(event, motor_name, test_type, strain_type):           #functio
     live_test_frame = TestOutput(motor_name, test_type, strain_type)
     live_test_frame.Show()
 
-def clear_test_results(event):
-    pass
+def clear_test_results(event, motor_name, frame_name):
+    home_frame.done_running(motor_name)
+    jobs_frame.clear_test(motor_name)
+    get_current_frame(frame_name)
+    current_frame.Destroy()
+    jobs_frame.Show()
 
-def export_test_results(event):
+def export_test_results(event, motor_name):
     pass                        #call function to export list to .CSV file
 
 #    gui_be.randomized_strain(10,100)

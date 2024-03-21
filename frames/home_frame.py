@@ -46,6 +46,7 @@ class HomeFrame(wx.Frame):
         button_exit = wx.Button(panel_4, wx.ID_ANY, 'EXIT')
 
         button_home.Disable()
+        button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
         #button_settings.Bind(wx.EVT_BUTTON, test)
 
         button_a.SetBackgroundColour((89, 99, 182))
@@ -108,7 +109,7 @@ class HomeFrame(wx.Frame):
         self.SetSizer(window_sizer)
         self.Layout()
     def is_running(event, motor_name):       #if capsule is being tested, disable respective button and change color to red to indicate test is being ran
-        match motor_name:
+        match motor_name[-1]:
             case 'A':
                 button_a.Disable()
                 button_a.SetBackgroundColour((190, 37, 66))
@@ -123,7 +124,7 @@ class HomeFrame(wx.Frame):
                 button_d.SetBackgroundColour((190, 37, 66))
         
     def done_running(event, motor_name):     #after test is finished, re-enabled button and change color back to default
-         match motor_name:
+         match motor_name[-1]:
             case 'A':
                 button_a.Enable()
                 button_a.SetBackgroundColour((89,99,182))
