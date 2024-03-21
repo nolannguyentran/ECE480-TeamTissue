@@ -151,15 +151,19 @@ class Jobs(wx.Frame):
                 button_a.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_a.SetBackgroundColour((51,153,51))
                 button_a.Enable()
+                button_a.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
             case 'B':
                 button_b.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_b.SetBackgroundColour((51,153,51))
                 button_b.Enable()
+                button_b.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
             case 'C':
                 button_c.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_c.SetBackgroundColour((51,153,51))
                 button_c.Enable()
+                button_c.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
             case 'D':
                 button_d.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_d.SetBackgroundColour((51,153,51))
                 button_d.Enable()
+                button_d.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))

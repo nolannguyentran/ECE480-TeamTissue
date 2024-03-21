@@ -165,6 +165,19 @@ def thread_test(motor_name, test_type, strain_type):
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
     
 
+def on_task_click(event, motor_name, test_type, strain_type):           #function for buttons in jobs page after a test is finished
+    identity = event.GetEventObject().GetLabel()
+    jobs_frame.Hide()
+    global live_test_frame
+    live_test_frame = TestOutput(motor_name, test_type, strain_type)
+    live_test_frame.Show()
+
+def clear_test_results(event):
+    pass
+
+def export_test_results(event):
+    pass                        #call function to export list to .CSV file
+
 #    gui_be.randomized_strain(10,100)
 
 
