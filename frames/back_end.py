@@ -41,6 +41,7 @@ def start_program():
     home_frame.Show()
     global jobs_frame
     jobs_frame = Jobs()
+    
 
 def get_current_frame(frame_name):                       #determines which frame user is currently in, assign to existing global frame name class
     global current_frame                                 #TODO: NEED A CHECK IF THE USER IS CURRENTLY ON THE HOME PAGE, IF THEY ARE, DON'T DESTROY THE FRAME, I.E. PRESSING THE SETTINGS, JOBS BUTTON WHEN THE USER IS IN THE HOME DASHBOARD
@@ -135,29 +136,33 @@ def on_calibration_click(event):
 def on_start_test_click(event, motor_name, test_type, strain_type):                  #TODO: WILL NEED TO ADD ANOTHER PARAMETER FOR THE STRAIN VALUES 
     identity = event.GetEventObject().GetLabel()
     constant_strain_test_frame.Destroy()
-    global live_test_frame
-    live_test_frame = TestOutput(motor_name, test_type, strain_type)
-    live_test_frame.Show()
+    #global live_test_frame
+    #live_test_frame = TestOutput(motor_name, test_type, strain_type)
+    #live_test_frame.Show()
+    
+    jobs_frame.Show()
     
     home_frame.is_running(motor_name[-1])       #disable button, change color of button to red
     jobs_frame.is_running(motor_name, test_type, strain_type)
     #thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1,))
-    thread = threading.Thread(target = thread_test, args=(motor_name,))
+    thread = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type,))
     thread.start()
 
 def on_home_click(event, frame_name):
-    print("home clicked")
     get_current_frame(frame_name)
-    current_frame.Destroy()
+    if current_frame == jobs_frame:
+        current_frame.Hide()
+    else:
+        current_frame.Destroy()
     
 
-def thread_test(motor_name):
+def thread_test(motor_name, test_type, strain_type):
     for i in range(10):
         print(f"{motor_name} running: {i}")
         time.sleep(1)
     
     wx.CallAfter(home_frame.done_running, motor_name[-1])   #re-enabled button, change color back to default
-    wx.CallAfter(jobs_frame.done_running, motor_name[-1])
+    wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
     
 
 #    gui_be.randomized_strain(10,100)

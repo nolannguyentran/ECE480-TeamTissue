@@ -38,19 +38,27 @@ class Jobs(wx.Frame):
         t_0.SetForegroundColour((255, 255, 255))
         t_1 = wx.StaticText(panel_1, label = now)
         t_1.SetForegroundColour((255, 255, 255))
-        t_2 = wx.StaticText(panel_2, label = "Jobs:") 
+        t_2 = wx.StaticText(panel_2, label = "Current Jobs:") 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
+        t_3 = wx.StaticText(panel_4, label = "Please go back to 'Home' to start a new test")
+        t_3.SetFont(font_2)
+        t_3.SetForegroundColour((255, 255, 255))
 
         global button_a
         global button_b
         global button_c
         global button_d
         
-        button_a = wx.Button(panel_3, wx.ID_ANY, 'Capsule: A', style = wx.BU_LEFT)
-        button_b = wx.Button(panel_3, wx.ID_ANY, 'Capsule: B', style = wx.BU_LEFT)
-        button_c = wx.Button(panel_3, wx.ID_ANY, 'Capsule: C', style = wx.BU_LEFT)
-        button_d = wx.Button(panel_3, wx.ID_ANY, 'Capsule: D', style = wx.BU_LEFT)
+        button_a = wx.Button(panel_3, wx.ID_ANY, 'Capsule: A -----[STATUS: No Test Selected]', style = wx.BU_LEFT)
+        button_b = wx.Button(panel_3, wx.ID_ANY, 'Capsule: B -----[STATUS: No Test Selected]', style = wx.BU_LEFT)
+        button_c = wx.Button(panel_3, wx.ID_ANY, 'Capsule: C -----[STATUS: No Test Selected]', style = wx.BU_LEFT)
+        button_d = wx.Button(panel_3, wx.ID_ANY, 'Capsule: D -----[STATUS: No Test Selected]', style = wx.BU_LEFT)
+
+        button_a.Disable()              #buttons are disabled by default
+        button_b.Disable()
+        button_c.Disable()
+        button_d.Disable()
         
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
@@ -61,6 +69,11 @@ class Jobs(wx.Frame):
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
         text_sizer_2.Add(t_2, 0, wx.ALIGN_CENTER)
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
+
+        text_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning instructions in center
+        text_sizer_3.Add((0,0), 1, wx.EXPAND)
+        text_sizer_3.Add(t_3,0,wx.ALIGN_CENTER)
+        text_sizer_3.Add((0,0), 1, wx.EXPAND)
 
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
@@ -100,6 +113,7 @@ class Jobs(wx.Frame):
         panel_1.SetSizer(text_sizer_1)
         panel_2.SetSizer(text_sizer_2)
         panel_3.SetSizer(middle_sizer)
+        panel_4.SetSizer(text_sizer_3)
         panel_5.SetSizer(navigation_grid_sizer)
 
         window_sizer.Add(panel_1, 1, wx.EXPAND)
@@ -115,29 +129,37 @@ class Jobs(wx.Frame):
     def is_running(event, motor_name, test_type, strain_type):       #if capsule is being tested, disable respective button and change color to red to indicate test is being ran
         match motor_name[-1]:
             case 'A':
-                button_a.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type)
-                button_a.SetBackgroundColour((51,153,51))
+                button_a.Disable()
+                button_a.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Running]")
+                button_a.SetBackgroundColour((190, 37, 66))
             case 'B':
-                button_b.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type)
-                button_b.SetBackgroundColour((51,153,51))
+                button_b.Disable()
+                button_b.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Running]")
+                button_b.SetBackgroundColour((190, 37, 66))
             case 'C':
-                button_c.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type)
-                button_c.SetBackgroundColour((51,153,51))
+                button_c.Disable()
+                button_c.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Running]")
+                button_c.SetBackgroundColour((190, 37, 66))
             case 'D':
-                button_d.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type)
-                button_d.SetBackgroundColour((51,153,51))
+                button_d.Disable()
+                button_d.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Running]")
+                button_d.SetBackgroundColour((190, 37, 66))
         
-    def done_running(event, motor_name):     #after test is finished, re-enabled button and change color back to default
-         match motor_name:
+    def done_running(event, motor_name, test_type, strain_type):     #after test is finished, re-enabled button and change color back to default
+         match motor_name[-1]:
             case 'A':
-                button_a.SetLabel('Capsule: A')
-                button_a.SetBackgroundColour((33, 37, 41))
+                button_a.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
+                button_a.SetBackgroundColour((51,153,51))
+                button_a.Enable()
             case 'B':
-                button_b.SetLabel('Capsule: B')
-                button_b.SetBackgroundColour((33, 37, 41))
+                button_b.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
+                button_b.SetBackgroundColour((51,153,51))
+                button_b.Enable()
             case 'C':
-                button_c.SetLabel('Capsule: C')
-                button_c.SetBackgroundColour((33, 37, 41))
+                button_c.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
+                button_c.SetBackgroundColour((51,153,51))
+                button_c.Enable()
             case 'D':
-                button_d.SetLabel('Capsule: D')
-                button_d.SetBackgroundColour((33, 37, 41))
+                button_d.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
+                button_d.SetBackgroundColour((51,153,51))
+                button_d.Enable()
