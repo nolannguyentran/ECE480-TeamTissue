@@ -221,6 +221,16 @@ def clear_test_results(event, motor_name, frame_name):
     get_current_frame(frame_name)
     current_frame.Destroy()
     jobs_frame.Show()
+    match motor_name[-1]:
+            case 'A':
+                motor_a_flag.clear()
+            case 'B':
+               motor_b_flag.clear()
+            case 'C':
+                motor_c_flag.clear()
+            case 'D':
+                motor_d_flag.clear()
+
 
 def export_test_results(event, motor_name):
     pass                        #TODO: call function to export list to .CSV file
