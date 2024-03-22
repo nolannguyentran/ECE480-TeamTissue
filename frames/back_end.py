@@ -23,6 +23,13 @@ import motor_config
 # This is where the majority of the back-end functionality will reside. Includes functions that control screen navigation, motor control
 # load cell readings, running tests, exporting data, randomizing values, motor and load cell initializations, etc.
 
+
+motor_a_flag = threading.Event()  # flags used to stop threads
+motor_b_flag = threading.Event()
+motor_c_flag = threading.Event()
+motor_d_flag = threading.Event()
+
+
 # Define Directions
 global CW
 global CCW
@@ -32,7 +39,7 @@ CCW = 0         # CounterClockwise
 motor_dict = motor_config.motor_dict                    #Pass by reference
 #loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
 
-
+#TODO: MAYBE ADD GLOBAL LIST FOR EACH MOTORS ('A', 'B', 'C', 'D') TO LATER BE CONVERTED INTO .CSV FILE
 
 def start_program():
     global home_frame
@@ -76,8 +83,6 @@ def on_motor_click(event):                          #TODO: ADDED IF STATEMENT DE
     global test_selection_frame
     test_selection_frame = TestSelectionFrame(identity)
     test_selection_frame.Show()
-
-
 
 def on_compression_test_click(event, motor_name):
     identity = event.GetEventObject().GetLabel()    #Returns which test selected
@@ -136,6 +141,9 @@ def on_calibration_click(event):
     loadcell_calibration_frame = Calibration(identity)
     loadcell_calibration_frame.Show()
 
+
+
+
 def on_start_test_click(event, motor_name, test_type, strain_type):                  #TODO: WILL NEED TO ADD ANOTHER PARAMETER FOR THE STRAIN VALUES 
     identity = event.GetEventObject().GetLabel()
     constant_strain_test_frame.Destroy()
@@ -148,8 +156,26 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     home_frame.is_running(motor_name)       #disable button, change color of button to red
     jobs_frame.is_running(motor_name, test_type, strain_type)
     #thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1,))
-    thread = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type,))
-    thread.start()
+    global thread_a
+    global thread_b
+    global thread_c
+    global thread_d
+    
+    thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag))
+    thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag))
+    thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag))
+    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag))
+    match motor_name[-1]:
+            case 'A':
+                thread_a.start()
+            case 'B':
+                thread_b.start()
+            case 'C':
+                thread_c.start()
+            case 'D':
+                thread_d.start()
+    #thread = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type,))
+    #thread.start()
 
 def on_home_click(event, frame_name):
     get_current_frame(frame_name)
@@ -159,12 +185,13 @@ def on_home_click(event, frame_name):
         current_frame.Destroy()
     
 
-def thread_test(motor_name, test_type, strain_type):
+def thread_test(motor_name, test_type, strain_type, stop_flag):
     for i in range(10):
+        if stop_flag.is_set():
+            break
         print(f"{motor_name} running: {i}")
         time.sleep(1)
     
-    #wx.CallAfter(home_frame.done_running, motor_name)   #re-enabled button, change color back to default
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
     
 
@@ -175,6 +202,19 @@ def on_task_click(event, motor_name, test_type, strain_type):           #functio
     live_test_frame = TestOutput(motor_name, test_type, strain_type)
     live_test_frame.Show()
 
+
+def on_stop_test_click(event):              #function for 'Stop Test' buttons in 'Jobs' page
+    motor_name = event.GetEventObject().myname                                    #TODO: call function to stop specific thread, and maybe function to reset linear actuator position back to original 'starting' position (in cm?)
+    match motor_name:
+            case 'A':
+                motor_a_flag.set()
+            case 'B':
+               motor_b_flag.set()
+            case 'C':
+                motor_c_flag.set()
+            case 'D':
+                motor_d_flag.set()
+
 def clear_test_results(event, motor_name, frame_name):
     home_frame.done_running(motor_name)
     jobs_frame.clear_test(motor_name)
@@ -183,7 +223,7 @@ def clear_test_results(event, motor_name, frame_name):
     jobs_frame.Show()
 
 def export_test_results(event, motor_name):
-    pass                        #call function to export list to .CSV file
+    pass                        #TODO: call function to export list to .CSV file
 
 #    gui_be.randomized_strain(10,100)
 

@@ -68,9 +68,13 @@ class Jobs(wx.Frame):
         button_d.Disable()
 
         button_a_stop = wx.Button(panel_4, wx.ID_ANY, 'Stop Test')
+        button_a_stop.myname = 'A'
         button_b_stop = wx.Button(panel_4, wx.ID_ANY, 'Stop Test')
+        button_b_stop.myname = 'B'
         button_c_stop = wx.Button(panel_4, wx.ID_ANY, 'Stop Test')
+        button_c_stop.myname = 'C'
         button_d_stop = wx.Button(panel_4, wx.ID_ANY, 'Stop Test')
+        button_d_stop.myname = 'D'
 
         button_a_stop.Disable()
         button_b_stop.Disable()
@@ -114,6 +118,11 @@ class Jobs(wx.Frame):
         button_c_stop.SetForegroundColour((255, 255, 255))
         button_d_stop.SetBackgroundColour((33, 37, 41))
         button_d_stop.SetForegroundColour((255, 255, 255))
+
+        button_a_stop.Bind(wx.EVT_BUTTON, back_end.on_stop_test_click)
+        button_b_stop.Bind(wx.EVT_BUTTON, back_end.on_stop_test_click)
+        button_c_stop.Bind(wx.EVT_BUTTON, back_end.on_stop_test_click)
+        button_d_stop.Bind(wx.EVT_BUTTON, back_end.on_stop_test_click)
 
         button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
         button_jobs.Disable()
