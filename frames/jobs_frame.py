@@ -56,6 +56,8 @@ class Jobs(wx.Frame):
         global button_b_stop
         global button_c_stop
         global button_d_stop
+
+        global button_emerg_stop
         
         button_a = wx.Button(panel_3, wx.ID_ANY, 'Capsule: A -----[STATUS: No Test Selected]', style = wx.BU_LEFT)
         button_b = wx.Button(panel_3, wx.ID_ANY, 'Capsule: B -----[STATUS: No Test Selected]', style = wx.BU_LEFT)
@@ -100,6 +102,7 @@ class Jobs(wx.Frame):
         button_home = wx.BitmapButton(panel_6, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_6, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_6, wx.ID_ANY, bitmap = settings_img)
+        button_emerg_stop = wx.Button(panel_6, wx.ID_ANY, 'EMERGENCY \nSTOP')
 
         button_a.SetBackgroundColour((33, 37, 41))
         button_a.SetForegroundColour((255, 255, 255))
@@ -127,10 +130,14 @@ class Jobs(wx.Frame):
         button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
         button_jobs.Disable()
         button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
+        button_emerg_stop.Bind(wx.EVT_BUTTON, back_end.on_emerg_click)
+        button_emerg_stop.Disable()
         
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
         button_settings.SetBackgroundColour((0, 0, 0))
+        button_emerg_stop.SetBackgroundColour((190, 37, 66))
+        button_emerg_stop.SetForegroundColour((255, 255, 255))
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         parent_middle_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -151,10 +158,11 @@ class Jobs(wx.Frame):
         right_middle_sizer.Add(button_c_stop, 0, wx.EXPAND)
         right_middle_sizer.Add(button_d_stop, 0, wx.EXPAND)
        
-        navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
+        navigation_grid_sizer = wx.GridSizer(1, 4, 0, 0)  #For housig the three navigation buttons
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
+        navigation_grid_sizer.Add(button_emerg_stop, 0, wx.EXPAND)
         
         panel_1.SetSizer(text_sizer_1)
         panel_2.SetSizer(text_sizer_2)
@@ -249,4 +257,9 @@ class Jobs(wx.Frame):
                 button_d.Disable()
                 button_d.SetLabel('Capsule: D -----[STATUS: No Test Selected]')
                 button_d.SetBackgroundColour((33, 37, 41))
+    
+    def enable_emerg_stop_button(event):
+        button_emerg_stop.Enable()
+    def disable_emerg_stop_button(event):
+        button_emerg_stop.Disable()
             

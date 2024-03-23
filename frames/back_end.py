@@ -29,6 +29,8 @@ motor_b_flag = threading.Event()
 motor_c_flag = threading.Event()
 motor_d_flag = threading.Event()
 
+emergency_flag = threading.Event()  # flag used to stop ALL threads
+
 
 # Define Directions
 global CW
@@ -155,6 +157,7 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     
     home_frame.is_running(motor_name)       #disable button, change color of button to red
     jobs_frame.is_running(motor_name, test_type, strain_type)
+    jobs_frame.enable_emerg_stop_button()
     #thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1,))
     global thread_a
     global thread_b
@@ -186,8 +189,8 @@ def on_home_click(event, frame_name):
     
 
 def thread_test(motor_name, test_type, strain_type, stop_flag):
-    for i in range(10):
-        if stop_flag.is_set():
+    for i in range(20):
+        if stop_flag.is_set() or emergency_flag.is_set():
             break
         print(f"{motor_name} running: {i}")
         time.sleep(1)
@@ -215,12 +218,17 @@ def on_stop_test_click(event):              #function for 'Stop Test' buttons in
             case 'D':
                 motor_d_flag.set()
 
+def on_emerg_click(event):      #function for 'Emergency Stop" button - should stop all threads
+    emergency_flag.set()
+    
+
 def clear_test_results(event, motor_name, frame_name):
     home_frame.done_running(motor_name)
     jobs_frame.clear_test(motor_name)
     get_current_frame(frame_name)
     current_frame.Destroy()
     jobs_frame.Show()
+    jobs_frame.disable_emerg_stop_button()
     match motor_name[-1]:
             case 'A':
                 motor_a_flag.clear()
@@ -230,6 +238,8 @@ def clear_test_results(event, motor_name, frame_name):
                 motor_c_flag.clear()
             case 'D':
                 motor_d_flag.clear()
+    if emergency_flag.is_set():
+        emergency_flag.clear()
 
 
 def export_test_results(event, motor_name):

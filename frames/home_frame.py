@@ -43,46 +43,53 @@ class HomeFrame(wx.Frame):
         button_home = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
-        button_exit = wx.Button(panel_4, wx.ID_ANY, 'EXIT')
+        button_exit = wx.Button(panel_1, wx.ID_ANY, 'X')
+        #button_emerg_button = wx.Button(panel_4, wx.ID_ANY, 'STOP')
 
         button_home.Disable()
         button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
         #button_settings.Bind(wx.EVT_BUTTON, test)
 
+        button_exit.SetBackgroundColour((53, 62, 108))
+        button_exit.SetForegroundColour((255, 255, 255))
         button_a.SetBackgroundColour((89, 99, 182))
-        button_a.SetForegroundColour((255,255,255))
+        button_a.SetForegroundColour((255, 255, 255))
         button_b.SetBackgroundColour((89, 99, 182))
-        button_b.SetForegroundColour((255,255,255))
+        button_b.SetForegroundColour((255, 255, 255))
         button_c.SetBackgroundColour((89, 99, 182))
-        button_c.SetForegroundColour((255,255,255))
+        button_c.SetForegroundColour((255, 255, 255))
         button_d.SetBackgroundColour((89, 99, 182))
-        button_d.SetForegroundColour((255,255,255))
+        button_d.SetForegroundColour((255, 255, 255))
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
         button_settings.SetBackgroundColour((0, 0, 0))
-        button_exit.SetBackgroundColour((0, 0, 0))
-        button_exit.SetForegroundColour((255, 255, 255))
+        #button_emerg_button.SetBackgroundColour((190, 37, 66))
+        #button_emerg_button.SetForegroundColour((255, 255, 255))
+        
+
 
         button_a.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_b.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_c.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_d.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
-       
+
+        #test_button_sizer = wx.GridSizer(1,1,10,10)
+        #test_button_sizer.Add(button_emerg_button, 0, wx.EXPAND)
 
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
         t_0.SetForegroundColour((255, 255, 255))
-        t_1 = wx.StaticText(panel_1, label = now)
-        t_1.SetForegroundColour((255, 255, 255))
+        #t_1 = wx.StaticText(panel_1, label = now)
+        #t_1.SetForegroundColour((255, 255, 255))
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
-        text_sizer_1.Add(t_1, 0, wx.EXPAND)
+        text_sizer_1.Add(button_exit, 0, wx.EXPAND)
    
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
         motor_grid_sizer = wx.GridSizer(2, 2, 10, 10)     #For housing the four motor buttons
-        navigation_grid_sizer = wx.GridSizer(1, 4, 0, 0)  #For housig the three navigation buttons
+        navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
 
         middle_sizer.Add(panel_2, 1, wx.EXPAND)
         middle_sizer.Add(panel_3, 1, wx.EXPAND)
@@ -95,9 +102,10 @@ class HomeFrame(wx.Frame):
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
-        navigation_grid_sizer.Add(button_exit, 0, wx.EXPAND)
+        #navigation_grid_sizer.Add(button_emerg_button, 0, wx.EXPAND)
         
         panel_1.SetSizer(text_sizer_1)
+        #panel_2.SetSizer(test_button_sizer)
         panel_3.SetSizer(motor_grid_sizer)
         panel_4.SetSizer(navigation_grid_sizer)
 
