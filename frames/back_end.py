@@ -228,7 +228,10 @@ def clear_test_results(event, motor_name, frame_name):
     get_current_frame(frame_name)
     current_frame.Destroy()
     jobs_frame.Show()
-    jobs_frame.disable_emerg_stop_button()
+    if thread_a.is_alive() or thread_b.is_alive() or thread_c.is_alive() or thread_d.is_alive():        # to ensure emergency button is still enable if any of the motor is still running (i.e., if the user starts two motors, but only stop one of the motors...)
+        pass
+    else: #this means all threads are dead
+        jobs_frame.disable_emerg_stop_button()
     match motor_name[-1]:
             case 'A':
                 motor_a_flag.clear()
