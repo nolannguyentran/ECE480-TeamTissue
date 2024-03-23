@@ -44,7 +44,7 @@ class HomeFrame(wx.Frame):
         button_jobs = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
         button_exit = wx.Button(panel_1, wx.ID_ANY, 'X')
-        #button_emerg_button = wx.Button(panel_4, wx.ID_ANY, 'STOP')
+       
 
         button_home.Disable()
         button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
@@ -63,9 +63,7 @@ class HomeFrame(wx.Frame):
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
         button_settings.SetBackgroundColour((0, 0, 0))
-        #button_emerg_button.SetBackgroundColour((190, 37, 66))
-        #button_emerg_button.SetForegroundColour((255, 255, 255))
-        
+       
 
 
         button_a.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
@@ -73,9 +71,8 @@ class HomeFrame(wx.Frame):
         button_c.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_d.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
 
-        #test_button_sizer = wx.GridSizer(1,1,10,10)
-        #test_button_sizer.Add(button_emerg_button, 0, wx.EXPAND)
-
+       
+       
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
         t_0.SetForegroundColour((255, 255, 255))
         #t_1 = wx.StaticText(panel_1, label = now)
@@ -102,10 +99,10 @@ class HomeFrame(wx.Frame):
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
-        #navigation_grid_sizer.Add(button_emerg_button, 0, wx.EXPAND)
+        
         
         panel_1.SetSizer(text_sizer_1)
-        #panel_2.SetSizer(test_button_sizer)
+        
         panel_3.SetSizer(motor_grid_sizer)
         panel_4.SetSizer(navigation_grid_sizer)
 
