@@ -8,30 +8,30 @@ from hx711 import HX711  # import the class HX711
 
 loadcell_dict = {					#dictionary containing respective step/dir pin for each load cell configuration
 	'A':{
-		'dout_pin':5,               #data pin
-		'pd_sck_pin': 6,            #clock pin
+		'dout_pin': 13,               #data pin
+		'pd_sck_pin': 15,            #clock pin
 		'channel': 'A',
 		'gain': 64,
         'num_readings': 10
 	},
 	'B':{
-		'dout_pin':1,
-		'pd_sck_pin': 2,
-		'channel': 'A',
+		'dout_pin':21,
+		'pd_sck_pin': 23,
+		'channel': 'B',
 		'gain': 64, 
         'num_readings': 10
 	},
 	'C':{
-		'dout_pin':3,
-		'pd_sck_pin': 4,
-		'channel': 'A',
+		'dout_pin': 18,
+		'pd_sck_pin': 22,
+		'channel': 'C',
 		'gain': 64,
         'num_readings': 10
 	},
 	'D':{
-		'dout_pin':7,
-		'pd_sck_pin': 8,
-		'channel': 'A',
+		'dout_pin':24,
+		'pd_sck_pin': 26,
+		'channel': 'D',
 		'gain': 64,
         'num_readings': 10
 	},
