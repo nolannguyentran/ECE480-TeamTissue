@@ -14,10 +14,11 @@ import wx
 import threading
 import time
 
-#import RPi.GPIO as GPIO
-#from hx711 import HX711  # import the class HX711
+import RPi.GPIO as GPIO
+from hx711 import HX711  # import the class HX711
 from time import sleep
 import motor_config
+import loadcell_config
 
 #--------------------------------------------------------------------------BACK-END CONTROLS---------------------------------------------
 # This is where the majority of the back-end functionality will reside. Includes functions that control screen navigation, motor control
@@ -39,7 +40,7 @@ CW = 1          # Clockwise
 CCW = 0         # CounterClockwise
 
 motor_dict = motor_config.motor_dict                    #Pass by reference
-#loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
+loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
 
 #TODO: MAYBE ADD GLOBAL LIST FOR EACH MOTORS ('A', 'B', 'C', 'D') TO LATER BE CONVERTED INTO .CSV FILE
 
@@ -274,38 +275,57 @@ def export_test_results(event, motor_name):
 
 	print("-------LOAD CELLS ARE READY-------") """
 
+def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
+    match motor_name:
+        case 'A':
+            loadcell_A.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'B':
+            loadcell_B.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'C':
+            loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'D':
+            loadcell_D.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+
+
+
+
 # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
-""" def run_motor_constant(motor_name, test_name, strain_value, time_duration):		#TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
-	if test_name=='Compression Test':											#TODO: have a way to convert time duration to something equivalent to control or sleep motors 
-		starting_rotation = CW
-		returning_rotation = CCW
-		
-	else:
-		starting_rotation = CCW
-		returning_rotation = CW
-		
-	GPIO.output(motor_dict[motor_name]['dir_pin'], starting_rotation)
+def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): #TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
+    if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
+        starting_rotation = CW
+        returning_rotation = CCW
+    
+    else:
+        starting_rotation = CCW
+        returning_rotation = CW
+    GPIO.output(motor_dict[motor_name]['dir_pin'], starting_rotation)
 
-	for step in range(500):
-		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
-		sleep(0.005)
-		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
-		sleep(0.005)
-		#read_data(motor_name)	---------------------------------------------> WILL NEED TO UNCOMMENT
-	
-	sleep(1.0)
-	GPIO.output(motor_dict[motor_name]['dir_pin'], returning_rotation)
+    for step in range(500):
+        if stop_flag.is_set():
+            break
+        GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+        sleep(0.005)
+        GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+        sleep(0.005)
+        #read_data(motor_name) -------------------------------------------------> WILL NEED TO UNCOMMENT
+    
+    sleep(1.0)
+    GPIO.output(motor_dict[motor_name]['dir_pin'], returning_rotation)
+    for step in range(500):
+        if stop_flag.is_set():
+            break
+        GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+        sleep(0.005)
+        GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+        sleep(0.005)
+        #read_data(motor_name) -------------------------------------------------> WILL NEED TO UNCOMMENT
+    
+    wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
 
-	for step in range(10000):
-		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
-		sleep(0.005)
-		GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
-		sleep(0.005)
-		#read_data(motor_name)	-----------------------------------------------> WILL NEED TO UNCOMMENT """
-	
 
+	  
 
-
+    
 
 
 
