@@ -23,14 +23,16 @@ class TestOutput(wx.Frame):
         settings_img = wx.Bitmap("./pictures/settings.png")
 
         panel_1 = wx.Panel(self, -1,)       #For housing name, date, and time
-        panel_2 = wx.Panel(self, -1,)       #For housing graph
-        panel_3 = wx.Panel(self, -1,)       #For housing capsule name, test, and export button
-        panel_4 = wx.Panel(self, -1,)       #For housing navigation buttons
+        panel_2 = wx.Panel(self, -1,)       #For capsule name
+        panel_3 = wx.Panel(self, -1,)       #For housing two test output buttons
+        panel_4 = wx.Panel(self, -1,)       #For housing instruction
+        panel_5 = wx.Panel(self, -1,)       #For housing navigation buttons
     
         panel_1.SetBackgroundColour((53, 62, 108))        
         panel_2.SetBackgroundColour((33, 37, 41))         
         panel_3.SetBackgroundColour((33, 37, 41))
-        panel_4.SetBackgroundColour((53, 62, 108))               
+        panel_4.SetBackgroundColour((33, 37, 41))  
+        panel_5.SetBackgroundColour((53, 62, 108))             
 
         font_1 = wx.Font(20, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         font_2 = wx.Font(14, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
@@ -42,6 +44,9 @@ class TestOutput(wx.Frame):
         t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type+": "+self.strain_type) 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
+        t_3 = wx.StaticText(panel_4, label = "Please select option")
+        t_3.SetFont(font_2)
+        t_3.SetForegroundColour((255, 255, 255))
         
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
@@ -53,25 +58,38 @@ class TestOutput(wx.Frame):
         text_sizer_2.Add(t_2, 0, wx.ALIGN_CENTER)
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
 
-        #button_start = wx.Button(panel_4, wx.ID_ANY, 'START')
-        #button_start.SetBackgroundColour((190, 37, 66))
+        text_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning instructions in center
+        text_sizer_3.Add((0,0), 1, wx.EXPAND)
+        text_sizer_3.Add(t_3,0,wx.ALIGN_CENTER)
+        text_sizer_3.Add((0,0), 1, wx.EXPAND)
 
-        button_home = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = dashboard_img)
-        button_jobs = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = jobs_img)
-        button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
+        button_clear_test = wx.Button(panel_3, wx.ID_ANY, 'Clear Test Results')
+        button_export_test = wx.Button(panel_3, wx.ID_ANY, 'Export Test Results to .CSV')
+
+        button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
+        button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
+        button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
         button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
+        button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
         button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
         
+        button_clear_test.SetBackgroundColour((89, 99, 182))
+        button_clear_test.SetForegroundColour((255, 255, 255))
+        button_export_test.SetBackgroundColour((89, 99, 182))
+        button_export_test.SetForegroundColour((255, 255, 255))
+
+        button_clear_test.Bind(wx.EVT_BUTTON, lambda event: back_end.clear_test_results(event, self.motor_name, self.__class__.__name__))
+
         button_home.SetBackgroundColour((0, 0, 0))
         button_jobs.SetBackgroundColour((0, 0, 0))
         button_settings.SetBackgroundColour((0, 0, 0))
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
-        middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
+        middle_sizer = wx.GridSizer(1, 2, 20, 20)         #For housing middle panel
 
-        middle_sizer.Add(panel_2, 1, wx.EXPAND)
-        middle_sizer.Add(panel_3, 1, wx.EXPAND)
+        middle_sizer.Add(button_clear_test, 0, wx.EXPAND)
+        middle_sizer.Add(button_export_test, 0, wx.EXPAND)
        
         navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
@@ -80,14 +98,16 @@ class TestOutput(wx.Frame):
         
         panel_1.SetSizer(text_sizer_1)
         panel_2.SetSizer(text_sizer_2)
-        #panel_3.SetSizer(user_field_sizer)
-        panel_4.SetSizer(navigation_grid_sizer)
+        panel_3.SetSizer(middle_sizer)
+        panel_4.SetSizer(text_sizer_3)
+        panel_5.SetSizer(navigation_grid_sizer)
     
 
         window_sizer.Add(panel_1, 1, wx.EXPAND)
-        #window_sizer.Add(panel_2, 2, wx.EXPAND)
-        window_sizer.Add(middle_sizer, 10, wx.EXPAND)
+        window_sizer.Add(panel_2, 2, wx.EXPAND)
+        window_sizer.Add(panel_3, 6, wx.EXPAND)
         window_sizer.Add(panel_4, 2, wx.EXPAND)
+        window_sizer.Add(panel_5, 2, wx.EXPAND)
    
         self.SetAutoLayout(True)
         self.SetSizer(window_sizer)

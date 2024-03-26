@@ -52,7 +52,7 @@ class ConstantStrainTestInput(wx.Frame):
         constant_strain_text = wx.StaticText(panel_3, label = "Strain:")
         constant_strain_text.SetForegroundColour((255, 255, 255))
         global constant_strain_input                        #---------------------------------------------------------> might refactor in the future
-        constant_strain_input = wx.TextCtrl(panel_3)
+        constant_strain_input = wx.TextCtrl(panel_3)        #---might need to rename to strain_input_constant
         #strain_input.Bind(wx.EVT_TEXT, on_key_typed)
         rate_text = wx.StaticText(panel_3, label = "Rate:")
         rate_text.SetForegroundColour((255, 255, 255))
