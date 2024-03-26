@@ -90,9 +90,14 @@ try:
     # desired units. In my case in grams.
     print("Now, I will read data in infinite loop. To exit press 'CTRL + C'")
     input('Press Enter to begin reading')
-    print('Current weight on the scale in grams is: ')
+    print('Current weight on the scale in grams and force in Newtons is: ')
     while True:
         print(hx.get_weight_mean(20), 'g')
+        
+        #convert grams to newtons
+        newton_mean = ((hx.get_weight_mean(20) / 1000) * 9.81)
+
+        print(newton_mean, 'N')
 
 except (KeyboardInterrupt, SystemExit):
     print('Bye :)')
