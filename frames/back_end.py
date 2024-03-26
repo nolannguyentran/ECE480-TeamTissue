@@ -47,7 +47,7 @@ loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
 def start_program():
     global home_frame
     home_frame = HomeFrame(None, -1, "BioReactor")
-    #back_end.initialization() #initialize motors and load cells
+    initialization() #initialize motors and load cells
     home_frame.Show()
     global jobs_frame
     jobs_frame = Jobs()
@@ -165,7 +165,7 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     global thread_c
     global thread_d
     
-    thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag))
+    thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
     thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag))
     thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag))
     thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag))
@@ -248,7 +248,7 @@ def export_test_results(event, motor_name):
 
 
 #function to initialize both motors and their respective load cells
-""" def initialization():
+def initialization():
 	
 	GPIO.setwarnings(False)
 
@@ -273,7 +273,7 @@ def export_test_results(event, motor_name):
 	loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin'], channel=loadcell_dict['C']['channel'], gain=loadcell_dict['C']['gain']) 
 	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin'], channel=loadcell_dict['D']['channel'], gain=loadcell_dict['D']['gain']) 
 
-	print("-------LOAD CELLS ARE READY-------") """
+	print("-------LOAD CELLS ARE READY-------")
 
 def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
     match motor_name:
