@@ -15,7 +15,7 @@ import threading
 import time
 
 import RPi.GPIO as GPIO
-from hx711 import HX711  # import the class HX711
+#from hx711 import HX711  # import the class HX711
 from time import sleep
 import motor_config
 import loadcell_config
@@ -40,7 +40,7 @@ CW = 1          # Clockwise
 CCW = 0         # CounterClockwise
 
 motor_dict = motor_config.motor_dict                    #Pass by reference
-loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
+#loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
 
 #TODO: MAYBE ADD GLOBAL LIST FOR EACH MOTORS ('A', 'B', 'C', 'D') TO LATER BE CONVERTED INTO .CSV FILE
 
@@ -168,7 +168,7 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
     thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag))
     thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag))
-    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag))
+    thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_d_flag))
     match motor_name[-1]:
             case 'A':
                 thread_a.start()
@@ -275,7 +275,7 @@ def initialization():
 
 	print("-------LOAD CELLS ARE READY-------") """
 
-def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
+""" def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
     match motor_name:
         case 'A':
             loadcell_A.get_raw_data(loadcell_dict[motor_name]['num_readings'])
@@ -285,7 +285,7 @@ def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
             loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
         case 'D':
             loadcell_D.get_raw_data(loadcell_dict[motor_name]['num_readings'])
-
+ """
 
 
 
