@@ -18,7 +18,7 @@ import RPi.GPIO as GPIO
 #from hx711 import HX711  # import the class HX711
 from time import sleep
 import motor_config
-import loadcell_config
+#import loadcell_config
 
 #--------------------------------------------------------------------------BACK-END CONTROLS---------------------------------------------
 # This is where the majority of the back-end functionality will reside. Includes functions that control screen navigation, motor control
@@ -262,10 +262,10 @@ def initialization():
 	
 	print("-------MOTORS ARE READY-------")
 	
-	global loadcell_A
-	global loadcell_B
-	global loadcell_C
-	global loadcell_D
+	#global loadcell_A
+	#global loadcell_B
+	#global loadcell_C
+	#global loadcell_D
 
 	""" # Create and set up all four load cells objects
 	loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin'], channel=loadcell_dict['A']['channel'], gain=loadcell_dict['A']['gain']) 
@@ -292,6 +292,7 @@ def initialization():
 # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
 def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): #TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
+        print("here")
         starting_rotation = CW
         returning_rotation = CCW
     
