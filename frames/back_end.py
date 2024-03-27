@@ -299,25 +299,25 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
     else:
         starting_rotation = CCW
         returning_rotation = CW
-    GPIO.output(motor_dict[motor_name]['dir_pin'], starting_rotation)
+    GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
 
     for step in range(500):
         if stop_flag.is_set():
             break
-        GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+        GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
         sleep(0.005)
-        GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+        GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
         #read_data(motor_name) -------------------------------------------------> WILL NEED TO UNCOMMENT
     
     sleep(1.0)
-    GPIO.output(motor_dict[motor_name]['dir_pin'], returning_rotation)
+    GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
     for step in range(500):
         if stop_flag.is_set():
             break
-        GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.HIGH)
+        GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
         sleep(0.005)
-        GPIO.output(motor_dict[motor_name]['step_pin'], GPIO.LOW)
+        GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
         #read_data(motor_name) -------------------------------------------------> WILL NEED TO UNCOMMENT
     
