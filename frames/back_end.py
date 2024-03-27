@@ -15,10 +15,10 @@ import threading
 import time
 
 import RPi.GPIO as GPIO
-#from hx711 import HX711  # import the class HX711
+from hx711 import HX711  # import the class HX711
 from time import sleep
 import motor_config
-#import loadcell_config
+import loadcell_config
 
 #--------------------------------------------------------------------------BACK-END CONTROLS---------------------------------------------
 # This is where the majority of the back-end functionality will reside. Includes functions that control screen navigation, motor control
@@ -40,7 +40,7 @@ CW = 1          # Clockwise
 CCW = 0         # CounterClockwise
 
 motor_dict = motor_config.motor_dict                    #Pass by reference
-#loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
+loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
 
 #TODO: MAYBE ADD GLOBAL LIST FOR EACH MOTORS ('A', 'B', 'C', 'D') TO LATER BE CONVERTED INTO .CSV FILE
 
@@ -265,27 +265,35 @@ def initialization():
 	#global loadcell_A
 	#global loadcell_B
 	#global loadcell_C
-	#global loadcell_D
+	global loadcell_D
 
-	""" # Create and set up all four load cells objects
-	loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin'], channel=loadcell_dict['A']['channel'], gain=loadcell_dict['A']['gain']) 
-	loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin'], channel=loadcell_dict['B']['channel'], gain=loadcell_dict['B']['gain']) 
-	loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin'], channel=loadcell_dict['C']['channel'], gain=loadcell_dict['C']['gain']) 
+	# Create and set up all four load cells objects
+	#loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin'], channel=loadcell_dict['A']['channel'], gain=loadcell_dict['A']['gain']) 
+	#loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin'], channel=loadcell_dict['B']['channel'], gain=loadcell_dict['B']['gain']) 
+	#loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin'], channel=loadcell_dict['C']['channel'], gain=loadcell_dict['C']['gain']) 
 	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin'], channel=loadcell_dict['D']['channel'], gain=loadcell_dict['D']['gain']) 
 
-	print("-------LOAD CELLS ARE READY-------") """
+	print("-------LOAD CELLS ARE READY-------")
 
-""" def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
+def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
     match motor_name:
+        #case 'A':
+        #    loadcell_A.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        #case 'B':
+        #    loadcell_B.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        #case 'C':
+        #    loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
         case 'A':
-            loadcell_A.get_raw_data(loadcell_dict[motor_name]['num_readings'])
-        case 'B':
-            loadcell_B.get_raw_data(loadcell_dict[motor_name]['num_readings'])
-        case 'C':
-            loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
-        case 'D':
-            loadcell_D.get_raw_data(loadcell_dict[motor_name]['num_readings'])
- """
+            print('Current weight on the scale in grams and force in Newtons is: ')
+            while True:
+                print(loadcell_D.get_weight_mean(20), 'g')
+        
+        #convert grams to newtons
+                newton_mean = ((hx.get_weight_mean(20) / 1000) * 9.81)
+
+                print(newton_mean, 'N')
+            
+
 
 
 
@@ -301,25 +309,25 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         returning_rotation = CW
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
 
-    for step in range(500):
+    for step in range(1000):
         if stop_flag.is_set():
             break
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        #read_data(motor_name) -------------------------------------------------> WILL NEED TO UNCOMMENT
+        read_data(motor_name[-1]) 
     
     sleep(1.0)
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
-    for step in range(500):
+    for step in range(1000):
         if stop_flag.is_set():
             break
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        #read_data(motor_name) -------------------------------------------------> WILL NEED TO UNCOMMENT
+        read_data(motor_name[-1])
     
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
 
