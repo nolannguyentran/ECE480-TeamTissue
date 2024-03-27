@@ -276,6 +276,7 @@ def initialization():
 	print("-------LOAD CELLS ARE READY-------")
 
 def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
+    print('Current weight on the scale in grams and force in Newtons is: ')
     match motor_name:
         #case 'A':
         #    loadcell_A.get_raw_data(loadcell_dict[motor_name]['num_readings'])
@@ -284,14 +285,14 @@ def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
         #case 'C':
         #    loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
         case 'D':
-            print('Current weight on the scale in grams and force in Newtons is: ')
-            while True:
-                print(loadcell_D.get_weight_mean(20), 'g')
+            
+            #while True:
+            print(loadcell_D.get_weight_mean(20), 'g')
         
         #convert grams to newtons
-                newton_mean = ((loadcell_D.get_weight_mean(20) / 1000) * 9.81)
+            newton_mean = ((loadcell_D.get_weight_mean(20) / 1000) * 9.81)
 
-                print(newton_mean, 'N')
+            print(newton_mean, 'N')
             
 
 
