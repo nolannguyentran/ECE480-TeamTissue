@@ -283,13 +283,13 @@ def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
         #    loadcell_B.get_raw_data(loadcell_dict[motor_name]['num_readings'])
         #case 'C':
         #    loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
-        case 'A':
+        case 'D':
             print('Current weight on the scale in grams and force in Newtons is: ')
             while True:
                 print(loadcell_D.get_weight_mean(20), 'g')
         
         #convert grams to newtons
-                newton_mean = ((hx.get_weight_mean(20) / 1000) * 9.81)
+                newton_mean = ((loadcell_D.get_weight_mean(20) / 1000) * 9.81)
 
                 print(newton_mean, 'N')
             
@@ -316,7 +316,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        read_data(motor_name[-1]) 
+        read_data('D') 
     
     sleep(1.0)
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
@@ -327,7 +327,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        read_data(motor_name[-1])
+        read_data('D')
     
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
 
