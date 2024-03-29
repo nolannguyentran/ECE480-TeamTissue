@@ -25,13 +25,20 @@ import loadcell_config
 # load cell readings, running tests, exporting data, randomizing values, motor and load cell initializations, etc.
 
 
-motor_a_flag = threading.Event()  # flags used to stop threads
+motor_a_flag = threading.Event()  # flags used to stop motor threads
 motor_b_flag = threading.Event()
 motor_c_flag = threading.Event()
 motor_d_flag = threading.Event()
 
+motor_a_lc_flag = threading.Event()
+motor_b_lc_flag = threading.Event()
+motor_c_lc_flag = threading.Event()
+motor_d_lc_flag = threading.Event() # flag used to stop load cell threads
 
 
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(19, GPIO.OUT)
+GPIO.output(19, GPIO.HIGH)
 
 # Define Directions
 global CW
@@ -145,8 +152,6 @@ def on_calibration_click(event):
     loadcell_calibration_frame.Show()
 
 
-
-
 def on_start_test_click(event, motor_name, test_type, strain_type):                  #TODO: WILL NEED TO ADD ANOTHER PARAMETER FOR THE STRAIN VALUES 
     identity = event.GetEventObject().GetLabel()
     constant_strain_test_frame.Destroy()
@@ -164,22 +169,35 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     global thread_b
     global thread_c
     global thread_d
+
+    global thread_a_lc
+    global thread_b_lc
+    global thread_c_lc
+    global thread_d_lc
     
     thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
     thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag))
     thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag))
     thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_d_flag))
+    thread_a_lc = threading.Thread(target = read_data, args=(motor_name,))
+    thread_b_lc = threading.Thread(target = read_data, args=(motor_name,))
+    thread_c_lc = threading.Thread(target = read_data, args=(motor_name,))
+    thread_d_lc = threading.Thread(target = read_data, args=(motor_name,))
     match motor_name[-1]:
             case 'A':
                 thread_a.start()
+                thread_a_lc.start()
             case 'B':
                 thread_b.start()
+                thread_b_lc.start()
             case 'C':
                 thread_c.start()
+                thread_c_lc.start()
             case 'D':
                 thread_d.start()
+                thread_d_lc.start()
+                
     #thread = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type,))
-    #thread.start()
 
 def on_home_click(event, frame_name):
     get_current_frame(frame_name)
@@ -212,15 +230,18 @@ def on_stop_test_click(event):              #function for 'Stop Test' buttons in
     match motor_name:
             case 'A':
                 motor_a_flag.set()
+                motor_a_lc_flag.set()
             case 'B':
                motor_b_flag.set()
+               motor_b_lc_flag.set()
             case 'C':
                 motor_c_flag.set()
+                motor_c_lc_flag.set()
             case 'D':
                 motor_d_flag.set()
+                motor_d_lc_flag.set()
 
 
-    
 
 def clear_test_results(event, motor_name, frame_name):
     home_frame.done_running(motor_name)
@@ -232,12 +253,16 @@ def clear_test_results(event, motor_name, frame_name):
     match motor_name[-1]:
             case 'A':
                 motor_a_flag.clear()
+                motor_a_lc_flag.clear()
             case 'B':
                motor_b_flag.clear()
+               motor_b_lc_flag.clear()
             case 'C':
                 motor_c_flag.clear()
+                motor_c_lc_flag.clear()
             case 'D':
                 motor_d_flag.clear()
+                motor_d_lc_flag.clear()
     
 
 
@@ -268,16 +293,16 @@ def initialization():
 	global loadcell_D
 
 	# Create and set up all four load cells objects
-	#loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin'], channel=loadcell_dict['A']['channel'], gain=loadcell_dict['A']['gain']) 
+	#loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin']) 
 	#loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin'], channel=loadcell_dict['B']['channel'], gain=loadcell_dict['B']['gain']) 
-	#loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin'], channel=loadcell_dict['C']['channel'], gain=loadcell_dict['C']['gain']) 
-	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin'], channel=loadcell_dict['D']['channel'], gain=loadcell_dict['D']['gain']) 
+	#loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
+	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin']) 
 
 	print("-------LOAD CELLS ARE READY-------")
 
 def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
     print('Current weight on the scale in grams and force in Newtons is: ')
-    match motor_name:
+    match motor_name[-1]:
         #case 'A':
         #    loadcell_A.get_raw_data(loadcell_dict[motor_name]['num_readings'])
         #case 'B':
@@ -285,15 +310,17 @@ def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
         #case 'C':
         #    loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
         case 'D':
-            
-            #while True:
-            print(loadcell_D.get_weight_mean(20), 'g')
+            counter = 0
+            while not motor_d_lc_flag.is_set():
+                counter = counter+1
+                print(loadcell_D.get_weight_mean(1), 'g')
+                print("counter: "+str(counter))
         
         #convert grams to newtons
-            newton_mean = ((loadcell_D.get_weight_mean(20) / 1000) * 9.81)
+                #newton_mean = ((loadcell_C.get_weight_mean(20) / 1000) * 9.81)
 
-            print(newton_mean, 'N')
-            
+                #print(newton_mean, 'N')
+                #print("HELP2")
 
 
 
@@ -301,7 +328,6 @@ def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
 # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
 def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): #TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
-        print("here")
         starting_rotation = CW
         returning_rotation = CCW
     
@@ -313,22 +339,24 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
     for step in range(1000):
         if stop_flag.is_set():
             break
+        
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        read_data('D') 
-    
+        
     sleep(1.0)
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
     for step in range(1000):
         if stop_flag.is_set():
             break
+        
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        read_data('D')
+        #read_data('D')
+    motor_d_lc_flag.set() #-------------------------might need to call a function to set this flag so it is dynamically motor correct
     
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
 
