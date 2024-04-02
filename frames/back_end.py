@@ -13,6 +13,7 @@ from frames.home_frame import HomeFrame
 import wx
 import threading
 import time
+import csv
 
 import RPi.GPIO as GPIO
 from hx711 import HX711  # import the class HX711
@@ -23,6 +24,8 @@ import loadcell_config
 #--------------------------------------------------------------------------BACK-END CONTROLS---------------------------------------------
 # This is where the majority of the back-end functionality will reside. Includes functions that control screen navigation, motor control
 # load cell readings, running tests, exporting data, randomizing values, motor and load cell initializations, etc.
+
+
 
 
 motor_a_flag = threading.Event()  # flags used to stop motor threads
@@ -49,7 +52,12 @@ CCW = 0         # CounterClockwise
 motor_dict = motor_config.motor_dict                    #Pass by reference
 loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
 
-#TODO: MAYBE ADD GLOBAL LIST FOR EACH MOTORS ('A', 'B', 'C', 'D') TO LATER BE CONVERTED INTO .CSV FILE
+csv_constant_strain_fields = ['Strain', 'Time', 'Linear Displacement']  #csv headers for constrant strain tests
+csv_square_wave_strain_fields = ['Strain', 'Time', 'Linear Displacement', 'Rate']   #csv headers for square wave strain tests
+capsule_a_list = [] #list holding loadcell data
+capsule_b_list = []
+capsule_c_list = []
+capsule_d_list = []
 
 def start_program():
     global home_frame
@@ -175,10 +183,17 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     global thread_c_lc
     global thread_d_lc
     
-    thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
+    """ thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag))
     thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag))
     thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag))
+    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag)) """
+
+    thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
+    thread_b = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_b_flag))
+    thread_c = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_c_flag))
     thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_d_flag))
+
+    
     thread_a_lc = threading.Thread(target = read_data, args=(motor_name,))
     thread_b_lc = threading.Thread(target = read_data, args=(motor_name,))
     thread_c_lc = threading.Thread(target = read_data, args=(motor_name,))
@@ -208,12 +223,13 @@ def on_home_click(event, frame_name):
     
 
 def thread_test(motor_name, test_type, strain_type, stop_flag):
-    for i in range(20):
+    for i in range(5):
         if stop_flag.is_set():
             break
         print(f"{motor_name} running: {i}")
+        #capsule_a_list.append([i,"hello", "world"])
         time.sleep(1)
-    
+    #print(capsule_a_list)
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
     
 
@@ -254,22 +270,49 @@ def clear_test_results(event, motor_name, frame_name):
             case 'A':
                 motor_a_flag.clear()
                 motor_a_lc_flag.clear()
+                capsule_a_list.clear()
             case 'B':
                motor_b_flag.clear()
                motor_b_lc_flag.clear()
+               capsule_b_list.clear()
             case 'C':
                 motor_c_flag.clear()
                 motor_c_lc_flag.clear()
+                capsule_c_list.clear()
             case 'D':
                 motor_d_flag.clear()
                 motor_d_lc_flag.clear()
+                capsule_d_list.clear()
     
 
+def remove_space(string):   #function to remove spaces in strings
+    return string.replace(" ", "")
 
-def export_test_results(event, motor_name):
-    pass                        #TODO: call function to export list to .CSV file
-
-#    gui_be.randomized_strain(10,100)
+def export_test_results(event, motor_name, test_type, strain_type, frame_name):
+    home_frame.done_running(motor_name)
+    jobs_frame.clear_test(motor_name)
+    get_current_frame(frame_name)
+    current_frame.Destroy()
+    jobs_frame.Show()
+    filename = "Capsule_{capsule}_{test}_{strain}.csv".format(capsule = motor_name[-1], test = remove_space(test_type), strain = remove_space(strain_type))
+    print(filename)
+    with open(filename, 'w') as f:
+        file_writer = csv.writer(f)
+        if strain_type=='Constant Strain':                                                              
+            file_writer.writerow(csv_constant_strain_fields)
+        else:                                                                  #user chose square wave...
+            file_writer.writerow(csv_square_wave_strain_fields) 
+        
+        match motor_name[-1]:
+            case 'A':
+                file_writer.writerows(capsule_a_list)
+            case 'B':
+                file_writer.writerows(capsule_b_list)
+            case 'C':
+                file_writer.writerows(capsule_c_list)
+            case 'D':
+                file_writer.writerows(capsule_d_list)
+        
 
 
 #function to initialize both motors and their respective load cells
@@ -355,7 +398,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        #read_data('D')
+        
     motor_d_lc_flag.set() #-------------------------might need to call a function to set this flag so it is dynamically motor correct
     
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
