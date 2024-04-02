@@ -62,18 +62,15 @@ class StrainInputTypeFrame(wx.Frame):
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
 
         button_constant = wx.Button(panel_3, wx.ID_ANY, 'Constant Strain')
-        button_random = wx.Button(panel_3, wx.ID_ANY, 'Random Strain')
+        
         button_wave = wx.Button(panel_3, wx.ID_ANY, 'Square Wave')
 
         button_constant.SetBackgroundColour((89, 99, 182))
         button_constant.SetForegroundColour((255,255,255))
-        button_random.SetBackgroundColour((89, 99, 182))
-        button_random.SetForegroundColour((255,255,255))
         button_wave.SetBackgroundColour((89, 99, 182))
         button_wave.SetForegroundColour((255,255,255))
 
         button_constant.Bind(wx.EVT_BUTTON, lambda event: back_end.on_constant_test_click(event, self.name, self.test_type))
-        button_random.Bind(wx.EVT_BUTTON, lambda event: back_end.on_random_test_click(event, self.name, self.test_type))
         button_wave.Bind(wx.EVT_BUTTON, lambda event: back_end.on_square_wave_test_click(event, self.name, self.test_type))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
@@ -88,12 +85,11 @@ class StrainInputTypeFrame(wx.Frame):
         button_settings.SetBackgroundColour((0, 0, 0))
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
-        middle_sizer = wx.GridSizer(1, 3, 20, 20)         #For housing middle panel
+        middle_sizer = wx.GridSizer(1, 2, 20, 20)         #For housing middle panel
        
         navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
 
         middle_sizer.Add(button_constant, 0, wx.EXPAND)
-        middle_sizer.Add(button_random, 0, wx.EXPAND)
         middle_sizer.Add(button_wave, 0, wx.EXPAND)
         
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)

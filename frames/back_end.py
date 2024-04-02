@@ -1,7 +1,6 @@
 from frames.test_selection_frame import TestSelectionFrame
 from frames.strain_input_type_frame import StrainInputTypeFrame
 from frames.constant_strain_input_frame import ConstantStrainTestInput
-from frames.randomized_strain_input_frame import RandomizedStrainTestInput
 from frames.wave_strain_input_frame import WaveStrainTestInput
 from frames.settings_frame import Settings
 from frames.jobs_frame import Jobs
@@ -15,8 +14,8 @@ import threading
 import time
 import csv
 
-import RPi.GPIO as GPIO
-from hx711 import HX711  # import the class HX711
+""" import RPi.GPIO as GPIO
+from hx711 import HX711  # import the class HX711 """
 from time import sleep
 import motor_config
 import loadcell_config
@@ -33,15 +32,15 @@ motor_b_flag = threading.Event()
 motor_c_flag = threading.Event()
 motor_d_flag = threading.Event()
 
-motor_a_lc_flag = threading.Event()
+""" motor_a_lc_flag = threading.Event()
 motor_b_lc_flag = threading.Event()
 motor_c_lc_flag = threading.Event()
-motor_d_lc_flag = threading.Event() # flag used to stop load cell threads
+motor_d_lc_flag = threading.Event() # flag used to stop load cell threads """
 
 
-GPIO.setmode(GPIO.BOARD)
+""" GPIO.setmode(GPIO.BOARD)
 GPIO.setup(19, GPIO.OUT)
-GPIO.output(19, GPIO.HIGH)
+GPIO.output(19, GPIO.HIGH) """
 
 # Define Directions
 global CW
@@ -62,7 +61,7 @@ capsule_d_list = []
 def start_program():
     global home_frame
     home_frame = HomeFrame(None, -1, "BioReactor")
-    initialization() #initialize motors and load cells
+    """ initialization() #initialize motors and load cells """
     home_frame.Show()
     global jobs_frame
     jobs_frame = Jobs()
@@ -123,13 +122,6 @@ def on_constant_test_click(event, motor_name, test_type):       #[strain input t
     constant_strain_test_frame = ConstantStrainTestInput(motor_name, test_type, strain_type)
     constant_strain_test_frame.Show()
 
-def on_random_test_click(event, motor_name, test_type):         #[strain input test selection page]
-    strain_type = event.GetEventObject().GetLabel()    #Returns which strain input type selected (constant rate)
-    strain_input_type_frame.Destroy()
-    global randomized_strain_test_frame
-    randomized_strain_test_frame = RandomizedStrainTestInput(motor_name, test_type, strain_type)
-    randomized_strain_test_frame.Show()
-
 def on_square_wave_test_click(event, motor_name, test_type):    #[strain input test selection page]
     strain_type = event.GetEventObject().GetLabel()    #Returns which strain input type selected (constant rate)
     strain_input_type_frame.Destroy()
@@ -163,56 +155,50 @@ def on_calibration_click(event):
 def on_start_test_click(event, motor_name, test_type, strain_type):                  #TODO: WILL NEED TO ADD ANOTHER PARAMETER FOR THE STRAIN VALUES 
     identity = event.GetEventObject().GetLabel()
     constant_strain_test_frame.Destroy()
-    #global live_test_frame
-    #live_test_frame = TestOutput(motor_name, test_type, strain_type)
-    #live_test_frame.Show()
-    
     jobs_frame.Show()
     
     home_frame.is_running(motor_name)       #disable button, change color of button to red
     jobs_frame.is_running(motor_name, test_type, strain_type)
     
-    #thread = threading.Thread(target = run_motor_constant, args=(motor_name[-1], test_type, 1, 1,))
     global thread_a
     global thread_b
     global thread_c
     global thread_d
 
-    global thread_a_lc
+    """ global thread_a_lc
     global thread_b_lc
     global thread_c_lc
-    global thread_d_lc
+    global thread_d_lc """
     
-    """ thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag))
+    thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag))
     thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag))
     thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag))
-    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag)) """
+    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag))
 
-    thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
+    """ thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
     thread_b = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_b_flag))
     thread_c = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_c_flag))
-    thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_d_flag))
+    thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_d_flag)) """
 
     
-    thread_a_lc = threading.Thread(target = read_data, args=(motor_name,))
+    """ thread_a_lc = threading.Thread(target = read_data, args=(motor_name,))
     thread_b_lc = threading.Thread(target = read_data, args=(motor_name,))
     thread_c_lc = threading.Thread(target = read_data, args=(motor_name,))
-    thread_d_lc = threading.Thread(target = read_data, args=(motor_name,))
+    thread_d_lc = threading.Thread(target = read_data, args=(motor_name,)) """
     match motor_name[-1]:
             case 'A':
                 thread_a.start()
-                thread_a_lc.start()
+                """ thread_a_lc.start() """
             case 'B':
                 thread_b.start()
-                thread_b_lc.start()
+                """ thread_b_lc.start() """
             case 'C':
                 thread_c.start()
-                thread_c_lc.start()
+                """ thread_c_lc.start() """
             case 'D':
                 thread_d.start()
-                thread_d_lc.start()
+                """ thread_d_lc.start() """
                 
-    #thread = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type,))
 
 def on_home_click(event, frame_name):
     get_current_frame(frame_name)
@@ -246,16 +232,16 @@ def on_stop_test_click(event):              #function for 'Stop Test' buttons in
     match motor_name:
             case 'A':
                 motor_a_flag.set()
-                motor_a_lc_flag.set()
+                """ motor_a_lc_flag.set() """
             case 'B':
                motor_b_flag.set()
-               motor_b_lc_flag.set()
+               """ motor_b_lc_flag.set() """
             case 'C':
                 motor_c_flag.set()
-                motor_c_lc_flag.set()
+                """ motor_c_lc_flag.set() """
             case 'D':
                 motor_d_flag.set()
-                motor_d_lc_flag.set()
+                """ motor_d_lc_flag.set() """
 
 
 
@@ -269,19 +255,19 @@ def clear_test_results(event, motor_name, frame_name):
     match motor_name[-1]:
             case 'A':
                 motor_a_flag.clear()
-                motor_a_lc_flag.clear()
+                """ motor_a_lc_flag.clear() """
                 capsule_a_list.clear()
             case 'B':
                motor_b_flag.clear()
-               motor_b_lc_flag.clear()
+               """ motor_b_lc_flag.clear() """
                capsule_b_list.clear()
             case 'C':
                 motor_c_flag.clear()
-                motor_c_lc_flag.clear()
+                """ motor_c_lc_flag.clear() """
                 capsule_c_list.clear()
             case 'D':
                 motor_d_flag.clear()
-                motor_d_lc_flag.clear()
+                """ motor_d_lc_flag.clear() """
                 capsule_d_list.clear()
     
 
@@ -316,7 +302,7 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name):
 
 
 #function to initialize both motors and their respective load cells
-def initialization():
+""" def initialization():
 	
 	GPIO.setwarnings(False)
 
@@ -341,9 +327,9 @@ def initialization():
 	#loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
 	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin']) 
 
-	print("-------LOAD CELLS ARE READY-------")
+	print("-------LOAD CELLS ARE READY-------") """
 
-def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
+""" def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
     print('Current weight on the scale in grams and force in Newtons is: ')
     match motor_name[-1]:
         #case 'A':
@@ -363,12 +349,12 @@ def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
                 #newton_mean = ((loadcell_C.get_weight_mean(20) / 1000) * 9.81)
 
                 #print(newton_mean, 'N')
-                #print("HELP2")
+                #print("HELP2") """
 
 
 
 
-# function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
+""" # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
 def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): #TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
         starting_rotation = CW
@@ -401,7 +387,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         
     motor_d_lc_flag.set() #-------------------------might need to call a function to set this flag so it is dynamically motor correct
     
-    wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
+    wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type) """
 
 
 	  
