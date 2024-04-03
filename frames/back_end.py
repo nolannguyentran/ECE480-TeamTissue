@@ -298,6 +298,9 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name):
                 file_writer.writerows(capsule_d_list)
         
 
+def exit_application(event):
+    jobs_frame.Destroy()
+    home_frame.Destroy()
 
 #function to initialize both motors and their respective load cells
 """ def initialization():

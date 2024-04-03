@@ -66,6 +66,7 @@ class HomeFrame(wx.Frame):
         button_jobs.SetBackgroundColour((28, 28, 59))
         button_settings.SetBackgroundColour((28, 28, 59))
        
+        button_exit.Bind(wx.EVT_BUTTON, back_end.exit_application)
         button_a.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_b.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_c.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
