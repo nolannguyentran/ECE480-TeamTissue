@@ -76,8 +76,6 @@ def get_current_frame(frame_name):                       #determines which frame
             current_frame = strain_input_type_frame
         case 'ConstantStrainTestInput':
             current_frame = constant_strain_test_frame
-        case 'RandomizedStrainTestInput':
-            current_frame = randomized_strain_test_frame
         case 'WaveStrainTestInput':
             current_frame = square_wave_strain_test_frame
         case 'Settings':

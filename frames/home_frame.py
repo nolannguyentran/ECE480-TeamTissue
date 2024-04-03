@@ -20,6 +20,8 @@ class HomeFrame(wx.Frame):
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
+        logo_img = wx.Image("./pictures/logo.PNG", wx.BITMAP_TYPE_ANY)
+        logo_img = logo_img.Scale(90, 30, wx.IMAGE_QUALITY_HIGH)
 
         panel_1 = wx.Panel(self, -1,)       #For housing name, date, and time
         panel_2 = wx.Panel(self, -1,)       #For housing live-view display
@@ -31,6 +33,7 @@ class HomeFrame(wx.Frame):
         panel_3.SetBackgroundColour((33, 37, 41))         
         panel_4.SetBackgroundColour((53, 62, 108))       
 
+        logo = wx.StaticBitmap(panel_1, wx.ID_ANY, wx.Bitmap(logo_img))
         global button_a
         global button_b
         global button_c
@@ -73,11 +76,10 @@ class HomeFrame(wx.Frame):
 
        
        
-        t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
-        t_0.SetForegroundColour((255, 255, 255))
+
     
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
-        text_sizer_1.Add(t_0, 1, wx.EXPAND)
+        text_sizer_1.Add(logo)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
         text_sizer_1.Add(button_exit, 0, wx.EXPAND)
    

@@ -16,6 +16,8 @@ class Jobs(wx.Frame):
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
+        logo_img = wx.Image("./pictures/logo.PNG", wx.BITMAP_TYPE_ANY)
+        logo_img = logo_img.Scale(90, 30, wx.IMAGE_QUALITY_HIGH)
 
         panel_1 = wx.Panel(self, -1,)       #For housing name, date, and time
         panel_2 = wx.Panel(self, -1,)       #For capsule name
@@ -31,11 +33,11 @@ class Jobs(wx.Frame):
         panel_5.SetBackgroundColour((33, 37, 41))
         panel_6.SetBackgroundColour((53, 62, 108))
 
+        logo = wx.StaticBitmap(panel_1, wx.ID_ANY, wx.Bitmap(logo_img))
+
         font_1 = wx.Font(20, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         font_2 = wx.Font(14, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
         
-        t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark]
-        t_0.SetForegroundColour((255, 255, 255))
         t_2 = wx.StaticText(panel_2, label = "Current Jobs:") 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
@@ -80,7 +82,7 @@ class Jobs(wx.Frame):
         button_d_stop.Disable()
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
-        text_sizer_1.Add(t_0, 1, wx.EXPAND)
+        text_sizer_1.Add(logo)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
 
         text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning Capsule Name and type of test in center
