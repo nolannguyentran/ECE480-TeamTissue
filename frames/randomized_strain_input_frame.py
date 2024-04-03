@@ -4,8 +4,7 @@ import frames.back_end as back_end
 from datetime import datetime
 length = 800
 width = 480
-current_date_time = datetime.now()
-now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
+
 
 #--------------------------------------------------------------------------RANDOMIZED STRAIN TYPE SCREEN---------------------------------------------
 # This is where the user has selected the 'randomized strain type' test where the user will enter a min and max strain value in which the program
@@ -39,8 +38,6 @@ class RandomizedStrainTestInput(wx.Frame):
         
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark]
         t_0.SetForegroundColour((255, 255, 255))
-        t_1 = wx.StaticText(panel_1, label = now)
-        t_1.SetForegroundColour((255, 255, 255))
         t_2 = wx.StaticText(panel_2, label = self.motor_name+ " - "+ self.test_type+": "+self.strain_type) 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
@@ -61,7 +58,6 @@ class RandomizedStrainTestInput(wx.Frame):
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
-        text_sizer_1.Add(t_1, 0, wx.EXPAND)
 
         text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning Capsule Name and type of test in center
         text_sizer_2.Add((0,0), 1, wx.EXPAND)

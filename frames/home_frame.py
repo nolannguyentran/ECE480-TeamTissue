@@ -75,9 +75,7 @@ class HomeFrame(wx.Frame):
        
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
         t_0.SetForegroundColour((255, 255, 255))
-        #t_1 = wx.StaticText(panel_1, label = now)
-        #t_1.SetForegroundColour((255, 255, 255))
-
+    
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)

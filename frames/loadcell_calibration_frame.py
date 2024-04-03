@@ -4,8 +4,6 @@ import frames.back_end as back_end
 from datetime import datetime
 length = 800
 width = 480
-current_date_time = datetime.now()
-now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
 #--------------------------------------------------------------------------LOAD CELL CALLIBRATION SCREEN---------------------------------------------
 # This is where the user callibrates load cells against a given, known weight to deliver accurate load cell readings
@@ -37,8 +35,6 @@ class Calibration(wx.Frame):
         
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark
         t_0.SetForegroundColour((255, 255, 255))
-        t_1 = wx.StaticText(panel_1, label = now)
-        t_1.SetForegroundColour((255, 255, 255))
         t_2 = wx.StaticText(panel_2, label = self.name) 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
@@ -49,7 +45,6 @@ class Calibration(wx.Frame):
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
-        text_sizer_1.Add(t_1, 0, wx.EXPAND)
 
         text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning Capsule Name in center
         text_sizer_2.Add((0,0), 1, wx.EXPAND)

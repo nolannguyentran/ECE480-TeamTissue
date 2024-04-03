@@ -4,8 +4,6 @@ import frames.back_end as back_end
 from datetime import datetime
 length = 800
 width = 480
-current_date_time = datetime.now()
-now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
 
 #--------------------------------------------------------------------------JOBS SCREEN---------------------------------------------
 # This is where the user is presented all four capsules and whether they are currently being experimented on or not; Green will
@@ -38,8 +36,6 @@ class Jobs(wx.Frame):
         
         t_0 = wx.StaticText(panel_1, label = "BioReact")    #tmp placeholder for future photoshopped trademark]
         t_0.SetForegroundColour((255, 255, 255))
-        t_1 = wx.StaticText(panel_1, label = now)
-        t_1.SetForegroundColour((255, 255, 255))
         t_2 = wx.StaticText(panel_2, label = "Current Jobs:") 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
@@ -86,7 +82,6 @@ class Jobs(wx.Frame):
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(t_0, 1, wx.EXPAND)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
-        text_sizer_1.Add(t_1, 0, wx.EXPAND)
 
         text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning Capsule Name and type of test in center
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
