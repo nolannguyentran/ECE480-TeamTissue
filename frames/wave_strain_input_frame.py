@@ -29,9 +29,9 @@ class WaveStrainTestInput(wx.Frame):
         panel_5 = wx.Panel(self, -1,)       #For housing navigation buttons
     
         panel_1.SetBackgroundColour((53, 62, 108))        
-        panel_2.SetBackgroundColour((33, 37, 41))         
-        panel_3.SetBackgroundColour((33, 37, 41))
-        panel_4.SetBackgroundColour((33, 37, 41))               
+        panel_2.SetBackgroundColour((28, 28, 59))         
+        panel_3.SetBackgroundColour((28, 28, 59))
+        panel_4.SetBackgroundColour((28, 28, 59))               
         panel_5.SetBackgroundColour((53, 62, 108))
 
         logo = wx.StaticBitmap(panel_1, wx.ID_ANY, wx.Bitmap(logo_img))
@@ -80,9 +80,9 @@ class WaveStrainTestInput(wx.Frame):
         button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
         button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
         
-        button_home.SetBackgroundColour((0, 0, 0))
-        button_jobs.SetBackgroundColour((0, 0, 0))
-        button_settings.SetBackgroundColour((0, 0, 0))
+        button_home.SetBackgroundColour((28, 28, 59))
+        button_jobs.SetBackgroundColour((28, 28, 59))
+        button_settings.SetBackgroundColour((28, 28, 59))
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel

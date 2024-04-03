@@ -26,9 +26,9 @@ class TestSelectionFrame(wx.Frame):
         panel_5 = wx.Panel(self, -1,)       #For housing navigation buttons
     
         panel_1.SetBackgroundColour((53, 62, 108))        
-        panel_2.SetBackgroundColour((33, 37, 41))         
-        panel_3.SetBackgroundColour((33, 37, 41))
-        panel_4.SetBackgroundColour((33, 37, 41))               
+        panel_2.SetBackgroundColour((28, 28, 59))         
+        panel_3.SetBackgroundColour((28, 28, 59))
+        panel_4.SetBackgroundColour((28, 28, 59))               
         panel_5.SetBackgroundColour((53, 62, 108))
 
         logo = wx.StaticBitmap(panel_1, wx.ID_ANY, wx.Bitmap(logo_img))
@@ -39,7 +39,7 @@ class TestSelectionFrame(wx.Frame):
         t_2 = wx.StaticText(panel_2, label = self.name) 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
-        t_3 = wx.StaticText(panel_4, label = "Please select which type of test to conduct with "+self.name)
+        t_3 = wx.StaticText(panel_4, label = "Please select which type of test to be conducted with "+self.name)
         t_3.SetFont(font_2)
         t_3.SetForegroundColour((255, 255, 255))
       

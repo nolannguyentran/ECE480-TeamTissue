@@ -29,8 +29,8 @@ class HomeFrame(wx.Frame):
         panel_4 = wx.Panel(self, -1,)       #For housing navigation buttons
     
         panel_1.SetBackgroundColour((53, 62, 108))        
-        panel_2.SetBackgroundColour((33, 37, 41))         
-        panel_3.SetBackgroundColour((33, 37, 41))         
+        panel_2.SetBackgroundColour((28, 28, 59))         
+        panel_3.SetBackgroundColour((28, 28, 59))         
         panel_4.SetBackgroundColour((53, 62, 108))       
 
         logo = wx.StaticBitmap(panel_1, wx.ID_ANY, wx.Bitmap(logo_img))
@@ -48,7 +48,6 @@ class HomeFrame(wx.Frame):
         button_settings = wx.BitmapButton(panel_4, wx.ID_ANY, bitmap = settings_img)
         button_exit = wx.Button(panel_1, wx.ID_ANY, 'X')
        
-
         button_home.Disable()
         button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
         #button_settings.Bind(wx.EVT_BUTTON, test)
@@ -63,21 +62,15 @@ class HomeFrame(wx.Frame):
         button_c.SetForegroundColour((255, 255, 255))
         button_d.SetBackgroundColour((89, 99, 182))
         button_d.SetForegroundColour((255, 255, 255))
-        button_home.SetBackgroundColour((0, 0, 0))
-        button_jobs.SetBackgroundColour((0, 0, 0))
-        button_settings.SetBackgroundColour((0, 0, 0))
+        button_home.SetBackgroundColour((28, 28, 59))
+        button_jobs.SetBackgroundColour((28, 28, 59))
+        button_settings.SetBackgroundColour((28, 28, 59))
        
-
-
         button_a.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_b.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_c.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
         button_d.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
 
-       
-       
-
-    
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(logo)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
@@ -100,9 +93,7 @@ class HomeFrame(wx.Frame):
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
         
-        
         panel_1.SetSizer(text_sizer_1)
-        
         panel_3.SetSizer(motor_grid_sizer)
         panel_4.SetSizer(navigation_grid_sizer)
 

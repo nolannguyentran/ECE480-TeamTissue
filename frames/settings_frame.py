@@ -26,9 +26,9 @@ class Settings(wx.Frame):
         panel_5 = wx.Panel(self, -1,)       #For housing navigation buttons
     
         panel_1.SetBackgroundColour((53, 62, 108))        
-        panel_2.SetBackgroundColour((33, 37, 41))         
-        panel_3.SetBackgroundColour((33, 37, 41))
-        panel_4.SetBackgroundColour((33, 37, 41))               
+        panel_2.SetBackgroundColour((28, 28, 59))         
+        panel_3.SetBackgroundColour((28, 28, 59))
+        panel_4.SetBackgroundColour((28, 28, 59))               
         panel_5.SetBackgroundColour((53, 62, 108))
 
         logo = wx.StaticBitmap(panel_1, wx.ID_ANY, wx.Bitmap(logo_img))
@@ -80,9 +80,9 @@ class Settings(wx.Frame):
         button_calibrate.Bind(wx.EVT_BUTTON, back_end.on_calibration_click)
         button_settings.Disable()
         
-        button_home.SetBackgroundColour((0, 0, 0))
-        button_jobs.SetBackgroundColour((0, 0, 0))
-        button_settings.SetBackgroundColour((0, 0, 0))
+        button_home.SetBackgroundColour((28, 28, 59))
+        button_jobs.SetBackgroundColour((28, 28, 59))
+        button_settings.SetBackgroundColour((28, 28, 59))
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.GridSizer(1, 3, 20, 20)         #For housing middle panel

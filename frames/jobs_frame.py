@@ -27,10 +27,10 @@ class Jobs(wx.Frame):
         panel_6 = wx.Panel(self, -1,)
     
         panel_1.SetBackgroundColour((53, 62, 108))        
-        panel_2.SetBackgroundColour((33, 37, 41))         
-        panel_3.SetBackgroundColour((33, 37, 41))
-        panel_4.SetBackgroundColour((33, 37, 41))               
-        panel_5.SetBackgroundColour((33, 37, 41))
+        panel_2.SetBackgroundColour((28, 28, 59))         
+        panel_3.SetBackgroundColour((28, 28, 59))
+        panel_4.SetBackgroundColour((28, 28, 59))               
+        panel_5.SetBackgroundColour((28, 28, 59))
         panel_6.SetBackgroundColour((53, 62, 108))
 
         logo = wx.StaticBitmap(panel_1, wx.ID_ANY, wx.Bitmap(logo_img))
@@ -101,22 +101,22 @@ class Jobs(wx.Frame):
         button_settings = wx.BitmapButton(panel_6, wx.ID_ANY, bitmap = settings_img)
         
 
-        button_a.SetBackgroundColour((33, 37, 41))
+        button_a.SetBackgroundColour((28, 28, 59))
         button_a.SetForegroundColour((255, 255, 255))
-        button_b.SetBackgroundColour((33, 37, 41))
+        button_b.SetBackgroundColour((28, 28, 59))
         button_b.SetForegroundColour((255, 255, 255))
-        button_c.SetBackgroundColour((33, 37, 41))
+        button_c.SetBackgroundColour((28, 28, 59))
         button_c.SetForegroundColour((255, 255, 255))
-        button_d.SetBackgroundColour((33, 37, 41))
+        button_d.SetBackgroundColour((28, 28, 59))
         button_d.SetForegroundColour((255, 255, 255))
 
-        button_a_stop.SetBackgroundColour((33, 37, 41))
+        button_a_stop.SetBackgroundColour((28, 28, 59))
         button_a_stop.SetForegroundColour((255, 255, 255))
-        button_b_stop.SetBackgroundColour((33, 37, 41))
+        button_b_stop.SetBackgroundColour((28, 28, 59))
         button_b_stop.SetForegroundColour((255, 255, 255))
-        button_c_stop.SetBackgroundColour((33, 37, 41))
+        button_c_stop.SetBackgroundColour((28, 28, 59))
         button_c_stop.SetForegroundColour((255, 255, 255))
-        button_d_stop.SetBackgroundColour((33, 37, 41))
+        button_d_stop.SetBackgroundColour((28, 28, 59))
         button_d_stop.SetForegroundColour((255, 255, 255))
 
         button_a_stop.Bind(wx.EVT_BUTTON, back_end.on_stop_test_click)
@@ -129,9 +129,9 @@ class Jobs(wx.Frame):
         button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
        
         
-        button_home.SetBackgroundColour((0, 0, 0))
-        button_jobs.SetBackgroundColour((0, 0, 0))
-        button_settings.SetBackgroundColour((0, 0, 0))
+        button_home.SetBackgroundColour((28, 28, 59))
+        button_jobs.SetBackgroundColour((28, 28, 59))
+        button_settings.SetBackgroundColour((28, 28, 59))
         
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
@@ -211,47 +211,47 @@ class Jobs(wx.Frame):
                 button_a.Enable()
                 button_a.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
                 button_a_stop.Disable()
-                button_a_stop.SetBackgroundColour((33, 37, 41))
+                button_a_stop.SetBackgroundColour((28, 28, 59))
             case 'B':
                 button_b.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_b.SetBackgroundColour((51,153,51))
                 button_b.Enable()
                 button_b.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
                 button_b_stop.Disable()
-                button_b_stop.SetBackgroundColour((33, 37, 41))
+                button_b_stop.SetBackgroundColour((28, 28, 59))
             case 'C':
                 button_c.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_c.SetBackgroundColour((51,153,51))
                 button_c.Enable()
                 button_c.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
                 button_c_stop.Disable()
-                button_c_stop.SetBackgroundColour((33, 37, 41))
+                button_c_stop.SetBackgroundColour((28, 28, 59))
             case 'D':
                 button_d.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_d.SetBackgroundColour((51,153,51))
                 button_d.Enable()
                 button_d.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
                 button_d_stop.Disable()
-                button_d_stop.SetBackgroundColour((33, 37, 41))
+                button_d_stop.SetBackgroundColour((28, 28, 59))
 
     def clear_test(event, motor_name):
         match motor_name[-1]:
             case 'A':
                 button_a.Disable()
                 button_a.SetLabel('Capsule: A -----[STATUS: No Test Selected]')
-                button_a.SetBackgroundColour((33, 37, 41))
+                button_a.SetBackgroundColour((28, 28, 59))
             case 'B':
                 button_b.Disable()
                 button_b.SetLabel('Capsule: B -----[STATUS: No Test Selected]')
-                button_b.SetBackgroundColour((33, 37, 41))
+                button_b.SetBackgroundColour((28, 28, 59))
             case 'C':
                 button_c.Disable()
                 button_c.SetLabel('Capsule: C -----[STATUS: No Test Selected]')
-                button_c.SetBackgroundColour((33, 37, 41))
+                button_c.SetBackgroundColour((28, 28, 59))
             case 'D':
                 button_d.Disable()
                 button_d.SetLabel('Capsule: D -----[STATUS: No Test Selected]')
-                button_d.SetBackgroundColour((33, 37, 41))
+                button_d.SetBackgroundColour((28, 28, 59))
     
     
             
