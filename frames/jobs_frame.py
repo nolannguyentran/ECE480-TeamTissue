@@ -55,8 +55,6 @@ class Jobs(wx.Frame):
         global button_c_stop
         global button_d_stop
 
-        
-        
         button_a = wx.Button(panel_3, wx.ID_ANY, 'Capsule: A -----[STATUS: No Test Selected]', style = wx.BU_LEFT)
         button_b = wx.Button(panel_3, wx.ID_ANY, 'Capsule: B -----[STATUS: No Test Selected]', style = wx.BU_LEFT)
         button_c = wx.Button(panel_3, wx.ID_ANY, 'Capsule: C -----[STATUS: No Test Selected]', style = wx.BU_LEFT)
@@ -95,12 +93,10 @@ class Jobs(wx.Frame):
         text_sizer_3.Add(t_3,0,wx.ALIGN_CENTER)
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
 
-
         button_home = wx.BitmapButton(panel_6, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_6, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_6, wx.ID_ANY, bitmap = settings_img)
         
-
         button_a.SetBackgroundColour((28, 28, 59))
         button_a.SetForegroundColour((255, 255, 255))
         button_b.SetBackgroundColour((28, 28, 59))
@@ -157,7 +153,6 @@ class Jobs(wx.Frame):
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
-        
         
         panel_1.SetSizer(text_sizer_1)
         panel_2.SetSizer(text_sizer_2)

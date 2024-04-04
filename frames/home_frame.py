@@ -21,7 +21,7 @@ class HomeFrame(wx.Frame):
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
         logo_img = wx.Image("./pictures/logo.PNG", wx.BITMAP_TYPE_ANY)
-        logo_img = logo_img.Scale(90, 30, wx.IMAGE_QUALITY_HIGH)
+        logo_img = logo_img.Scale(300, 100, wx.IMAGE_QUALITY_HIGH)
 
         panel_1 = wx.Panel(self, -1,)       #For housing name, date, and time
         panel_2 = wx.Panel(self, -1,)       #For housing live-view display
@@ -31,9 +31,16 @@ class HomeFrame(wx.Frame):
         panel_1.SetBackgroundColour((53, 62, 108))        
         panel_2.SetBackgroundColour((28, 28, 59))         
         panel_3.SetBackgroundColour((28, 28, 59))         
-        panel_4.SetBackgroundColour((53, 62, 108))       
+        panel_4.SetBackgroundColour((53, 62, 108))  
 
-        logo = wx.StaticBitmap(panel_1, wx.ID_ANY, wx.Bitmap(logo_img))
+        font_1 = wx.Font(10, wx.DECORATIVE, wx.ITALIC, wx.NORMAL) 
+        font_2 = wx.Font(12, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)  
+
+        t_1 = wx.StaticText(panel_2, label = "Biomaterial && Musculoskeletal Engineering Lab")
+        t_1.SetFont(font_1)
+        t_1.SetForegroundColour((255, 255, 255))  
+
+        logo = wx.StaticBitmap(panel_2, wx.ID_ANY, wx.Bitmap(logo_img))
         global button_a
         global button_b
         global button_c
@@ -73,18 +80,23 @@ class HomeFrame(wx.Frame):
         button_d.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
-        text_sizer_1.Add(logo)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
         text_sizer_1.Add(button_exit, 0, wx.EXPAND)
-   
+
+    
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
+        left_middle_sizer = wx.BoxSizer(wx.VERTICAL)      #For housing the logo and name of application and text instruction
         motor_grid_sizer = wx.GridSizer(2, 2, 10, 10)     #For housing the four motor buttons
         navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
 
         middle_sizer.Add(panel_2, 1, wx.EXPAND)
         middle_sizer.Add(panel_3, 1, wx.EXPAND)
 
+        left_middle_sizer.Add((0,0), 1, wx.ALIGN_CENTER)
+        left_middle_sizer.Add(logo, 1, wx.ALIGN_CENTER)
+        left_middle_sizer.Add(t_1, 1, wx.ALIGN_CENTER)
+    
         motor_grid_sizer.Add(button_a, 0, wx.EXPAND)
         motor_grid_sizer.Add(button_b, 0, wx.EXPAND)
         motor_grid_sizer.Add(button_c, 0, wx.EXPAND)
@@ -95,6 +107,7 @@ class HomeFrame(wx.Frame):
         navigation_grid_sizer.Add(button_settings, 0, wx.EXPAND)
         
         panel_1.SetSizer(text_sizer_1)
+        panel_2.SetSizer(left_middle_sizer)
         panel_3.SetSizer(motor_grid_sizer)
         panel_4.SetSizer(navigation_grid_sizer)
 
