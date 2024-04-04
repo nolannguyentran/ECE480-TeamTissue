@@ -76,9 +76,9 @@ class TestSelectionFrame(wx.Frame):
         button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
         button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
         
-        button_home.SetBackgroundColour((0, 0, 0))
-        button_jobs.SetBackgroundColour((0, 0, 0))
-        button_settings.SetBackgroundColour((0, 0, 0))
+        button_home.SetBackgroundColour((28, 28, 59))
+        button_jobs.SetBackgroundColour((28, 28, 59))
+        button_settings.SetBackgroundColour((28, 28, 59))
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.GridSizer(1, 2, 20, 20)         #For housing middle panel
