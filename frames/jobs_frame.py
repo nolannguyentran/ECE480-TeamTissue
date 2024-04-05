@@ -124,12 +124,10 @@ class Jobs(wx.Frame):
         button_jobs.Disable()
         button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
        
-        
         button_home.SetBackgroundColour((28, 28, 59))
         button_jobs.SetBackgroundColour((28, 28, 59))
         button_settings.SetBackgroundColour((28, 28, 59))
         
-
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         parent_middle_sizer = wx.BoxSizer(wx.HORIZONTAL)
 

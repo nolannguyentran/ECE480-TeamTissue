@@ -100,7 +100,6 @@ class TestOutput(wx.Frame):
         panel_4.SetSizer(text_sizer_3)
         panel_5.SetSizer(navigation_grid_sizer)
     
-
         window_sizer.Add(panel_1, 1, wx.EXPAND)
         window_sizer.Add(panel_2, 2, wx.EXPAND)
         window_sizer.Add(panel_3, 6, wx.EXPAND)

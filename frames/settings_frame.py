@@ -12,7 +12,6 @@ class Settings(wx.Frame):
        def __init__(self):
         wx.Frame.__init__(self, None, size=(length, width))
 
-       
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
         settings_img = wx.Bitmap("./pictures/settings.png")
