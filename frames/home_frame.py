@@ -57,7 +57,7 @@ class HomeFrame(wx.Frame):
        
         button_home.Disable()
         button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
-        #button_settings.Bind(wx.EVT_BUTTON, test)
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
 
         button_exit.SetBackgroundColour((53, 62, 108))
         button_exit.SetForegroundColour((255, 255, 255))

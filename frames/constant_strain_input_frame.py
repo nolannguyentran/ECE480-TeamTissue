@@ -69,7 +69,7 @@ class ConstantStrainTestInput(wx.Frame):
         button_start = wx.Button(panel_4, wx.ID_ANY, 'START')
         button_start.SetBackgroundColour((190, 37, 66))
         button_start.SetForegroundColour((255,255,255))
-        button_start.Bind(wx.EVT_BUTTON, on_constant_start_test)
+        #button_start.Bind(wx.EVT_BUTTON, on_constant_start_test)
  
         button_start.Bind(wx.EVT_BUTTON, lambda event: back_end.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type))
 

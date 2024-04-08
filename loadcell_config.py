@@ -104,3 +104,6 @@ except (KeyboardInterrupt, SystemExit):
 
 finally:
     GPIO.cleanup() """
+
+
+#code source: https://github.com/gandalf15/HX711/blob/master/python_examples/example.py

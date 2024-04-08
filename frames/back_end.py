@@ -5,7 +5,10 @@ from frames.wave_strain_input_frame import WaveStrainTestInput
 from frames.settings_frame import Settings
 from frames.jobs_frame import Jobs
 from frames.test_output_frame import TestOutput
+from frames.loadcell_selection_calibration_frame import LoadcellSelectionCalibration
+from frames.attach_known_weight_frame import AttachWeightFrame
 from frames.loadcell_calibration_frame import Calibration
+from frames.loadcell_calibration_success_frame import CalibrationSuccess
 from frames.home_frame import HomeFrame
 
 
@@ -26,6 +29,7 @@ import loadcell_config
 
 
 
+#TODO: IN DOCUMENTATION MENTION THAT ALL MOTORS MUST BE STOPPED BEFORE CLICKING ON THE 'X' IN HOMESCREEN, UNLESS IMPLEMENT AN EMERGENCY SHUTOFF?
 
 motor_a_flag = threading.Event()  # flags used to stop motor threads
 motor_b_flag = threading.Event()
@@ -80,8 +84,14 @@ def get_current_frame(frame_name):                       #determines which frame
             current_frame = square_wave_strain_test_frame
         case 'Settings':
             current_frame = settings_frame
+        case 'LoadcellSelectionCalibration':
+            current_frame = loadcell_selection_calibration_frame
+        case 'AttachWeightFrame':
+            current_frame = attach_known_weight_frame
         case 'Calibration':
             current_frame = loadcell_calibration_frame
+        case 'CalibrationSuccess':
+            current_frame = loadcell_calibration_success_frame
         case 'TestOutput':
             current_frame = live_test_frame
         case 'Jobs':                                                   #TODO: BIG PROBLEM , DONT DESTROY JOB, BUT HIDE IT
@@ -129,7 +139,8 @@ def on_square_wave_test_click(event, motor_name, test_type):    #[strain input t
 
 def on_settings_click(event, frame_name):
     get_current_frame(frame_name)
-    current_frame.Destroy()
+    if current_frame != home_frame:
+        current_frame.Destroy()
     global settings_frame
     settings_frame = Settings()
     settings_frame.Show()
@@ -141,13 +152,128 @@ def on_jobs_click(event, frame_name):
     
     jobs_frame.Show()
 
-
-def on_calibration_click(event):
+def on_calibration_click(event, frame_name):        #function for "Calibration" button in Settings Page
     identity = event.GetEventObject().GetLabel()
-    settings_frame.Destroy()
+    get_current_frame(frame_name)
+    current_frame.Destroy()
+    global loadcell_selection_calibration_frame
+    loadcell_selection_calibration_frame = LoadcellSelectionCalibration(identity)
+    loadcell_selection_calibration_frame.Show()
+   
+
+def on_loadcell_click(event, frame_name):       #function for the four load cell calibration selection 
+    identity = event.GetEventObject().GetLabel()
+    get_current_frame(frame_name)
+    current_frame.Destroy()
+    match identity[-1]:
+        case 'A':
+            print("load cell A is tared!")
+            error = loadcell_A.zero()
+            if error:
+                raise ValueError("Tare was unsuccessful")
+            raw_loadcell_reading = loadcell_A.get_raw_data_mean()
+        case 'B':
+            print("load cell B is tared!")
+            error = loadcell_B.zero()
+            if error:
+                raise ValueError("Tare was unsuccessful")
+            raw_loadcell_reading = loadcell_B.get_raw_data_mean()
+        case 'C':
+            print("load cell C is tared!")
+            error = loadcell_C.zero()
+            if error:
+                raise ValueError("Tare was unsuccessful")
+            raw_loadcell_reading = loadcell_C.get_raw_data_mean()
+        case 'D':
+            print("load cell D is tared!")
+            error = loadcell_D.zero()
+            if error:
+                raise ValueError("Tare was unsuccessful")
+            raw_loadcell_reading = loadcell_D.get_raw_data_mean()
+    
+    if raw_loadcell_reading:
+        print("Data subtracted by offset but still not converted to units: ", raw_loadcell_reading)
+    else:
+        print('invalid data', raw_loadcell_reading)
+    
+    global attach_known_weight_frame
+    attach_known_weight_frame = AttachWeightFrame(identity)
+    attach_known_weight_frame.Show()
+
+    
+
+def on_next_click(event, frame_name, loadcell_name):        #functino for next button after attaching known weight to loadcell to calibrate
+    get_current_frame(frame_name)
+    current_frame.Destroy()
     global loadcell_calibration_frame
-    loadcell_calibration_frame = Calibration(identity)
+    loadcell_calibration_frame = Calibration(loadcell_name)
     loadcell_calibration_frame.Show()
+
+def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_value):
+    get_current_frame(frame_name)
+    current_frame.Destroy()
+    try:
+            known_weight_grams = float(known_weight_value)
+            print("Known weight in grams: ",known_weight_grams)
+    except ValueError:
+            print('Expected integer or float but I recieved: ', known_weight_value)
+
+    match loadcell_name[-1]:
+        case 'A':
+            #print("load cell A is tared!")
+            loadcell_reading = loadcell_A.get_data_mean()
+            if loadcell_reading:
+                print('Mean value from load cell A is subtracted by offset:', loadcell_reading)
+        
+                ratio = loadcell_reading/known_weight_grams
+                loadcell_A.set_scale_ratio(ratio)
+                print("Ratio is set!")
+            else:
+                raise ValueError('Value cannot be read')
+            
+        case 'B':
+           #print("load cell B is tared!")
+           loadcell_reading = loadcell_B.get_data_mean()
+           if loadcell_reading:
+                print('Mean value from load cell B is subtracted by offset:', loadcell_reading)
+        
+                ratio = loadcell_reading/known_weight_grams
+                loadcell_B.set_scale_ratio(ratio)
+                print("Ratio is set!")
+           else:
+                raise ValueError('Value cannot be read')
+            
+        case 'C':
+            #print("load cell C is tared!")
+            loadcell_reading = loadcell_C.get_data_mean()
+            if loadcell_reading:
+                print('Mean value from load cell C is subtracted by offset:', loadcell_reading)
+        
+                ratio = loadcell_reading/known_weight_grams
+                loadcell_C.set_scale_ratio(ratio)
+                print("Ratio is set!")
+            else:
+                raise ValueError('Value cannot be read')
+            
+        case 'D':
+            #print("load cell D is tared!")
+            loadcell_reading = loadcell_d.get_data_mean()
+            if loadcell_reading:
+                print('Mean value from load cell D is subtracted by offset:', loadcell_reading)
+        
+                ratio = loadcell_reading/known_weight_grams
+                loadcell_D.set_scale_ratio(ratio)
+                print("Ratio is set!")
+            else:
+                raise ValueError('Value cannot be read')
+    
+
+    print("The known weight value in grams is: "+known_weight_value)
+
+    global loadcell_calibration_success_frame
+    loadcell_calibration_success_frame = CalibrationSuccess(loadcell_name)
+    loadcell_calibration_success_frame.Show()
+
 
 
 def on_start_test_click(event, motor_name, test_type, strain_type):                  #TODO: WILL NEED TO ADD ANOTHER PARAMETER FOR THE STRAIN VALUES 
@@ -317,15 +443,15 @@ def initialization():
 	
 	print("-------MOTORS ARE READY-------")
 	
-	#global loadcell_A
-	#global loadcell_B
-	#global loadcell_C
+	global loadcell_A
+	global loadcell_B
+	global loadcell_C
 	global loadcell_D
 
 	# Create and set up all four load cells objects
-	#loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin']) 
-	#loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin'], channel=loadcell_dict['B']['channel'], gain=loadcell_dict['B']['gain']) 
-	#loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
+	loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin']) 
+	loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin']) 
+	loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
 	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin']) 
 
 	print("-------LOAD CELLS ARE READY-------")

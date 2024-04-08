@@ -8,9 +8,11 @@ width = 480
 #--------------------------------------------------------------------------SETTINGS SCREEN---------------------------------------------
 # This is where the user can select settings options (load cell callibration) they want to configure; serves as the 'Settings'
 
-class Settings(wx.Frame):
-       def __init__(self):
+class LoadcellSelectionCalibration(wx.Frame):
+       def __init__(self, name):
         wx.Frame.__init__(self, None, size=(length, width))
+
+        self.name = name
 
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
@@ -34,13 +36,17 @@ class Settings(wx.Frame):
 
         font_1 = wx.Font(20, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         font_2 = wx.Font(14, wx.DECORATIVE, wx.ITALIC, wx.NORMAL)
+        font_3 = wx.Font(10, wx.DECORATIVE, wx.NORMAL, wx.NORMAL)
         
-        t_2 = wx.StaticText(panel_2, label = "Settings") 
+        t_2 = wx.StaticText(panel_2, label = self.name) 
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
-        t_3 = wx.StaticText(panel_4, label = "Please select a Setting to adjust")
+        t_3 = wx.StaticText(panel_4, label = "Please select which load cell to calibrate")
         t_3.SetFont(font_2)
         t_3.SetForegroundColour((255, 255, 255))
+        t_4 = wx.StaticText(panel_4, label = "Note: selecting load cell will immediately \"tare\" it")
+        t_4.SetFont(font_3)
+        t_4.SetForegroundColour((255, 255, 255))
       
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(logo)
@@ -51,46 +57,53 @@ class Settings(wx.Frame):
         text_sizer_2.Add(t_2, 0, wx.ALIGN_CENTER)
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
 
-        text_sizer_3 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning instructions in center
+        text_sizer_3 = wx.BoxSizer(wx.VERTICAL)   #Aligning instructions in center
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
         text_sizer_3.Add(t_3,0,wx.ALIGN_CENTER)
+        text_sizer_3.Add(t_4,0,wx.ALIGN_CENTRE)
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
 
-        button_1 = wx.Button(panel_3, wx.ID_ANY, 'Zero-ed Motors')
-        button_calibrate = wx.Button(panel_3, wx.ID_ANY, 'Calibrate Load Cells')
-        button_3 = wx.Button(panel_3, wx.ID_ANY, 'Change email address')
+        loadcell_a = wx.Button(panel_3, wx.ID_ANY, 'Load Cell A')
+        loadcell_b = wx.Button(panel_3, wx.ID_ANY, 'Load Cell B')
+        loadcell_c = wx.Button(panel_3, wx.ID_ANY, 'Load Cell C')
+        loadcell_d = wx.Button(panel_3, wx.ID_ANY, 'Load Cell D')
+       
 
-        button_1.SetBackgroundColour((89, 99, 182))
-        button_1.SetForegroundColour((255,255,255))
-        button_calibrate.SetBackgroundColour((89, 99, 182))
-        button_calibrate.SetForegroundColour((255,255,255))
-        button_3.SetBackgroundColour((89, 99, 182))
-        button_3.SetForegroundColour((255,255,255))
+        loadcell_a.SetBackgroundColour((89, 99, 182))
+        loadcell_a.SetForegroundColour((255,255,255))
+        loadcell_b.SetBackgroundColour((89, 99, 182))
+        loadcell_b.SetForegroundColour((255,255,255))
+        loadcell_c.SetBackgroundColour((89, 99, 182))
+        loadcell_c.SetForegroundColour((255,255,255))
+        loadcell_d.SetBackgroundColour((89, 99, 182))
+        loadcell_d.SetForegroundColour((255,255,255))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
-        button_1.Disable()
-        button_calibrate.Bind(wx.EVT_BUTTON, lambda event: back_end.on_calibration_click(event, self.__class__.__name__))
-        button_3.Disable()
+        loadcell_a.Bind(wx.EVT_BUTTON, lambda event: back_end.on_loadcell_click(event, self.__class__.__name__))
+        loadcell_b.Bind(wx.EVT_BUTTON, lambda event: back_end.on_loadcell_click(event, self.__class__.__name__))
+        loadcell_c.Bind(wx.EVT_BUTTON, lambda event: back_end.on_loadcell_click(event, self.__class__.__name__))
+        loadcell_d.Bind(wx.EVT_BUTTON, lambda event: back_end.on_loadcell_click(event, self.__class__.__name__))
 
         button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
         button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
-        button_settings.Disable()
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((28, 28, 59))
         button_jobs.SetBackgroundColour((28, 28, 59))
         button_settings.SetBackgroundColour((28, 28, 59))
 
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
-        middle_sizer = wx.GridSizer(1, 3, 20, 20)         #For housing middle panel
+        middle_sizer = wx.GridSizer(1, 4, 20, 20)         #For housing middle panel
        
         navigation_grid_sizer = wx.GridSizer(1, 3, 0, 0)  #For housig the three navigation buttons
 
-        middle_sizer.Add(button_1, 0, wx.EXPAND)
-        middle_sizer.Add(button_calibrate, 0, wx.EXPAND)
-        middle_sizer.Add(button_3, 0, wx.EXPAND)
+        middle_sizer.Add(loadcell_a, 0, wx.EXPAND)
+        middle_sizer.Add(loadcell_b, 0, wx.EXPAND)
+        middle_sizer.Add(loadcell_c, 0, wx.EXPAND)
+        middle_sizer.Add(loadcell_d, 0, wx.EXPAND)
         
         navigation_grid_sizer.Add(button_home, 0, wx.EXPAND)
         navigation_grid_sizer.Add(button_jobs, 0, wx.EXPAND)
