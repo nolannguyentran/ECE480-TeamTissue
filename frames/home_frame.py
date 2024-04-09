@@ -2,13 +2,9 @@ import wx
 import frames.back_end as back_end
 #import gui_be          #REMEMBER TO UN-COMMENT INITIALIZATION AT THE BOTTOM OF THIS FILE!!!
 
-
-
-from datetime import datetime
 length = 800
 width = 480
-current_date_time = datetime.now()
-now = current_date_time.strftime("%A, %B %d, %Y %I:%M %p")
+
 
 #--------------------------------------------------------------------------HOME SCREEN---------------------------------------------
 # This is where the user can select which capsule they want to perform tests on; serves as the 'home screen' or dashboard

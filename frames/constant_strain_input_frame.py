@@ -1,7 +1,6 @@
 import wx
 import frames.back_end as back_end
 
-from datetime import datetime
 length = 800
 width = 480
 
@@ -47,15 +46,15 @@ class ConstantStrainTestInput(wx.Frame):
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
         
-        constant_strain_text = wx.StaticText(panel_3, label = "Strain:")
-        constant_strain_text.SetForegroundColour((255, 255, 255))
-        global constant_strain_input                        #---------------------------------------------------------> might refactor in the future
-        constant_strain_input = wx.TextCtrl(panel_3)        #---might need to rename to strain_input_constant
+        strain_text = wx.StaticText(panel_3, label = "Strain (Linear Displacement):")
+        strain_text.SetForegroundColour((255, 255, 255))
+        global strain_input                        #---------------------------------------------------------> might refactor in the future
+        strain_input = wx.TextCtrl(panel_3)        
         #strain_input.Bind(wx.EVT_TEXT, on_key_typed)
-        rate_text = wx.StaticText(panel_3, label = "Rate:")
-        rate_text.SetForegroundColour((255, 255, 255))
-        global rate_input_constant                          #-----------------------------------------------------------> maybe better name for "constant" starin input test
-        rate_input_constant = wx.TextCtrl(panel_3)
+        time_text = wx.StaticText(panel_3, label = "Time:")
+        time_text.SetForegroundColour((255, 255, 255))
+        global time_input                          #-----------------------------------------------------------> maybe better name for "constant" starin input test
+        time_input = wx.TextCtrl(panel_3)
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(logo)
@@ -71,7 +70,7 @@ class ConstantStrainTestInput(wx.Frame):
         button_start.SetForegroundColour((255,255,255))
         #button_start.Bind(wx.EVT_BUTTON, on_constant_start_test)
  
-        button_start.Bind(wx.EVT_BUTTON, lambda event: back_end.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type))
+        button_start.Bind(wx.EVT_BUTTON, lambda event: back_end.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type, strain_input.GetValue(), time_input.GetValue()))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
@@ -89,11 +88,11 @@ class ConstantStrainTestInput(wx.Frame):
         test_button_sizer = wx.GridSizer(3,1,10,10) #--------------------------------------------------------------->
         user_field_sizer = wx.BoxSizer(wx.VERTICAL)
         
-        user_field_sizer.Add(constant_strain_text, 1, wx.EXPAND)
-        user_field_sizer.Add(constant_strain_input, 0, wx.EXPAND)
+        user_field_sizer.Add(strain_text, 1, wx.EXPAND)
+        user_field_sizer.Add(strain_input, 0, wx.EXPAND)
         user_field_sizer.Add((0,0), 1, wx.EXPAND)
-        user_field_sizer.Add(rate_text, 1, wx.EXPAND)
-        user_field_sizer.Add(rate_input_constant, 0, wx.EXPAND)
+        user_field_sizer.Add(time_text, 1, wx.EXPAND)
+        user_field_sizer.Add(time_input, 0, wx.EXPAND)
         user_field_sizer.Add((0,0), 1, wx.EXPAND)
 
         middle_sizer.Add(panel_3, 1, wx.EXPAND)

@@ -1,7 +1,6 @@
 import wx
 import frames.back_end as back_end
 
-from datetime import datetime
 length = 800
 width = 480
 

@@ -55,8 +55,8 @@ CCW = 0         # CounterClockwise
 motor_dict = motor_config.motor_dict                    #Pass by reference
 loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
 
-csv_constant_strain_fields = ['Strain', 'Time', 'Linear Displacement']  #csv headers for constrant strain tests
-csv_square_wave_strain_fields = ['Strain', 'Time', 'Linear Displacement', 'Rate']   #csv headers for square wave strain tests
+csv_constant_strain_fields = ['Time', 'Strain Value']  #csv headers for constrant strain tests
+csv_square_wave_strain_fields = ['Time', 'Strain Value']   #csv headers for square wave strain tests
 capsule_a_list = [] #list holding loadcell data
 capsule_b_list = []
 capsule_c_list = []
@@ -209,7 +209,6 @@ def on_loadcell_click(event, frame_name):       #function for the four load cell
     attach_known_weight_frame.Show()
 
     
-
 def on_next_click(event, frame_name, loadcell_name):        #function for next button after attaching known weight to loadcell to calibrate
     get_current_frame(frame_name)
     current_frame.Destroy()
@@ -284,7 +283,7 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
 
 
 
-def on_start_test_click(event, motor_name, test_type, strain_type):                  #TODO: WILL NEED TO ADD ANOTHER PARAMETER FOR THE STRAIN VALUES 
+def on_start_test_click(event, motor_name, test_type, strain_type, strain_input, time_input):                  #TODO: WILL NEED TO ADD ANOTHER PARAMETER FOR THE STRAIN VALUES 
     identity = event.GetEventObject().GetLabel()
     constant_strain_test_frame.Destroy()
     jobs_frame.Show()
@@ -302,10 +301,10 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     global thread_c_lc
     global thread_d_lc """
     
-    thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, 5))
-    thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag))
-    thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag))
-    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag))
+    thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input, time_input))
+    thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag, strain_input, time_input))
+    thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag, strain_input, time_input))
+    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input, time_input))
 
     """ thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
     thread_b = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_b_flag))
@@ -340,8 +339,8 @@ def on_home_click(event, frame_name):                   #function for 'Home' but
         current_frame.Destroy()
     
 
-def thread_test(motor_name, test_type, strain_type, stop_flag, duration):     #function that simulate a test (only used when not connected to bioreactor)
-    time_target = duration
+def thread_test(motor_name, test_type, strain_type, stop_flag, strain_input, duration):     #function that simulate a test (only used when not connected to bioreactor)
+    time_target = float(duration)
     start_time = time.time()
 
     time_elapsed = 0
@@ -350,15 +349,9 @@ def thread_test(motor_name, test_type, strain_type, stop_flag, duration):     #f
             break
         end_time_increment = time.time()
         time_elapsed = end_time_increment - start_time
-        print(f"{motor_name} running...at time: {time_conversion(time_elapsed)}")
+        print(f"{motor_name} running with strain: {strain_input} grams...at time: {time_conversion(time_elapsed)}")
+        capsule_a_list.append([time_conversion(time_elapsed), strain_input])
     
-    """ for i in range(5):
-        if stop_flag.is_set():
-            break
-        print(f"{motor_name} running: {i}")
-        #capsule_a_list.append([i,"hello", "world"])
-        time.sleep(1)
-    #print(capsule_a_list) """
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
     
 
@@ -385,7 +378,6 @@ def on_stop_test_click(event):              #function for 'Stop Test' buttons in
             case 'D':
                 motor_d_flag.set()
                 """ motor_d_lc_flag.set() """
-
 
 
 def clear_test_results(event, motor_name, frame_name):      #function for 'Clear Test' after clicking on a completed task in the 'Jobs' page

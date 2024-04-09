@@ -1,7 +1,6 @@
 import wx
 import frames.back_end as back_end
 
-from datetime import datetime
 length = 800
 width = 480
 
@@ -77,7 +76,7 @@ class TestOutput(wx.Frame):
         button_export_test.SetForegroundColour((255, 255, 255))
 
         button_clear_test.Bind(wx.EVT_BUTTON, lambda event: back_end.clear_test_results(event, self.motor_name, self.__class__.__name__))
-        #button_export_test.Bind(wx.EVT_BUTTON, lambda event: back_end.export_test_results(event, self.motor_name, self.test_type, self.strain_type, self.__class__.__name__))
+        button_export_test.Bind(wx.EVT_BUTTON, lambda event: back_end.export_test_results(event, self.motor_name, self.test_type, self.strain_type, self.__class__.__name__))
 
         button_home.SetBackgroundColour((28, 28, 59))
         button_jobs.SetBackgroundColour((28, 28, 59))
