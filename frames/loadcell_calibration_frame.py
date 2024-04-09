@@ -41,10 +41,8 @@ class Calibration(wx.Frame):
         t_2.SetForegroundColour((255, 255, 255))
         
         known_weight_text = wx.StaticText(panel_3, label = "Enter known weight in grams:")
-        known_weight_text.SetForegroundColour((255, 255, 255))
-        global known_weight_input                       
+        known_weight_text.SetForegroundColour((255, 255, 255))                  
         known_weight_input = wx.TextCtrl(panel_3)        #---might need to rename to strain_input_constant
-        #strain_input.Bind(wx.EVT_TEXT, on_key_typed)
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(logo)

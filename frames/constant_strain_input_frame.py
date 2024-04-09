@@ -8,10 +8,6 @@ width = 480
 # This is where the user has selected the 'constant strain type' test where the user will enter a constant strain value alongside with time duration
 # that will be used for the test
 
-def on_constant_start_test(event):                           #function for start button to start test; call function run_motor (used for constant strain test only) 
-        #print("hello world")
-        print(constant_strain_input.GetValue()) 
-
 class ConstantStrainTestInput(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):
         wx.Frame.__init__(self, None, size=(length, width))
@@ -48,12 +44,9 @@ class ConstantStrainTestInput(wx.Frame):
         
         strain_text = wx.StaticText(panel_3, label = "Strain (Linear Displacement):")
         strain_text.SetForegroundColour((255, 255, 255))
-        global strain_input                        #---------------------------------------------------------> might refactor in the future
         strain_input = wx.TextCtrl(panel_3)        
-        #strain_input.Bind(wx.EVT_TEXT, on_key_typed)
         time_text = wx.StaticText(panel_3, label = "Time:")
         time_text.SetForegroundColour((255, 255, 255))
-        global time_input                          #-----------------------------------------------------------> maybe better name for "constant" starin input test
         time_input = wx.TextCtrl(panel_3)
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
@@ -68,7 +61,6 @@ class ConstantStrainTestInput(wx.Frame):
         button_start = wx.Button(panel_4, wx.ID_ANY, 'START')
         button_start.SetBackgroundColour((190, 37, 66))
         button_start.SetForegroundColour((255,255,255))
-        #button_start.Bind(wx.EVT_BUTTON, on_constant_start_test)
  
         button_start.Bind(wx.EVT_BUTTON, lambda event: back_end.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type, strain_input.GetValue(), time_input.GetValue()))
 
