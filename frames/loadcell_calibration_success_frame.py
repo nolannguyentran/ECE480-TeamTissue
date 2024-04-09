@@ -47,7 +47,7 @@ class CalibrationSuccess(wx.Frame):
         text_sizer_1.Add(logo)
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
 
-        text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning Capsule Name in center
+        text_sizer_2 = wx.BoxSizer(wx.HORIZONTAL)   #Aligning 'Success' message in center
         text_sizer_2.Add((0,0), 1, wx.EXPAND)
         text_sizer_2.Add(t_2, 0, wx.ALIGN_CENTER)
         text_sizer_2.Add((0,0), 1, wx.EXPAND)

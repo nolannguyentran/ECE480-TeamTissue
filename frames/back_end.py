@@ -17,9 +17,9 @@ import threading
 import time
 import csv
 
-import RPi.GPIO as GPIO
-from hx711 import HX711  # import the class HX711
-from time import sleep
+""" import RPi.GPIO as GPIO
+from hx711 import HX711  # import the class HX711 """
+
 import motor_config
 import loadcell_config
 
@@ -36,15 +36,15 @@ motor_b_flag = threading.Event()
 motor_c_flag = threading.Event()
 motor_d_flag = threading.Event()
 
-motor_a_lc_flag = threading.Event()
+""" motor_a_lc_flag = threading.Event()
 motor_b_lc_flag = threading.Event()
 motor_c_lc_flag = threading.Event()
 motor_d_lc_flag = threading.Event() # flag used to stop load cell threads
+ """
 
-
-GPIO.setmode(GPIO.BOARD)
+""" GPIO.setmode(GPIO.BOARD)
 GPIO.setup(19, GPIO.OUT)
-GPIO.output(19, GPIO.HIGH)
+GPIO.output(19, GPIO.HIGH) """
 
 # Define Directions
 global CW
@@ -65,15 +65,15 @@ capsule_d_list = []
 def start_program():
     global home_frame
     home_frame = HomeFrame(None, -1, "BioReactor")
-    initialization() #initialize motors and load cells
+    """ initialization() #initialize motors and load cells """
     home_frame.Show()
     global jobs_frame
     jobs_frame = Jobs()
     
 
-def get_current_frame(frame_name):                       #determines which frame user is currently in, assign to existing global frame name class
-    global current_frame                                 #TODO: NEED A CHECK IF THE USER IS CURRENTLY ON THE HOME PAGE, IF THEY ARE, DON'T DESTROY THE FRAME, I.E. PRESSING THE SETTINGS, JOBS BUTTON WHEN THE USER IS IN THE HOME DASHBOARD
-    match frame_name:                                    #<---------------------------------might need to add settings and job frame
+def get_current_frame(frame_name):                       #function that determines which frame user is currently in, assign to existing global frame name class
+    global current_frame                                 
+    match frame_name:                                    
         case 'TestSelectionFrame':
             current_frame = test_selection_frame
         case 'StrainInputTypeFrame':
@@ -94,7 +94,7 @@ def get_current_frame(frame_name):                       #determines which frame
             current_frame = loadcell_calibration_success_frame
         case 'TestOutput':
             current_frame = live_test_frame
-        case 'Jobs':                                                   #TODO: BIG PROBLEM , DONT DESTROY JOB, BUT HIDE IT
+        case 'Jobs':                                                   
             current_frame = jobs_frame
         case 'HomeFrame':
             current_frame = home_frame
@@ -102,21 +102,29 @@ def get_current_frame(frame_name):                       #determines which frame
 
 #TODO: Add functions for grabing max,min,and rate from each of the different strain type input tests
 
+def time_conversion(seconds):       #convert to format: H:M:S:milli
+    minutes = seconds//60
+    hours = minutes//60  #hour-th place
+    seconds = seconds%60 #second-th place
+    minutes = minutes%60 #minute-th place
+    milliseconds = int((seconds%1)*100)  #millisecond-th place
+    converted_time = '{0}:{1}:{2}:{3}'.format(int(hours), int(minutes), int(seconds), milliseconds)
+    return converted_time
 
-def on_motor_click(event):                          #TODO: ADDED IF STATEMENT DETERMINING WHETHER THE MOTOR IS CURRENTLY RUNNING AND NAVIGATE USER TO THE APPROPIATE PAGE
+def on_motor_click(event):                          #function for each of the 'Capsule' buttons on the home screen
     identity = event.GetEventObject().GetLabel()    #Returns which capsule selected
     global test_selection_frame
     test_selection_frame = TestSelectionFrame(identity)
     test_selection_frame.Show()
 
-def on_compression_test_click(event, motor_name):
+def on_compression_test_click(event, motor_name):   #function for 'Compression Test' button in Test Selection screen
     identity = event.GetEventObject().GetLabel()    #Returns which test selected
     test_selection_frame.Destroy()
     global strain_input_type_frame
     strain_input_type_frame = StrainInputTypeFrame(motor_name, identity)
     strain_input_type_frame.Show()
 
-def on_tensile_test_click(event, motor_name):
+def on_tensile_test_click(event, motor_name):       #function for 'Tensile Test' button in Test Selection screen
     identity = event.GetEventObject().GetLabel()    #Returns which test selected
     test_selection_frame.Destroy()
     global strain_input_type_frame
@@ -137,7 +145,7 @@ def on_square_wave_test_click(event, motor_name, test_type):    #[strain input t
     square_wave_strain_test_frame = WaveStrainTestInput(motor_name, test_type, strain_type)
     square_wave_strain_test_frame.Show()
 
-def on_settings_click(event, frame_name):
+def on_settings_click(event, frame_name):           #function for 'Settings' button 
     get_current_frame(frame_name)
     if current_frame != home_frame:
         current_frame.Destroy()
@@ -145,7 +153,7 @@ def on_settings_click(event, frame_name):
     settings_frame = Settings()
     settings_frame.Show()
 
-def on_jobs_click(event, frame_name):
+def on_jobs_click(event, frame_name):               #function for 'Jobs' button
     get_current_frame(frame_name)
     if current_frame != home_frame:
         current_frame.Destroy()
@@ -168,33 +176,33 @@ def on_loadcell_click(event, frame_name):       #function for the four load cell
     match identity[-1]:
         case 'A':
             print("load cell A is tared!")
-            error = loadcell_A.zero()
+            """ error = loadcell_A.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
-            raw_loadcell_reading = loadcell_A.get_raw_data_mean()
+            raw_loadcell_reading = loadcell_A.get_raw_data_mean() """
         case 'B':
             print("load cell B is tared!")
-            error = loadcell_B.zero()
+            """ error = loadcell_B.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
-            raw_loadcell_reading = loadcell_B.get_raw_data_mean()
+            raw_loadcell_reading = loadcell_B.get_raw_data_mean() """
         case 'C':
             print("load cell C is tared!")
-            error = loadcell_C.zero()
+            """ error = loadcell_C.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
-            raw_loadcell_reading = loadcell_C.get_raw_data_mean()
+            raw_loadcell_reading = loadcell_C.get_raw_data_mean() """
         case 'D':
             print("load cell D is tared!")
-            error = loadcell_D.zero()
+            """ error = loadcell_D.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
-            raw_loadcell_reading = loadcell_D.get_raw_data_mean()
+            raw_loadcell_reading = loadcell_D.get_raw_data_mean() """
     
-    if raw_loadcell_reading:
+    """ if raw_loadcell_reading:
         print("Data subtracted by offset but still not converted to units: ", raw_loadcell_reading)
     else:
-        print('invalid data', raw_loadcell_reading)
+        print('invalid data', raw_loadcell_reading) """
     
     global attach_known_weight_frame
     attach_known_weight_frame = AttachWeightFrame(identity)
@@ -202,7 +210,7 @@ def on_loadcell_click(event, frame_name):       #function for the four load cell
 
     
 
-def on_next_click(event, frame_name, loadcell_name):        #functino for next button after attaching known weight to loadcell to calibrate
+def on_next_click(event, frame_name, loadcell_name):        #function for next button after attaching known weight to loadcell to calibrate
     get_current_frame(frame_name)
     current_frame.Destroy()
     global loadcell_calibration_frame
@@ -221,7 +229,7 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
     match loadcell_name[-1]:
         case 'A':
             #print("load cell A is tared!")
-            loadcell_reading = loadcell_A.get_data_mean()
+            """ loadcell_reading = loadcell_A.get_data_mean()
             if loadcell_reading:
                 print('Mean value from load cell A is subtracted by offset:', loadcell_reading)
         
@@ -229,11 +237,11 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
                 loadcell_A.set_scale_ratio(ratio)
                 print("Ratio is set!")
             else:
-                raise ValueError('Value cannot be read')
+                raise ValueError('Value cannot be read') """
             
         case 'B':
            #print("load cell B is tared!")
-           loadcell_reading = loadcell_B.get_data_mean()
+           """ loadcell_reading = loadcell_B.get_data_mean()
            if loadcell_reading:
                 print('Mean value from load cell B is subtracted by offset:', loadcell_reading)
         
@@ -241,11 +249,11 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
                 loadcell_B.set_scale_ratio(ratio)
                 print("Ratio is set!")
            else:
-                raise ValueError('Value cannot be read')
+                raise ValueError('Value cannot be read') """
             
         case 'C':
             #print("load cell C is tared!")
-            loadcell_reading = loadcell_C.get_data_mean()
+            """ loadcell_reading = loadcell_C.get_data_mean()
             if loadcell_reading:
                 print('Mean value from load cell C is subtracted by offset:', loadcell_reading)
         
@@ -253,11 +261,11 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
                 loadcell_C.set_scale_ratio(ratio)
                 print("Ratio is set!")
             else:
-                raise ValueError('Value cannot be read')
+                raise ValueError('Value cannot be read') """
             
         case 'D':
             #print("load cell D is tared!")
-            loadcell_reading = loadcell_d.get_data_mean()
+            """ loadcell_reading = loadcell_d.get_data_mean()
             if loadcell_reading:
                 print('Mean value from load cell D is subtracted by offset:', loadcell_reading)
         
@@ -265,7 +273,7 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
                 loadcell_D.set_scale_ratio(ratio)
                 print("Ratio is set!")
             else:
-                raise ValueError('Value cannot be read')
+                raise ValueError('Value cannot be read') """
     
 
     print("The known weight value in grams is: "+known_weight_value)
@@ -289,17 +297,17 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     global thread_c
     global thread_d
 
-    global thread_a_lc
+    """ global thread_a_lc
     global thread_b_lc
     global thread_c_lc
-    global thread_d_lc
+    global thread_d_lc """
     
-    """ thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag))
+    thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, 5))
     thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag))
     thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag))
-    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag)) """
+    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag))
 
-    thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
+    """ thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
     thread_b = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_b_flag))
     thread_c = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_c_flag))
     thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_d_flag))
@@ -308,23 +316,23 @@ def on_start_test_click(event, motor_name, test_type, strain_type):             
     thread_a_lc = threading.Thread(target = read_data, args=(motor_name,))
     thread_b_lc = threading.Thread(target = read_data, args=(motor_name,))
     thread_c_lc = threading.Thread(target = read_data, args=(motor_name,))
-    thread_d_lc = threading.Thread(target = read_data, args=(motor_name,))
+    thread_d_lc = threading.Thread(target = read_data, args=(motor_name,)) """
     match motor_name[-1]:
             case 'A':
                 thread_a.start()
-                thread_a_lc.start()
+                """ thread_a_lc.start() """
             case 'B':
                 thread_b.start()
-                thread_b_lc.start()
+                """ thread_b_lc.start() """
             case 'C':
                 thread_c.start()
-                thread_c_lc.start()
+                """ thread_c_lc.start() """
             case 'D':
                 thread_d.start()
-                thread_d_lc.start()
+                """ thread_d_lc.start() """
                 
 
-def on_home_click(event, frame_name):
+def on_home_click(event, frame_name):                   #function for 'Home' button
     get_current_frame(frame_name)
     if current_frame == jobs_frame:
         current_frame.Hide()
@@ -332,14 +340,25 @@ def on_home_click(event, frame_name):
         current_frame.Destroy()
     
 
-def thread_test(motor_name, test_type, strain_type, stop_flag):
-    for i in range(5):
+def thread_test(motor_name, test_type, strain_type, stop_flag, duration):     #function that simulate a test (only used when not connected to bioreactor)
+    time_target = duration
+    start_time = time.time()
+
+    time_elapsed = 0
+    while True:
+        if stop_flag.is_set() or time_elapsed >= time_target:
+            break
+        end_time_increment = time.time()
+        time_elapsed = end_time_increment - start_time
+        print(f"{motor_name} running...at time: {time_conversion(time_elapsed)}")
+    
+    """ for i in range(5):
         if stop_flag.is_set():
             break
         print(f"{motor_name} running: {i}")
         #capsule_a_list.append([i,"hello", "world"])
         time.sleep(1)
-    #print(capsule_a_list)
+    #print(capsule_a_list) """
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
     
 
@@ -356,20 +375,20 @@ def on_stop_test_click(event):              #function for 'Stop Test' buttons in
     match motor_name:
             case 'A':
                 motor_a_flag.set()
-                motor_a_lc_flag.set()
+                """ motor_a_lc_flag.set() """
             case 'B':
                motor_b_flag.set()
-               motor_b_lc_flag.set()
+               """ motor_b_lc_flag.set() """
             case 'C':
                 motor_c_flag.set()
-                motor_c_lc_flag.set()
+                """ motor_c_lc_flag.set() """
             case 'D':
                 motor_d_flag.set()
-                motor_d_lc_flag.set()
+                """ motor_d_lc_flag.set() """
 
 
 
-def clear_test_results(event, motor_name, frame_name):
+def clear_test_results(event, motor_name, frame_name):      #function for 'Clear Test' after clicking on a completed task in the 'Jobs' page
     home_frame.done_running(motor_name)
     jobs_frame.clear_test(motor_name)
     get_current_frame(frame_name)
@@ -379,26 +398,26 @@ def clear_test_results(event, motor_name, frame_name):
     match motor_name[-1]:
             case 'A':
                 motor_a_flag.clear()
-                motor_a_lc_flag.clear()
+                """ motor_a_lc_flag.clear() """
                 capsule_a_list.clear()
             case 'B':
                motor_b_flag.clear()
-               motor_b_lc_flag.clear()
+               """ motor_b_lc_flag.clear() """
                capsule_b_list.clear()
             case 'C':
                 motor_c_flag.clear()
-                motor_c_lc_flag.clear()
+                """ motor_c_lc_flag.clear() """
                 capsule_c_list.clear()
             case 'D':
                 motor_d_flag.clear()
-                motor_d_lc_flag.clear()
+                """ motor_d_lc_flag.clear() """
                 capsule_d_list.clear()
     
 
 def remove_space(string):   #function to remove spaces in strings
     return string.replace(" ", "")
 
-def export_test_results(event, motor_name, test_type, strain_type, frame_name):
+def export_test_results(event, motor_name, test_type, strain_type, frame_name):     #function that export test results to a .CSV file
     home_frame.done_running(motor_name)
     jobs_frame.clear_test(motor_name)
     get_current_frame(frame_name)
@@ -424,11 +443,11 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name):
                 file_writer.writerows(capsule_d_list)
         
 
-def exit_application(event):
+def exit_application(event):        #function for 'X' button on Homescreen
     jobs_frame.Destroy()
     home_frame.Destroy()
 
-#function to initialize both motors and their respective load cells
+""" #function to initialize both motors and their respective load cells
 def initialization():
 	
 	GPIO.setwarnings(False)
@@ -443,20 +462,20 @@ def initialization():
 	
 	print("-------MOTORS ARE READY-------")
 	
-	global loadcell_A
-	global loadcell_B
-	global loadcell_C
+	#global loadcell_A
+	#global loadcell_B
+	#global loadcell_C
 	global loadcell_D
 
 	# Create and set up all four load cells objects
-	loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin']) 
-	loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin']) 
-	loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
+	#loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin']) 
+	#loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin'], channel=loadcell_dict['B']['channel'], gain=loadcell_dict['B']['gain']) 
+	#loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
 	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin']) 
 
-	print("-------LOAD CELLS ARE READY-------")
+	print("-------LOAD CELLS ARE READY-------") """
 
-def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
+""" def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
     print('Current weight on the scale in grams and force in Newtons is: ')
     match motor_name[-1]:
         #case 'A':
@@ -476,12 +495,12 @@ def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
                 #newton_mean = ((loadcell_C.get_weight_mean(20) / 1000) * 9.81)
 
                 #print(newton_mean, 'N')
-                #print("HELP2")
+                #print("HELP2") """
 
 
 
 
-# function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
+""" # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
 def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): #TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
         starting_rotation = CW
@@ -514,7 +533,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         
     motor_d_lc_flag.set() #-------------------------might need to call a function to set this flag so it is dynamically motor correct
     
-    wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
+    wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type) """
 
 
 	  
