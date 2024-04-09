@@ -8,22 +8,22 @@
 
 loadcell_dict = {					#dictionary containing respective step/dir pin for each load cell configuration
 	'A':{
-		'dout_pin': 13,               #data pin
-		'pd_sck_pin': 15,            #clock pin
+		'dout_pin': 7,               #data pin
+		'pd_sck_pin': 11,            #clock pin
 		'channel': 'A',
 		'gain': 64,
         'num_readings': 10
 	},
 	'B':{
-		'dout_pin':21,
-		'pd_sck_pin': 23,
+		'dout_pin':22,
+		'pd_sck_pin': 18,
 		'channel': 'B',
 		'gain': 64, 
         'num_readings': 10
 	},
 	'C':{
-		'dout_pin': 18,
-		'pd_sck_pin': 22,
+		'dout_pin': 15,
+		'pd_sck_pin': 13,
 		'channel': 'C',
 		'gain': 64,
         'num_readings': 10

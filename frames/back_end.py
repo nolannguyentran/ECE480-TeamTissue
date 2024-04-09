@@ -42,10 +42,16 @@ motor_b_lc_flag = threading.Event()
 motor_c_lc_flag = threading.Event()
 motor_d_lc_flag = threading.Event() # flag used to stop load cell threads
 
-
-GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)        #Motor D enable pin
 GPIO.setup(19, GPIO.OUT)
 GPIO.output(19, GPIO.HIGH)
+GPIO.setup(37, GPIO.OUT)        #Motor C enable pin
+GPIO.output(37, GPIO.HIGH)
+GPIO.setup(21, GPIO.OUT)        #Motor B enable pin
+GPIO.output(21, GPIO.HIGH)
+GPIO.setup(23, GPIO.OUT)        #Motor A enable pin
+GPIO.output(23, GPIO.HIGH)
 
 # Define Directions
 global CW
@@ -329,7 +335,7 @@ def on_start_test_click(event, motor_name, test_type, strain_type, strain_input,
                 thread_c_lc.start()
             case 'D':
                 thread_d.start()
-                thread_d_lc.start()
+                #thread_d_lc.start()
                 
 
 def on_home_click(event, frame_name):                   #function for 'Home' button
@@ -536,7 +542,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         returning_rotation = CW
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
 
-    for step in range(strain_value):
+    for step in range(int(strain_value)):
         if stop_flag.is_set():
             break
         
@@ -544,11 +550,12 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        
-    sleep(time_duration)
-
+        #print("here")
+    thread_d_lc.start()
+    sleep(int(time_duration))
+    motor_d_lc_flag.set()
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
-    for step in range(strain_value):
+    for step in range(int(strain_value)):
         if stop_flag.is_set():
             break
         
