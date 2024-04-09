@@ -17,11 +17,12 @@ import threading
 import time
 import csv
 
-""" import RPi.GPIO as GPIO
-from hx711 import HX711  # import the class HX711 """
+import RPi.GPIO as GPIO
+from hx711 import HX711  # import the class HX711
 
 import motor_config
 import loadcell_config
+from time import sleep
 
 #--------------------------------------------------------------------------BACK-END CONTROLS---------------------------------------------
 # This is where the majority of the back-end functionality will reside. Includes functions that control screen navigation, motor control
@@ -36,15 +37,15 @@ motor_b_flag = threading.Event()
 motor_c_flag = threading.Event()
 motor_d_flag = threading.Event()
 
-""" motor_a_lc_flag = threading.Event()
+motor_a_lc_flag = threading.Event()
 motor_b_lc_flag = threading.Event()
 motor_c_lc_flag = threading.Event()
 motor_d_lc_flag = threading.Event() # flag used to stop load cell threads
- """
 
-""" GPIO.setmode(GPIO.BOARD)
+
+GPIO.setmode(GPIO.BOARD)
 GPIO.setup(19, GPIO.OUT)
-GPIO.output(19, GPIO.HIGH) """
+GPIO.output(19, GPIO.HIGH)
 
 # Define Directions
 global CW
@@ -65,7 +66,7 @@ capsule_d_list = []
 def start_program():
     global home_frame
     home_frame = HomeFrame(None, -1, "BioReactor")
-    """ initialization() #initialize motors and load cells """
+    initialization() #initialize motors and load cells
     home_frame.Show()
     global jobs_frame
     jobs_frame = Jobs()
@@ -176,33 +177,33 @@ def on_loadcell_click(event, frame_name):       #function for the four load cell
     match identity[-1]:
         case 'A':
             print("load cell A is tared!")
-            """ error = loadcell_A.zero()
+            error = loadcell_A.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
-            raw_loadcell_reading = loadcell_A.get_raw_data_mean() """
+            raw_loadcell_reading = loadcell_A.get_raw_data_mean()
         case 'B':
             print("load cell B is tared!")
-            """ error = loadcell_B.zero()
+            error = loadcell_B.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
-            raw_loadcell_reading = loadcell_B.get_raw_data_mean() """
+            raw_loadcell_reading = loadcell_B.get_raw_data_mean()
         case 'C':
             print("load cell C is tared!")
-            """ error = loadcell_C.zero()
+            error = loadcell_C.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
-            raw_loadcell_reading = loadcell_C.get_raw_data_mean() """
+            raw_loadcell_reading = loadcell_C.get_raw_data_mean()
         case 'D':
             print("load cell D is tared!")
-            """ error = loadcell_D.zero()
+            error = loadcell_D.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
-            raw_loadcell_reading = loadcell_D.get_raw_data_mean() """
+            raw_loadcell_reading = loadcell_D.get_raw_data_mean()
     
-    """ if raw_loadcell_reading:
+    if raw_loadcell_reading:
         print("Data subtracted by offset but still not converted to units: ", raw_loadcell_reading)
     else:
-        print('invalid data', raw_loadcell_reading) """
+        print('invalid data', raw_loadcell_reading)
     
     global attach_known_weight_frame
     attach_known_weight_frame = AttachWeightFrame(identity)
@@ -228,7 +229,7 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
     match loadcell_name[-1]:
         case 'A':
             #print("load cell A is tared!")
-            """ loadcell_reading = loadcell_A.get_data_mean()
+            loadcell_reading = loadcell_A.get_data_mean()
             if loadcell_reading:
                 print('Mean value from load cell A is subtracted by offset:', loadcell_reading)
         
@@ -236,11 +237,11 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
                 loadcell_A.set_scale_ratio(ratio)
                 print("Ratio is set!")
             else:
-                raise ValueError('Value cannot be read') """
+                raise ValueError('Value cannot be read')
             
         case 'B':
            #print("load cell B is tared!")
-           """ loadcell_reading = loadcell_B.get_data_mean()
+           loadcell_reading = loadcell_B.get_data_mean()
            if loadcell_reading:
                 print('Mean value from load cell B is subtracted by offset:', loadcell_reading)
         
@@ -248,11 +249,11 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
                 loadcell_B.set_scale_ratio(ratio)
                 print("Ratio is set!")
            else:
-                raise ValueError('Value cannot be read') """
+                raise ValueError('Value cannot be read')
             
         case 'C':
             #print("load cell C is tared!")
-            """ loadcell_reading = loadcell_C.get_data_mean()
+            loadcell_reading = loadcell_C.get_data_mean()
             if loadcell_reading:
                 print('Mean value from load cell C is subtracted by offset:', loadcell_reading)
         
@@ -260,11 +261,11 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
                 loadcell_C.set_scale_ratio(ratio)
                 print("Ratio is set!")
             else:
-                raise ValueError('Value cannot be read') """
+                raise ValueError('Value cannot be read')
             
         case 'D':
             #print("load cell D is tared!")
-            """ loadcell_reading = loadcell_d.get_data_mean()
+            loadcell_reading = loadcell_D.get_data_mean()
             if loadcell_reading:
                 print('Mean value from load cell D is subtracted by offset:', loadcell_reading)
         
@@ -272,7 +273,7 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
                 loadcell_D.set_scale_ratio(ratio)
                 print("Ratio is set!")
             else:
-                raise ValueError('Value cannot be read') """
+                raise ValueError('Value cannot be read')
     
 
     print("The known weight value in grams is: "+known_weight_value)
@@ -296,39 +297,39 @@ def on_start_test_click(event, motor_name, test_type, strain_type, strain_input,
     global thread_c
     global thread_d
 
-    """ global thread_a_lc
+    global thread_a_lc
     global thread_b_lc
     global thread_c_lc
-    global thread_d_lc """
+    global thread_d_lc
     
-    thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input, time_input))
+    """ thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input, time_input))
     thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag, strain_input, time_input))
     thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag, strain_input, time_input))
-    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input, time_input))
+    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input, time_input)) """
 
-    """ thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_a_flag))
-    thread_b = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_b_flag))
-    thread_c = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_c_flag))
-    thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, 1, 1, motor_d_flag))
+    thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input, time_input, motor_a_flag))
+    thread_b = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input, time_input, motor_b_flag))
+    thread_c = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input, time_input, motor_c_flag))
+    thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input, time_input, motor_d_flag))
 
     
-    thread_a_lc = threading.Thread(target = read_data, args=(motor_name,))
-    thread_b_lc = threading.Thread(target = read_data, args=(motor_name,))
-    thread_c_lc = threading.Thread(target = read_data, args=(motor_name,))
-    thread_d_lc = threading.Thread(target = read_data, args=(motor_name,)) """
+    thread_a_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
+    thread_b_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
+    thread_c_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
+    thread_d_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
     match motor_name[-1]:
             case 'A':
                 thread_a.start()
-                """ thread_a_lc.start() """
+                thread_a_lc.start()
             case 'B':
                 thread_b.start()
-                """ thread_b_lc.start() """
+                thread_b_lc.start()
             case 'C':
                 thread_c.start()
-                """ thread_c_lc.start() """
+                thread_c_lc.start()
             case 'D':
                 thread_d.start()
-                """ thread_d_lc.start() """
+                thread_d_lc.start()
                 
 
 def on_home_click(event, frame_name):                   #function for 'Home' button
@@ -368,16 +369,16 @@ def on_stop_test_click(event):              #function for 'Stop Test' buttons in
     match motor_name:
             case 'A':
                 motor_a_flag.set()
-                """ motor_a_lc_flag.set() """
+                motor_a_lc_flag.set()
             case 'B':
                motor_b_flag.set()
-               """ motor_b_lc_flag.set() """
+               motor_b_lc_flag.set()
             case 'C':
                 motor_c_flag.set()
-                """ motor_c_lc_flag.set() """
+                motor_c_lc_flag.set()
             case 'D':
                 motor_d_flag.set()
-                """ motor_d_lc_flag.set() """
+                motor_d_lc_flag.set()
 
 
 def clear_test_results(event, motor_name, frame_name):      #function for 'Clear Test' after clicking on a completed task in the 'Jobs' page
@@ -390,19 +391,19 @@ def clear_test_results(event, motor_name, frame_name):      #function for 'Clear
     match motor_name[-1]:
             case 'A':
                 motor_a_flag.clear()
-                """ motor_a_lc_flag.clear() """
+                motor_a_lc_flag.clear()
                 capsule_a_list.clear()
             case 'B':
                motor_b_flag.clear()
-               """ motor_b_lc_flag.clear() """
+               motor_b_lc_flag.clear()
                capsule_b_list.clear()
             case 'C':
                 motor_c_flag.clear()
-                """ motor_c_lc_flag.clear() """
+                motor_c_lc_flag.clear()
                 capsule_c_list.clear()
             case 'D':
                 motor_d_flag.clear()
-                """ motor_d_lc_flag.clear() """
+                motor_d_lc_flag.clear()
                 capsule_d_list.clear()
     
 
@@ -439,7 +440,7 @@ def exit_application(event):        #function for 'X' button on Homescreen
     jobs_frame.Destroy()
     home_frame.Destroy()
 
-""" #function to initialize both motors and their respective load cells
+#function to initialize both motors and their respective load cells
 def initialization():
 	
 	GPIO.setwarnings(False)
@@ -454,45 +455,77 @@ def initialization():
 	
 	print("-------MOTORS ARE READY-------")
 	
-	#global loadcell_A
-	#global loadcell_B
-	#global loadcell_C
+	global loadcell_A
+	global loadcell_B
+	global loadcell_C
 	global loadcell_D
 
 	# Create and set up all four load cells objects
-	#loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin']) 
-	#loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin'], channel=loadcell_dict['B']['channel'], gain=loadcell_dict['B']['gain']) 
-	#loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
+	loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin']) 
+	loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin']) 
+	loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
 	loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin']) 
 
-	print("-------LOAD CELLS ARE READY-------") """
+	print("-------LOAD CELLS ARE READY-------")
 
-""" def read_data(motor_name):		#TODO: MUCH MORE WILL BE ADDED
+def read_data(motor_name, duration):		#TODO: MUCH MORE WILL BE ADDED
     print('Current weight on the scale in grams and force in Newtons is: ')
+    time_target = float(duration)
+    start_time = time.time()
+
+    time_elapsed = 0
     match motor_name[-1]:
-        #case 'A':
-        #    loadcell_A.get_raw_data(loadcell_dict[motor_name]['num_readings'])
-        #case 'B':
-        #    loadcell_B.get_raw_data(loadcell_dict[motor_name]['num_readings'])
-        #case 'C':
-        #    loadcell_C.get_raw_data(loadcell_dict[motor_name]['num_readings'])
+        case 'A':
+            while True:
+                if motor_a_lc_flag.is_set() or time_elapsed >= time_target:
+                    break
+                end_time_increment = time.time()
+                time_elapsed = end_time_increment-start_time
+                print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
+                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
+       
+        case 'B':
+            while True:
+                if motor_b_lc_flag.is_set() or time_elapsed >= time_target:
+                    break
+                end_time_increment = time.time()
+                time_elapsed = end_time_increment-start_time
+                print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
+                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
+        
+        case 'C':
+            while True:
+                if motor_c_lc_flag.is_set() or time_elapsed >= time_target:
+                    break
+                end_time_increment = time.time()
+                time_elapsed = end_time_increment-start_time
+                print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
+                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
+        
         case 'D':
-            counter = 0
-            while not motor_d_lc_flag.is_set():
-                counter = counter+1
-                print(loadcell_D.get_weight_mean(1), 'g')
-                print("counter: "+str(counter))
+            while True:
+                if motor_d_lc_flag.is_set() or time_elapsed >= time_target:
+                    break
+                end_time_increment = time.time()
+                time_elapsed = end_time_increment-start_time
+                print(f"{motor_name}: {loadcell_D.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
+                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
+            
+            
+            #while not motor_d_lc_flag.is_set():
+            #    print(loadcell_D.get_weight_mean(1), 'g')
+                
         
         #convert grams to newtons
                 #newton_mean = ((loadcell_C.get_weight_mean(20) / 1000) * 9.81)
 
                 #print(newton_mean, 'N')
-                #print("HELP2") """
+                #print("HELP2")
 
 
 
 
-""" # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
+# function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
 def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): #TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
         starting_rotation = CW
@@ -503,7 +536,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         returning_rotation = CW
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
 
-    for step in range(1000):
+    for step in range(strain_value):
         if stop_flag.is_set():
             break
         
@@ -512,9 +545,10 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
         
-    sleep(1.0)
+    sleep(time_duration)
+
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
-    for step in range(1000):
+    for step in range(strain_value):
         if stop_flag.is_set():
             break
         
@@ -523,9 +557,17 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
         
-    motor_d_lc_flag.set() #-------------------------might need to call a function to set this flag so it is dynamically motor correct
+    match motor_name[-1]:
+        case 'A':
+            motor_a_lc_flag.set()
+        case 'B':
+            motor_b_lc_flag.set()
+        case 'C':
+            motor_c_lc_flag.set()
+        case 'D':
+            motor_d_lc_flag.set()
     
-    wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type) """
+    wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
 
 
 	  
