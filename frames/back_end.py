@@ -514,7 +514,7 @@ def read_data(motor_name, duration):		#TODO: MUCH MORE WILL BE ADDED
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_D.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
+                print(f"{motor_name}: {loadcell_D.get_weight_mean(40)} grams...at time: {time_conversion(time_elapsed)}")
                 #capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
             
             
