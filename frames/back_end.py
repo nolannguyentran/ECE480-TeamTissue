@@ -531,6 +531,28 @@ def read_data(motor_name, duration):		#TODO: MUCH MORE WILL BE ADDED
 
 
 
+def start_measuring(motor_name):        #function to start reading data from specific load cell
+    match motor_name[-1]:
+        case 'A':
+            thread_a_lc.start()
+        case 'B':
+            thread_b_lc.start()
+        case 'C':
+            thread_c_lc.start()
+        case 'D':
+            thread_d_lc.start()
+
+def stop_measuring(motor_name):     #function to stop measuring data from specific load cell
+    match motor_name[-1]:
+        case 'A':
+            motor_a_lc_flag.set()
+        case 'B':
+            motor_b_lc_flag.set()
+        case 'C':
+            motor_c_lc_flag.set()
+        case 'D':
+            motor_d_lc_flag.set()
+
 # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
 def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): #TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
@@ -542,7 +564,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         returning_rotation = CW
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
 
-    for step in range(int(strain_value)):
+    for step in range(int(strain_value)):                                           #capsule-specific motor will move in specified direction (compression or tensile) until it reaches specified linear displacement
         if stop_flag.is_set():
             break
         
@@ -550,10 +572,10 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        #print("here")
-    thread_d_lc.start()
-    sleep(int(time_duration))
-    motor_d_lc_flag.set()
+    
+    start_measuring(motor_name)     #capsule-specific load cell will begin capturing data (get weight in grams)
+    sleep(int(time_duration))       #motor will hang; sample is held at specific linear-displacement for user-specified time duration
+    stop_measuring(motor_name)      #after user-specified time duration passed, load cell will stop capturing data
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
     for step in range(int(strain_value)):
         if stop_flag.is_set():
