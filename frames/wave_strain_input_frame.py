@@ -42,18 +42,18 @@ class WaveStrainTestInput(wx.Frame):
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
         
-        minimum_strain_text = wx.StaticText(panel_3, label = "wavyMinimum Strain:")
+        minimum_strain_text = wx.StaticText(panel_3, label = "Minimum Strain Value:")
         minimum_strain_text.SetForegroundColour((255, 255, 255))
-        global wave_strain_min
+        
         wave_strain_min = wx.TextCtrl(panel_3)
-        maximum_strain_text = wx.StaticText(panel_3, label = "Maximum Strain:")
+        maximum_strain_text = wx.StaticText(panel_3, label = "Maximum Strain Value:")
         maximum_strain_text.SetForegroundColour((255, 255, 255))
-        global wave_strain_max
+        
         wave_strain_max = wx.TextCtrl(panel_3)
-        rate_text = wx.StaticText(panel_3, label = "Rate:")
-        rate_text.SetForegroundColour((255, 255, 255))
-        global rate_input_wave
-        rate_input_wave = wx.TextCtrl(panel_3)
+        time_text = wx.StaticText(panel_3, label = "Time:")
+        time_text.SetForegroundColour((255, 255, 255))
+        
+        time_input = wx.TextCtrl(panel_3)
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(logo)
@@ -67,10 +67,8 @@ class WaveStrainTestInput(wx.Frame):
         button_start = wx.Button(panel_4, wx.ID_ANY, 'START')
         button_start.SetBackgroundColour((190, 37, 66))
         button_start.SetForegroundColour((255,255,255))
-        #button_start.Bind(wx.EVT_BUTTON, back_end.on_constant_start_test)
- 
-
-        #button_start.Bind(wx.EVT_BUTTON, lambda event: on_start_test_click(event, self.motor_name, self.test_type))
+        
+        button_start.Bind(wx.EVT_BUTTON, lambda event: back_end.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type, wave_strain_min.GetValue(), wave_strain_max.GetValue(), time_input.GetValue()))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
@@ -94,8 +92,8 @@ class WaveStrainTestInput(wx.Frame):
         user_field_sizer.Add(maximum_strain_text, 1, wx.EXPAND)
         user_field_sizer.Add(wave_strain_max, 0, wx.EXPAND)
         user_field_sizer.Add((0,0), 1, wx.EXPAND)
-        user_field_sizer.Add(rate_text, 1, wx.EXPAND)
-        user_field_sizer.Add(rate_input_wave, 0, wx.EXPAND)
+        user_field_sizer.Add(time_text, 1, wx.EXPAND)
+        user_field_sizer.Add(time_input, 0, wx.EXPAND)
         user_field_sizer.Add((0,0), 1, wx.EXPAND)
 
         middle_sizer.Add(panel_3, 1, wx.EXPAND)
