@@ -62,7 +62,7 @@ class ConstantStrainTestInput(wx.Frame):
         button_start.SetBackgroundColour((190, 37, 66))
         button_start.SetForegroundColour((255,255,255))
  
-        button_start.Bind(wx.EVT_BUTTON, lambda event: back_end.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type, strain_input.GetValue(), time_input.GetValue()))
+        button_start.Bind(wx.EVT_BUTTON, lambda event: back_end.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type, 0, strain_input.GetValue(), time_input.GetValue()))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
