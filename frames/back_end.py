@@ -29,7 +29,6 @@ from time import sleep
 # load cell readings, running tests, exporting data, randomizing values, motor and load cell initializations, etc.
 
 
-
 #TODO: IN DOCUMENTATION MENTION THAT ALL MOTORS MUST BE STOPPED BEFORE CLICKING ON THE 'X' IN HOMESCREEN, UNLESS IMPLEMENT AN EMERGENCY SHUTOFF?
 
 motor_a_flag = threading.Event()  # flags used to stop motor threads
@@ -106,8 +105,6 @@ def get_current_frame(frame_name):                       #function that determin
         case 'HomeFrame':
             current_frame = home_frame
 
-
-#TODO: Add functions for grabing max,min,and rate from each of the different strain type input tests
 
 def time_conversion(seconds):       #convert to format: H:M:S:milli
     minutes = seconds//60
@@ -489,7 +486,7 @@ def initialization():
     
   
 
-def read_data(motor_name, duration):		#TODO: MUCH MORE WILL BE ADDED
+def read_data(motor_name, duration):        #function that lets load cells read data
     print('Current weight on the scale in grams and force in Newtons is: ')
     time_target = float(duration)
     start_time = time.time()
@@ -643,13 +640,12 @@ def run_motor_wave(motor_name, test_type, strain_type, min_strain, max_strain, t
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
             sleep(0.005)
 
-        start_measuring(motor_name)     #capsule-specific load cell will begin capturing data (get weight in grams)
-        sleep(int(time_duration))       #motor will hang; sample is held at specific linear-displacement for user-specified time duration
-        stop_measuring(motor_name)      #after user-specified time duration passed, load cell will stop capturing data
+        start_measuring(motor_name)     
+        sleep(int(time_duration))       
+        stop_measuring(motor_name)      
         clear_flag(motor_name)
         
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
 
 
-
-
+#code source: https://github.com/gandalf15/HX711/blob/master/python_examples/example.py for load cell calibration code
