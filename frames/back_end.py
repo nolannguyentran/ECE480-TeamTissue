@@ -287,9 +287,10 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
 
 
 
-def on_start_test_click(event, motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input):                  #strain_input_1 is Minimum strain value for wave test or 0 for constant strain test
+def on_start_test_click(event, motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, frame_name):                  #strain_input_1 is Minimum strain value for wave test or 0 for constant strain test
     identity = event.GetEventObject().GetLabel()                                                                                 #strain_input_2 is Maximum strain value for wave test or constant strain value for constant strain test
-    constant_strain_test_frame.Destroy()
+    get_current_frame(frame_name)
+    current_frame.Destroy()
     jobs_frame.Show()
     
     home_frame.is_running(motor_name)       #disable button, change color of button to red
@@ -333,21 +334,24 @@ def on_start_test_click(event, motor_name, test_type, strain_type, strain_input_
             case 'A':
                 thread_a = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_a_flag))
                 thread_a.start()
-                thread_a_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
+                thread_a_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
+                thread_a_lc.start()
             case 'B':
-                thread_b = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_a_flag))
+                thread_b = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_b_flag))
                 thread_b.start()
-                thread_b_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
+                thread_b_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
+                thread_b_lc.start()
             case 'C':
-                thread_c = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_a_flag))
+                thread_c = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_c_flag))
                 thread_c.start()
-                thread_c_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
+                thread_c_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
+                thread_c_lc.start()
             case 'D':
-                thread_d = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_a_flag))
+                thread_d = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_d_flag))
                 thread_d.start()
-                thread_d_lc = threading.Thread(target = read_data, args=(motor_name, time_input))        
-    
-    
+                thread_d_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
+                thread_d_lc.start()       
+            
 def on_home_click(event, frame_name):                   #function for 'Home' button
     get_current_frame(frame_name)
     if current_frame == jobs_frame:
@@ -484,7 +488,52 @@ def initialization():
 
     print("-------LOAD CELLS ARE READY-------")
     
-  
+def read_data_wave(motor_name, duration):
+    print('Current weight on the scale in grams and force in Newtons is: ')
+    time_target = float(duration)
+    start_time = time.time()
+
+    time_elapsed = 0
+    match motor_name[-1]:
+        case 'A':
+            while True:
+                if motor_a_lc_flag.is_set():
+                    break
+                end_time_increment = time.time()
+                time_elapsed = end_time_increment-start_time
+                print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
+                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
+       
+        case 'B':
+            while True:
+                if motor_b_lc_flag.is_set():
+                    break
+                end_time_increment = time.time()
+                time_elapsed = end_time_increment-start_time
+                print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
+                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
+        
+        case 'C':
+            while True:
+                if motor_c_lc_flag.is_set():
+                    break
+                end_time_increment = time.time()
+                time_elapsed = end_time_increment-start_time
+                print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
+                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
+        
+        case 'D':
+            while True:
+                if motor_d_lc_flag.is_set():
+                    break
+                end_time_increment = time.time()
+                time_elapsed = end_time_increment-start_time
+                print(f"{motor_name}: {loadcell_D.get_weight_mean(40)} grams...at time: {time_conversion(time_elapsed)}")
+                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
+            
+
+
+
 
 def read_data(motor_name, duration):        #function that lets load cells read data
     print('Current weight on the scale in grams and force in Newtons is: ')
@@ -583,11 +632,13 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
     else:
         starting_rotation = CCW
         returning_rotation = CW
+    
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
 
     for step in range(int(strain_value)):                                           #capsule-specific motor will move in specified direction (compression or tensile) until it reaches specified linear displacement
         if stop_flag.is_set():
             break
+            
         
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
         sleep(0.005)
@@ -619,31 +670,48 @@ def run_motor_wave(motor_name, test_type, strain_type, min_strain, max_strain, t
     else:
         starting_rotation = CCW
         returning_rotation = CW
+    
+    
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
 
-    while not stop_flag.is_set():
+    while True:
+        if stop_flag.is_set():
+            break
         for step in range(int(max_strain)):
+            
+            if stop_flag.is_set():
+                break
+            GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
+            sleep(0.005)
+            GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
+            sleep(0.005)
+
+        GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
+        for step in range(int(max_strain)):
+            if stop_flag.is_set():
+                break
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
             sleep(0.005)
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
             sleep(0.005)
         
-        start_measuring(motor_name)     #capsule-specific load cell will begin capturing data (get weight in grams)
-        sleep(int(time_duration))       #motor will hang; sample is held at specific linear-displacement for user-specified time duration
-        stop_measuring(motor_name)      #after user-specified time duration passed, load cell will stop capturing data
-        clear_flag(motor_name)
-
-        GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
         for step in range(int(min_strain)):
+            if stop_flag.is_set():
+                break
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
             sleep(0.005)
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
             sleep(0.005)
 
-        start_measuring(motor_name)     
-        sleep(int(time_duration))       
-        stop_measuring(motor_name)      
-        clear_flag(motor_name)
+        GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
+        for step in range(int(min_strain)):
+            if stop_flag.is_set():
+                break
+            GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
+            sleep(0.005)
+            GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
+            sleep(0.005)
+
         
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
 
