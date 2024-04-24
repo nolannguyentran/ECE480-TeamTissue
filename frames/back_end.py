@@ -474,11 +474,13 @@ def initialization():
     GPIO.setmode(GPIO.BOARD)
     for motor in motor_dict:
         GPIO.setup(motor_dict[motor]['step_pin'], GPIO.OUT, initial = GPIO.LOW)
+        print("---------MOTOR {motor} STEP PIN INIATED SUCCESSFULLY---------")
     
     for motor in motor_dict:
         GPIO.setup(motor_dict[motor]['dir_pin'], GPIO.OUT, initial = GPIO.LOW)
+        print("---------MOTOR {motor} DIRECTION INIATED SUCCESSFULLY---------")
     
-    print("-------MOTORS ARE READY-------")
+    print("---------MOTORS ARE READY!--------")
     
     global loadcell_A
     global loadcell_B
@@ -487,11 +489,15 @@ def initialization():
 
     # Create and set up all four load cells objects
     loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin']) 
+    print("-------LOAD CELL A INIATED SUCCESSFULLY-------")
     loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin']) 
+    print("-------LOAD CELL B INIATED SUCCESSFULLY-------")
     loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
+    print("-------LOAD CELL C INIATED SUCCESSFULLY-------")
     loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin']) 
+    print("-------LOAD CELL D INIATED SUCCESSFULLY-------")
 
-    print("-------LOAD CELLS ARE READY-------")
+    print("-------LOAD CELLS ARE READY!-------")
     
 def read_data_wave(motor_name, duration):
     print('Current weight on the scale in grams and force in Newtons is: ')
@@ -533,7 +539,7 @@ def read_data_wave(motor_name, duration):
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_D.get_weight_mean(40)} grams...at time: {time_conversion(time_elapsed)}")
+                print(f"{motor_name}: {loadcell_D.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
                 capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
             
 
