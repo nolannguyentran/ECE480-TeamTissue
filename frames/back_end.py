@@ -512,8 +512,9 @@ def read_data_wave(motor_name, duration):
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                capsule_a_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
+                newton_mean_a = ((loadcell_A.get_weight_mean(1)/1000)*9.81)
+                print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...{newton_mean_a}...at time: {time_conversion(time_elapsed)}")
+                capsule_a_list.append([time_conversion(time_elapsed), newton_mean_a])
        
         case 'B':
             while True:
@@ -521,8 +522,9 @@ def read_data_wave(motor_name, duration):
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                capsule_b_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
+                newton_mean_b = ((loadcell_B.get_weight_mean(1)/1000)*9.81)
+                print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...{newton_mean_b} newtons...at time: {time_conversion(time_elapsed)}")
+                capsule_b_list.append([time_conversion(time_elapsed), newton_mean_b])
         
         case 'C':
             while True:
@@ -530,8 +532,9 @@ def read_data_wave(motor_name, duration):
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                capsule_c_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
+                newton_mean_c = ((loadcell_C.get_weight_mean(1)/1000)*9.81)
+                print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...{newton_mean_c} newtons...at time: {time_conversion(time_elapsed)}")
+                capsule_c_list.append([time_conversion(time_elapsed), newton_mean_c])
         
         case 'D':
             while True:
@@ -539,8 +542,9 @@ def read_data_wave(motor_name, duration):
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_D.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
+                newton_mean_d = ((loadcell_D.get_weight_mean(1)/1000)*9.81)
+                print(f"{motor_name}: {loadcell_D.get_weight_mean(1)} grams...{newton_mean_d} newtons...at time: {time_conversion(time_elapsed)}")
+                capsule_d_list.append([time_conversion(time_elapsed), newton_mean_d])
             
 
 
@@ -559,8 +563,9 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                capsule_a_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
+                newton_mean_a = ((loadcell_A.get_weight_mean(1)/1000)*9.81)
+                print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...{newton_mean_a}...at time: {time_conversion(time_elapsed)}")
+                capsule_a_list.append([time_conversion(time_elapsed), newton_mean_a])
        
         case 'B':
             while True:
@@ -568,8 +573,9 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                capsule_b_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
+                newton_mean_b = ((loadcell_B.get_weight_mean(1)/1000)*9.81)
+                print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...{newton_mean_b} newtons...at time: {time_conversion(time_elapsed)}")
+                capsule_b_list.append([time_conversion(time_elapsed), newton_mean_b])
         
         case 'C':
             while True:
@@ -577,8 +583,9 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                capsule_c_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
+                newton_mean_c = ((loadcell_C.get_weight_mean(1)/1000)*9.81)
+                print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...{newton_mean_c} newtons...at time: {time_conversion(time_elapsed)}")
+                capsule_c_list.append([time_conversion(time_elapsed), newton_mean_c])
         
         case 'D':
             while True:
@@ -586,14 +593,11 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                     break
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
-                print(f"{motor_name}: {loadcell_D.get_weight_mean(40)} grams...at time: {time_conversion(time_elapsed)}")
-                capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
+                newton_mean_d = ((loadcell_D.get_weight_mean(1)/1000)*9.81)
+                print(f"{motor_name}: {loadcell_D.get_weight_mean(1)} grams...{newton_mean_d} newtons...at time: {time_conversion(time_elapsed)}")
+                capsule_d_list.append([time_conversion(time_elapsed), newton_mean_d])
             
-            
-            #while not motor_d_lc_flag.is_set():
-            #    print(loadcell_D.get_weight_mean(1), 'g')
-                
-        
+    
         #convert grams to newtons
                 #newton_mean = ((loadcell_C.get_weight_mean(20) / 1000) * 9.81)
 
