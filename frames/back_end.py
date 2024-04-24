@@ -70,13 +70,12 @@ capsule_d_list = []
 
 def start_program():
     global home_frame
-    home_frame = HomeFrame(None, -1, "BioReactor")
+    home_frame = HomeFrame()
     initialization() #initialize motors and load cells
     home_frame.Show()
     global jobs_frame
     jobs_frame = Jobs()
     
-
 def get_current_frame(frame_name):                       #function that determines which frame user is currently in, assign to existing global frame name class
     global current_frame                                 
     match frame_name:                                    
@@ -104,7 +103,6 @@ def get_current_frame(frame_name):                       #function that determin
             current_frame = jobs_frame
         case 'HomeFrame':
             current_frame = home_frame
-
 
 def time_conversion(seconds):       #convert to format: H:M:S:milli
     minutes = seconds//60
@@ -278,7 +276,6 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
             else:
                 raise ValueError('Value cannot be read')
     
-
     print("The known weight value in grams is: "+known_weight_value)
 
     global loadcell_calibration_success_frame
@@ -305,48 +302,51 @@ def on_start_test_click(event, motor_name, test_type, strain_type, strain_input_
     global thread_b_lc
     global thread_c_lc
     global thread_d_lc
-    
-    """ thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input, time_input))
-    thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag, strain_input, time_input))
-    thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag, strain_input, time_input))
-    thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input, time_input)) """
 
     if strain_type=='Constant Strain':
         match motor_name[-1]:
             case 'A':
+                #thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input_2, time_input))
                 thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input_2, time_input, motor_a_flag))
                 thread_a.start()
                 thread_a_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
             case 'B':
+                #thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag, strain_input_2, time_input))
                 thread_b = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input_2, time_input, motor_b_flag))
                 thread_b.start()
                 thread_b_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
             case 'C':
+                #thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag, strain_input_2, time_input))
                 thread_c = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input_2, time_input, motor_c_flag))
                 thread_c.start()
                 thread_c_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
             case 'D':
+                #thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input_2, time_input))
                 thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input_2, time_input, motor_d_flag))
                 thread_d.start()
                 thread_d_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
     else:                                           #user chose square wave strain
         match motor_name[-1]:
             case 'A':
+                #thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input_2, time_input))
                 thread_a = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_a_flag))
                 thread_a.start()
                 thread_a_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
                 thread_a_lc.start()
             case 'B':
+                #thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag, strain_input_2, time_input))
                 thread_b = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_b_flag))
                 thread_b.start()
                 thread_b_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
                 thread_b_lc.start()
             case 'C':
+                #thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag, strain_input_2, time_input))
                 thread_c = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_c_flag))
                 thread_c.start()
                 thread_c_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
                 thread_c_lc.start()
             case 'D':
+                #thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input_2, time_input))
                 thread_d = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_d_flag))
                 thread_d.start()
                 thread_d_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
@@ -371,7 +371,7 @@ def thread_test(motor_name, test_type, strain_type, stop_flag, strain_input, dur
         end_time_increment = time.time()
         time_elapsed = end_time_increment - start_time
         print(f"{motor_name} running with strain: {strain_input} grams...at time: {time_conversion(time_elapsed)}")
-        capsule_a_list.append([time_conversion(time_elapsed), strain_input])
+        capsule_c_list.append([time_conversion(time_elapsed), strain_input])
     
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
     
@@ -438,7 +438,7 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name): 
     jobs_frame.Show()
     filename = "Capsule_{capsule}_{test}_{strain}.csv".format(capsule = motor_name[-1], test = remove_space(test_type), strain = remove_space(strain_type))
     print(filename)
-    with open(filename, 'w') as f:
+    with open(filename, 'w', newline='') as f:
         file_writer = csv.writer(f)
         if strain_type=='Constant Strain':                                                              
             file_writer.writerow(csv_constant_strain_fields)
@@ -448,12 +448,17 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name): 
         match motor_name[-1]:
             case 'A':
                 file_writer.writerows(capsule_a_list)
+                capsule_a_list.clear()
             case 'B':
                 file_writer.writerows(capsule_b_list)
+                capsule_b_list.clear()
             case 'C':
                 file_writer.writerows(capsule_c_list)
+                capsule_c_list.clear()
             case 'D':
                 file_writer.writerows(capsule_d_list)
+                capsule_d_list.clear()
+    f.close()
         
 
 def exit_application(event):        #function for 'X' button on Homescreen
@@ -502,7 +507,7 @@ def read_data_wave(motor_name, duration):
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
                 print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
+                capsule_a_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
        
         case 'B':
             while True:
@@ -511,7 +516,7 @@ def read_data_wave(motor_name, duration):
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
                 print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
+                capsule_b_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
         
         case 'C':
             while True:
@@ -520,7 +525,7 @@ def read_data_wave(motor_name, duration):
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
                 print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
+                capsule_c_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
         
         case 'D':
             while True:
@@ -529,7 +534,7 @@ def read_data_wave(motor_name, duration):
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
                 print(f"{motor_name}: {loadcell_D.get_weight_mean(40)} grams...at time: {time_conversion(time_elapsed)}")
-                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
+                capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
             
 
 
@@ -549,7 +554,7 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
                 print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
+                capsule_a_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
        
         case 'B':
             while True:
@@ -558,7 +563,7 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
                 print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
+                capsule_b_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
         
         case 'C':
             while True:
@@ -567,7 +572,7 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
                 print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...at time: {time_conversion(time_elapsed)}")
-                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
+                capsule_c_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
         
         case 'D':
             while True:
@@ -576,7 +581,7 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                 end_time_increment = time.time()
                 time_elapsed = end_time_increment-start_time
                 print(f"{motor_name}: {loadcell_D.get_weight_mean(40)} grams...at time: {time_conversion(time_elapsed)}")
-                #capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
+                capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
             
             
             #while not motor_d_lc_flag.is_set():
@@ -628,7 +633,6 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
         starting_rotation = CW
         returning_rotation = CCW
-    
     else:
         starting_rotation = CCW
         returning_rotation = CW
@@ -638,8 +642,6 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
     for step in range(int(strain_value)):                                           #capsule-specific motor will move in specified direction (compression or tensile) until it reaches specified linear displacement
         if stop_flag.is_set():
             break
-            
-        
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
@@ -653,7 +655,6 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
     for step in range(int(strain_value)):
         if stop_flag.is_set():
             break
-        
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)

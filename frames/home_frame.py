@@ -10,8 +10,8 @@ width = 480
 # This is where the user can select which capsule they want to perform tests on; serves as the 'home screen' or dashboard
 
 class HomeFrame(wx.Frame):
-    def __init__(self, parent, ID, title):
-        wx.Frame.__init__(self, parent, ID, title, size=(length, width))
+    def __init__(self):
+        wx.Frame.__init__(self, None, size=(length, width))
 
         dashboard_img = wx.Bitmap("./pictures/dashboard.png")
         jobs_img = wx.Bitmap("./pictures/jobs.png")
