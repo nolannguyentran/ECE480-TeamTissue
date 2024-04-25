@@ -436,7 +436,7 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name): 
     get_current_frame(frame_name)
     current_frame.Destroy()
     jobs_frame.Show()
-    filename = "Capsule_{capsule}_{test}_{strain}.csv".format(capsule = motor_name[-1], test = remove_space(test_type), strain = remove_space(strain_type))
+    filename = "~/Desktop/Capsule_{capsule}_{test}_{strain}.csv".format(capsule = motor_name[-1], test = remove_space(test_type), strain = remove_space(strain_type))
     print(filename)
     with open(filename, 'w', newline='') as f:
         file_writer = csv.writer(f)
