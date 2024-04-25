@@ -61,8 +61,8 @@ CCW = 0         # CounterClockwise
 motor_dict = motor_config.motor_dict                    #Pass by reference
 loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
 
-csv_constant_strain_fields = ['Time', 'Strain Value']  #csv headers for constrant strain tests
-csv_square_wave_strain_fields = ['Time', 'Strain Value']   #csv headers for square wave strain tests
+csv_constant_strain_fields = ['Time', 'Strain Value (Newtons)']  #csv headers for constrant strain tests
+csv_square_wave_strain_fields = ['Time', 'Strain Value (Newtons)']   #csv headers for square wave strain tests
 capsule_a_list = [] #list holding loadcell data
 capsule_b_list = []
 capsule_c_list = []
@@ -474,11 +474,11 @@ def initialization():
     GPIO.setmode(GPIO.BOARD)
     for motor in motor_dict:
         GPIO.setup(motor_dict[motor]['step_pin'], GPIO.OUT, initial = GPIO.LOW)
-        print("---------MOTOR {motor} STEP PIN INIATED SUCCESSFULLY---------")
+        print(f"[MOTOR {motor} STEP PIN INIATED SUCCESSFULLY]")
     
     for motor in motor_dict:
         GPIO.setup(motor_dict[motor]['dir_pin'], GPIO.OUT, initial = GPIO.LOW)
-        print("---------MOTOR {motor} DIRECTION INIATED SUCCESSFULLY---------")
+        print(f"[MOTOR {motor} DIRECTION INIATED SUCCESSFULLY]")
     
     print("---------MOTORS ARE READY!--------")
     
@@ -489,13 +489,13 @@ def initialization():
 
     # Create and set up all four load cells objects
     loadcell_A = HX711(dout_pin=loadcell_dict['A']['dout_pin'], pd_sck_pin=loadcell_dict['A']['pd_sck_pin']) 
-    print("-------LOAD CELL A INIATED SUCCESSFULLY-------")
+    print("[LOAD CELL A INIATED SUCCESSFULLY]")
     loadcell_B = HX711(dout_pin=loadcell_dict['B']['dout_pin'], pd_sck_pin=loadcell_dict['B']['pd_sck_pin']) 
-    print("-------LOAD CELL B INIATED SUCCESSFULLY-------")
+    print("[LOAD CELL B INIATED SUCCESSFULLY]")
     loadcell_C = HX711(dout_pin=loadcell_dict['C']['dout_pin'], pd_sck_pin=loadcell_dict['C']['pd_sck_pin']) 
-    print("-------LOAD CELL C INIATED SUCCESSFULLY-------")
+    print("[LOAD CELL C INIATED SUCCESSFULLY]")
     loadcell_D = HX711(dout_pin=loadcell_dict['D']['dout_pin'], pd_sck_pin=loadcell_dict['D']['pd_sck_pin']) 
-    print("-------LOAD CELL D INIATED SUCCESSFULLY-------")
+    print("[LOAD CELL D INIATED SUCCESSFULLY]")
 
     print("-------LOAD CELLS ARE READY!-------")
     
@@ -547,9 +547,6 @@ def read_data_wave(motor_name, duration):
                 capsule_d_list.append([time_conversion(time_elapsed), newton_mean_d])
             
 
-
-
-
 def read_data(motor_name, duration):        #function that lets load cells read data
     print('Current weight on the scale in grams and force in Newtons is: ')
     time_target = float(duration)
@@ -597,13 +594,6 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                 print(f"{motor_name}: {loadcell_D.get_weight_mean(1)} grams...{newton_mean_d} newtons...at time: {time_conversion(time_elapsed)}")
                 capsule_d_list.append([time_conversion(time_elapsed), newton_mean_d])
             
-    
-        #convert grams to newtons
-                #newton_mean = ((loadcell_C.get_weight_mean(20) / 1000) * 9.81)
-
-                #print(newton_mean, 'N')
-                #print("HELP2")
-
 
 def start_measuring(motor_name):        #function to start reading data from specific load cell
     match motor_name[-1]:
@@ -639,7 +629,7 @@ def clear_flag(motor_name):     #function to clear load cell flag - only called 
             motor_d_lc_flag.clear()
 
 # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
-def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): #TODO: have a way to convert strain value (in newtons) to step size equivalent to control motors
+def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): 
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
         starting_rotation = CW
         returning_rotation = CCW
@@ -657,9 +647,10 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
     
-    start_measuring(motor_name)     #capsule-specific load cell will begin capturing data (get weight in grams)
-    sleep(int(time_duration))       #motor will hang; sample is held at specific linear-displacement for user-specified time duration
-    stop_measuring(motor_name)      #after user-specified time duration passed, load cell will stop capturing data
+    if not stop_flag.is_set():
+        start_measuring(motor_name)     #capsule-specific load cell will begin capturing data (get weight in grams)
+        sleep(int(time_duration))       #motor will hang; sample is held at specific linear-displacement for user-specified time duration
+        stop_measuring(motor_name)      #after user-specified time duration passed, load cell will stop capturing data
 
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
     for step in range(int(strain_value)):
