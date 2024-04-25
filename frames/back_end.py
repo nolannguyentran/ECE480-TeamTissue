@@ -61,8 +61,8 @@ CCW = 0         # CounterClockwise
 motor_dict = motor_config.motor_dict                    #Pass by reference
 loadcell_dict = loadcell_config.loadcell_dict          #Pass by reference
 
-csv_constant_strain_fields = ['Time', 'Strain Value (Newtons)']  #csv headers for constrant strain tests
-csv_square_wave_strain_fields = ['Time', 'Strain Value (Newtons)']   #csv headers for square wave strain tests
+csv_constant_strain_fields = ['Time', 'Strain Value (grams)']  #csv headers for constrant strain tests
+csv_square_wave_strain_fields = ['Time', 'Strain Value (grams)']   #csv headers for square wave strain tests
 capsule_a_list = [] #list holding loadcell data
 capsule_b_list = []
 capsule_c_list = []
