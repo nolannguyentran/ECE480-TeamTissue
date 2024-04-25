@@ -41,7 +41,7 @@ motor_b_lc_flag = threading.Event()
 motor_c_lc_flag = threading.Event()
 motor_d_lc_flag = threading.Event() # flag used to stop load cell threads
 
-GPIO.setwarnings(False)
+""" GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)        #Motor D enable pin
 GPIO.setup(19, GPIO.OUT)
 GPIO.output(19, GPIO.HIGH)
@@ -50,7 +50,7 @@ GPIO.output(37, GPIO.HIGH)
 GPIO.setup(21, GPIO.OUT)        #Motor B enable pin
 GPIO.output(21, GPIO.HIGH)
 GPIO.setup(23, GPIO.OUT)        #Motor A enable pin
-GPIO.output(23, GPIO.HIGH)
+GPIO.output(23, GPIO.HIGH) """
 
 # Define Directions
 global CW
@@ -112,6 +112,12 @@ def time_conversion(seconds):       #convert to format: H:M:S:milli
     milliseconds = int((seconds%1)*100)  #millisecond-th place
     converted_time = '{0}:{1}:{2}:{3}'.format(int(hours), int(minutes), int(seconds), milliseconds)
     return converted_time
+
+def step_conversion(distance):      #convert linear displacement in millimeters to motor step count
+    if distance>38.1 or distance<0:
+        raise ValueError("Input exceeds 38.1 mm or is less than 0 mm!")
+    else:
+        return int(distance/0.003)
 
 def on_motor_click(event):                          #function for each of the 'Capsule' buttons on the home screen
     identity = event.GetEventObject().GetLabel()    #Returns which capsule selected
@@ -307,6 +313,7 @@ def on_start_test_click(event, motor_name, test_type, strain_type, strain_input_
         match motor_name[-1]:
             case 'A':
                 #thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input_2, time_input))
+                GPIO.setup(motor_dict['A']['enable_pin'])
                 thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input_2, time_input, motor_a_flag))
                 thread_a.start()
                 thread_a_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
@@ -471,6 +478,11 @@ def initialization():
 
     # Set GPIO mode and setup pins for motors 1-4
     GPIO.setmode(GPIO.BOARD)
+
+    for motor in motor_dict:
+        GPIO.setup(motor_dict[motor]['enable_pin'], GPIO.OUT, initial = GPIO.LOW)
+        print(f"[MOTOR {motor} ENABLE PIN SET UP SUCCESSFULLY]")
+
     for motor in motor_dict:
         GPIO.setup(motor_dict[motor]['step_pin'], GPIO.OUT, initial = GPIO.LOW)
         print(f"[MOTOR {motor} STEP PIN INIATED SUCCESSFULLY]")
@@ -629,12 +641,14 @@ def clear_flag(motor_name):     #function to clear load cell flag - only called 
 
 # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
 def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): 
+    GPIO.output(motor_dict[motor_name[-1]]['enable_pin'], GPIO.HIGH)
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
         starting_rotation = CW
         returning_rotation = CCW
     else:
         starting_rotation = CCW
         returning_rotation = CW
+    
     
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
 
@@ -659,11 +673,12 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         sleep(0.005)
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
         sleep(0.005)
-        
+    
+    GPIO.output(motor_dict[motor_name[-1]]['enable_pin'], GPIO.LOW)
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
 
 def run_motor_wave(motor_name, test_type, strain_type, min_strain, max_strain, time_duration, stop_flag): #TODO: MAYBE TENSION AND COMPRESSION DO NOT MATTER FOR WAVE TEST...OR LET THE USER KNOW WHICH IT IS GOING FIRST, UP OR DOWN DEPENDING ON COMPRESSION OR TENSILE.ALSO HAVE AN OUTSIDE TIMER TO CALCULATE TOTAL TIME BECAUSE OTHER TIMERS ARE USED TO 
-                                                                                                        #STOP THE MOTORS AND HANG FOR LOADCELLS TO READ....OR THIS IS A TEST WHERE THE USER WILL HAVE TO STEP IN AND STOP THE TEST MANUALLY
+    GPIO.output(motor_dict[motor_name[-1]]['enable_pin'], GPIO.HIGH)                                                                                                    #STOP THE MOTORS AND HANG FOR LOADCELLS TO READ....OR THIS IS A TEST WHERE THE USER WILL HAVE TO STEP IN AND STOP THE TEST MANUALLY
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
         starting_rotation = CW                                                                      #TODO: HAVE A LINE WRITTEN IN THE .CSV FILE TO DENOTE WHEN IT IS COMPRESSING OR TENSION-NING
         returning_rotation = CCW
@@ -713,7 +728,7 @@ def run_motor_wave(motor_name, test_type, strain_type, min_strain, max_strain, t
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
             sleep(0.005)
 
-        
+    GPIO.output(motor_dict[motor_name[-1]]['enable_pin'], GPIO.LOW)
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
 
 

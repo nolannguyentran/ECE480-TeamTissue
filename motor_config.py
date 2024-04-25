@@ -9,22 +9,26 @@
 # 360/1.8 = 200
 
 
-motor_dict = {					#dictionary containing respective step/dir pin for each motor configuration
+motor_dict = {					#dictionary containing respective step/dir/en pin for each motor configuration
 	'A':{
 		'step_pin':38,
-		'dir_pin': 40
+		'dir_pin': 40,
+        'enable_pin': 23
 	},
 	'B':{
 		'step_pin':32,
-		'dir_pin': 36
+		'dir_pin': 36,
+        'enable_pin': 21
 	},
 	'C':{
 		'step_pin':33,
-		'dir_pin': 35
+		'dir_pin': 35,
+        'enable_pin': 37
 	},
 	'D':{
 		'step_pin':29,
-		'dir_pin': 31
+		'dir_pin': 31,
+        'enable_pin': 19
 	},
 }
 
