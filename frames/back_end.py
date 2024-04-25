@@ -437,7 +437,6 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name): 
     current_frame.Destroy()
     jobs_frame.Show()
     filename = "/home/Tissue_Cap/Desktop/Capsule_{capsule}_{test}_{strain}.csv".format(capsule = motor_name[-1], test = remove_space(test_type), strain = remove_space(strain_type))
-    print(filename)
     with open(filename, 'w', newline='') as f:
         file_writer = csv.writer(f)
         if strain_type=='Constant Strain':                                                              
@@ -514,7 +513,7 @@ def read_data_wave(motor_name, duration):
                 time_elapsed = end_time_increment-start_time
                 newton_mean_a = ((loadcell_A.get_weight_mean(1)/1000)*9.81)
                 print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...{newton_mean_a}...at time: {time_conversion(time_elapsed)}")
-                capsule_a_list.append([time_conversion(time_elapsed), newton_mean_a])
+                capsule_a_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
        
         case 'B':
             while True:
@@ -524,7 +523,7 @@ def read_data_wave(motor_name, duration):
                 time_elapsed = end_time_increment-start_time
                 newton_mean_b = ((loadcell_B.get_weight_mean(1)/1000)*9.81)
                 print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...{newton_mean_b} newtons...at time: {time_conversion(time_elapsed)}")
-                capsule_b_list.append([time_conversion(time_elapsed), newton_mean_b])
+                capsule_b_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
         
         case 'C':
             while True:
@@ -534,7 +533,7 @@ def read_data_wave(motor_name, duration):
                 time_elapsed = end_time_increment-start_time
                 newton_mean_c = ((loadcell_C.get_weight_mean(1)/1000)*9.81)
                 print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...{newton_mean_c} newtons...at time: {time_conversion(time_elapsed)}")
-                capsule_c_list.append([time_conversion(time_elapsed), newton_mean_c])
+                capsule_c_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
         
         case 'D':
             while True:
@@ -544,7 +543,7 @@ def read_data_wave(motor_name, duration):
                 time_elapsed = end_time_increment-start_time
                 newton_mean_d = ((loadcell_D.get_weight_mean(1)/1000)*9.81)
                 print(f"{motor_name}: {loadcell_D.get_weight_mean(1)} grams...{newton_mean_d} newtons...at time: {time_conversion(time_elapsed)}")
-                capsule_d_list.append([time_conversion(time_elapsed), newton_mean_d])
+                capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
             
 
 def read_data(motor_name, duration):        #function that lets load cells read data
@@ -562,7 +561,7 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                 time_elapsed = end_time_increment-start_time
                 newton_mean_a = ((loadcell_A.get_weight_mean(1)/1000)*9.81)
                 print(f"{motor_name}: {loadcell_A.get_weight_mean(1)} grams...{newton_mean_a}...at time: {time_conversion(time_elapsed)}")
-                capsule_a_list.append([time_conversion(time_elapsed), newton_mean_a])
+                capsule_a_list.append([time_conversion(time_elapsed), loadcell_A.get_weight_mean(1)])
        
         case 'B':
             while True:
@@ -572,7 +571,7 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                 time_elapsed = end_time_increment-start_time
                 newton_mean_b = ((loadcell_B.get_weight_mean(1)/1000)*9.81)
                 print(f"{motor_name}: {loadcell_B.get_weight_mean(1)} grams...{newton_mean_b} newtons...at time: {time_conversion(time_elapsed)}")
-                capsule_b_list.append([time_conversion(time_elapsed), newton_mean_b])
+                capsule_b_list.append([time_conversion(time_elapsed), loadcell_B.get_weight_mean(1)])
         
         case 'C':
             while True:
@@ -582,7 +581,7 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                 time_elapsed = end_time_increment-start_time
                 newton_mean_c = ((loadcell_C.get_weight_mean(1)/1000)*9.81)
                 print(f"{motor_name}: {loadcell_C.get_weight_mean(1)} grams...{newton_mean_c} newtons...at time: {time_conversion(time_elapsed)}")
-                capsule_c_list.append([time_conversion(time_elapsed), newton_mean_c])
+                capsule_c_list.append([time_conversion(time_elapsed), loadcell_C.get_weight_mean(1)])
         
         case 'D':
             while True:
@@ -592,7 +591,7 @@ def read_data(motor_name, duration):        #function that lets load cells read 
                 time_elapsed = end_time_increment-start_time
                 newton_mean_d = ((loadcell_D.get_weight_mean(1)/1000)*9.81)
                 print(f"{motor_name}: {loadcell_D.get_weight_mean(1)} grams...{newton_mean_d} newtons...at time: {time_conversion(time_elapsed)}")
-                capsule_d_list.append([time_conversion(time_elapsed), newton_mean_d])
+                capsule_d_list.append([time_conversion(time_elapsed), loadcell_D.get_weight_mean(1)])
             
 
 def start_measuring(motor_name):        #function to start reading data from specific load cell
