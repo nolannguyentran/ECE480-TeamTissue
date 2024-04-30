@@ -44,8 +44,6 @@ motor_b_lc_flag = threading.Event()
 motor_c_lc_flag = threading.Event()
 motor_d_lc_flag = threading.Event() # flag used to stop load cell threads
 
-sleep_interrupt = threading.Event() # flag used to stop the motor_sleep function
-
 # Define Directions
 global CW
 global CCW
@@ -99,10 +97,6 @@ def get_current_frame(frame_name):                       #function that determin
             current_frame = home_frame
         case 'DataPlotFrame':
             current_frame = data_plot_frame
-
-
-def motor_sleep(duration, event):
-    event.wait(duration)
 
 def plot_data(filename):     #function to plot a graph based on exported .CSV data
     # Lists to store time and strain .CSV data
@@ -434,7 +428,6 @@ def on_task_click(event, motor_name, test_type, strain_type):           #functio
 
 def on_stop_test_click(event):              #function for 'Stop Test' buttons in 'Jobs' page
     motor_name = event.GetEventObject().myname                                    #TODO: call function to stop specific thread, and maybe function to reset linear actuator position back to original 'starting' position (in cm?)
-    sleep_interrupt.start()
     match motor_name:
             case 'A':
                 motor_a_flag.set()
@@ -455,7 +448,6 @@ def clear_test_results(event, motor_name, frame_name):      #function for 'Clear
     get_current_frame(frame_name)
     current_frame.Destroy()
     jobs_frame.Show()
-    sleep_interrupt.clear()
     match motor_name[-1]:
             case 'A':
                 motor_a_flag.clear()
@@ -684,7 +676,6 @@ def clear_flag(motor_name):     #function to clear load cell flag - only called 
 # function to run a motor depending on type of test (compression/tensile) - used for constant and randomized strain
 def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_duration, stop_flag): 
     GPIO.output(motor_dict[motor_name[-1]]['enable_pin'], GPIO.HIGH)
-    sleep_thread = threading.Thread(target=motor_sleep, args=(int(time_duration), sleep_interrupt))
     if test_type=='Compression Test':                                                               #TODO: have a way to convert time duration to something equivalent to control or sleep motors 
         starting_rotation = CW
         returning_rotation = CCW
@@ -704,7 +695,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
     
     if not stop_flag.is_set():
         start_measuring(motor_name)     #capsule-specific load cell will begin capturing data (get weight in grams)
-        sleep_thread.start()
+        stop_flag.wait(int(time_duration))
         #sleep(int(time_duration))       #motor will hang; sample is held at specific linear-displacement for user-specified time duration
         stop_measuring(motor_name)      #after user-specified time duration passed, load cell will stop capturing data
 
