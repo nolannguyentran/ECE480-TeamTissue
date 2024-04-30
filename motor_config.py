@@ -10,8 +10,8 @@
 
 motor_dict = {					#dictionary containing respective step/dir/en pin for each motor configuration
 	'A':{
-		'step_pin':38,
-		'dir_pin': 40,
+		'step_pin':40,
+		'dir_pin': 38,
         'enable_pin': 23
 	},
 	'B':{
