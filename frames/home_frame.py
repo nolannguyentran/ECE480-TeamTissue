@@ -1,10 +1,8 @@
 import wx
-import frames.back_end as back_end
-#import gui_be          #REMEMBER TO UN-COMMENT INITIALIZATION AT THE BOTTOM OF THIS FILE!!!
+import gui_be as gui_be
 
 length = 800
 width = 480
-
 
 #--------------------------------------------------------------------------HOME SCREEN---------------------------------------------
 # This is where the user can select which capsule they want to perform tests on; serves as the 'home screen' or dashboard
@@ -52,8 +50,8 @@ class HomeFrame(wx.Frame):
         button_exit = wx.Button(panel_1, wx.ID_ANY, 'X')
        
         button_home.Disable()
-        button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
-        button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
+        button_jobs.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_jobs_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_settings_click(event, self.__class__.__name__))
 
         button_exit.SetBackgroundColour((53, 62, 108))
         button_exit.SetForegroundColour((255, 255, 255))
@@ -69,17 +67,16 @@ class HomeFrame(wx.Frame):
         button_jobs.SetBackgroundColour((28, 28, 59))
         button_settings.SetBackgroundColour((28, 28, 59))
        
-        button_exit.Bind(wx.EVT_BUTTON, back_end.exit_application)
-        button_a.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
-        button_b.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
-        button_c.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
-        button_d.Bind(wx.EVT_BUTTON, back_end.on_motor_click)
+        button_exit.Bind(wx.EVT_BUTTON, gui_be.exit_application)
+        button_a.Bind(wx.EVT_BUTTON, gui_be.on_motor_click)
+        button_b.Bind(wx.EVT_BUTTON, gui_be.on_motor_click)
+        button_c.Bind(wx.EVT_BUTTON, gui_be.on_motor_click)
+        button_d.Bind(wx.EVT_BUTTON, gui_be.on_motor_click)
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add((0,0), 2, wx.ALIGN_CENTER)
         text_sizer_1.Add(button_exit, 0, wx.EXPAND)
 
-    
         window_sizer = wx.BoxSizer(wx.VERTICAL)           #For housing entire application window 
         middle_sizer = wx.BoxSizer(wx.HORIZONTAL)         #For housing middle panel
         left_middle_sizer = wx.BoxSizer(wx.VERTICAL)      #For housing the logo and name of application and text instruction

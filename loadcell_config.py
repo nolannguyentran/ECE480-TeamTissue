@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-#import RPi.GPIO as GPIO  # import GPIO
-#from hx711 import HX711  # import the class HX711
-
 # -------------lOAD CELL CONFIGURATION--------------------------------------------------------------------------------
 # SET UP LOAD CELLS BASED ON THEIR GPIO PINS
 

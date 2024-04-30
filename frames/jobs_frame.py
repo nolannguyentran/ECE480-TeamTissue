@@ -1,5 +1,5 @@
 import wx
-import frames.back_end as back_end
+import gui_be as gui_be
 
 length = 800
 width = 480
@@ -114,14 +114,14 @@ class Jobs(wx.Frame):
         button_d_stop.SetBackgroundColour((28, 28, 59))
         button_d_stop.SetForegroundColour((255, 255, 255))
 
-        button_a_stop.Bind(wx.EVT_BUTTON, back_end.on_stop_test_click)
-        button_b_stop.Bind(wx.EVT_BUTTON, back_end.on_stop_test_click)
-        button_c_stop.Bind(wx.EVT_BUTTON, back_end.on_stop_test_click)
-        button_d_stop.Bind(wx.EVT_BUTTON, back_end.on_stop_test_click)
+        button_a_stop.Bind(wx.EVT_BUTTON, gui_be.on_stop_test_click)
+        button_b_stop.Bind(wx.EVT_BUTTON, gui_be.on_stop_test_click)
+        button_c_stop.Bind(wx.EVT_BUTTON, gui_be.on_stop_test_click)
+        button_d_stop.Bind(wx.EVT_BUTTON, gui_be.on_stop_test_click)
 
-        button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
+        button_home.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_home_click(event, self.__class__.__name__))
         button_jobs.Disable()
-        button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_settings_click(event, self.__class__.__name__))
        
         button_home.SetBackgroundColour((28, 28, 59))
         button_jobs.SetBackgroundColour((28, 28, 59))
@@ -201,28 +201,28 @@ class Jobs(wx.Frame):
                 button_a.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_a.SetBackgroundColour((51,153,51))
                 button_a.Enable()
-                button_a.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
+                button_a.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_task_click(event, motor_name, test_type, strain_type))
                 button_a_stop.Disable()
                 button_a_stop.SetBackgroundColour((28, 28, 59))
             case 'B':
                 button_b.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_b.SetBackgroundColour((51,153,51))
                 button_b.Enable()
-                button_b.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
+                button_b.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_task_click(event, motor_name, test_type, strain_type))
                 button_b_stop.Disable()
                 button_b_stop.SetBackgroundColour((28, 28, 59))
             case 'C':
                 button_c.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_c.SetBackgroundColour((51,153,51))
                 button_c.Enable()
-                button_c.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
+                button_c.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_task_click(event, motor_name, test_type, strain_type))
                 button_c_stop.Disable()
                 button_c_stop.SetBackgroundColour((28, 28, 59))
             case 'D':
                 button_d.SetLabel(motor_name+ " - "+ test_type+": "+ strain_type+"-----[STATUS: Finished]")
                 button_d.SetBackgroundColour((51,153,51))
                 button_d.Enable()
-                button_d.Bind(wx.EVT_BUTTON, lambda event: back_end.on_task_click(event, motor_name, test_type, strain_type))
+                button_d.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_task_click(event, motor_name, test_type, strain_type))
                 button_d_stop.Disable()
                 button_d_stop.SetBackgroundColour((28, 28, 59))
 

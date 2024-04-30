@@ -1,6 +1,6 @@
 import wx
 import matplotlib.pyplot as plt
-import frames.back_end as back_end
+import gui_be as gui_be
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 length = 800
@@ -61,16 +61,16 @@ class DataPlotFrame(wx.Frame):
         text_sizer_3.Add((0,0), 1, wx.EXPAND)
 
         global figure
-        figure = back_end.plot_data("/home/Tissue_Cap/Desktop/Capsule_{capsule}_{test}_{strain}.csv".format(capsule = motor_name[-1], test = back_end.remove_space(test_type), strain = back_end.remove_space(strain_type)))   #graph of .CSV data
+        figure = gui_be.plot_data("/home/Tissue_Cap/Desktop/Capsule_{capsule}_{test}_{strain}.csv".format(capsule = motor_name[-1], test = gui_be.remove_space(test_type), strain = gui_be.remove_space(strain_type)))   #graph of .CSV data
         canvas = FigureCanvas(panel_3, -1, figure)
         
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
-        button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
-        button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
-        button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
+        button_home.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_home_click(event, self.__class__.__name__))
+        button_jobs.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_jobs_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((28, 28, 59))
         button_jobs.SetBackgroundColour((28, 28, 59))

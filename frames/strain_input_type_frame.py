@@ -1,5 +1,5 @@
 import wx
-import frames.back_end as back_end
+import gui_be as gui_be
 
 length = 800
 width = 480
@@ -66,15 +66,15 @@ class StrainInputTypeFrame(wx.Frame):
         button_wave.SetBackgroundColour((89, 99, 182))
         button_wave.SetForegroundColour((255,255,255))
 
-        button_constant.Bind(wx.EVT_BUTTON, lambda event: back_end.on_constant_test_click(event, self.name, self.test_type))
-        button_wave.Bind(wx.EVT_BUTTON, lambda event: back_end.on_square_wave_test_click(event, self.name, self.test_type))
+        button_constant.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_constant_test_click(event, self.name, self.test_type))
+        button_wave.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_square_wave_test_click(event, self.name, self.test_type))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
-        button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
-        button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
+        button_home.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_home_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((28, 28, 59))
         button_jobs.SetBackgroundColour((28, 28, 59))

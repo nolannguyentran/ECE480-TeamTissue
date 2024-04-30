@@ -1,5 +1,5 @@
 import wx
-import frames.back_end as back_end
+import gui_be as gui_be
 
 length = 800
 width = 480
@@ -71,11 +71,11 @@ class Settings(wx.Frame):
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
         button_1.Disable()
-        button_calibrate.Bind(wx.EVT_BUTTON, lambda event: back_end.on_calibration_click(event, self.__class__.__name__))
+        button_calibrate.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_calibration_click(event, self.__class__.__name__))
         button_3.Disable()
 
-        button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
-        button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
+        button_home.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_home_click(event, self.__class__.__name__))
+        button_jobs.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_jobs_click(event, self.__class__.__name__))
         button_settings.Disable()
         
         button_home.SetBackgroundColour((28, 28, 59))

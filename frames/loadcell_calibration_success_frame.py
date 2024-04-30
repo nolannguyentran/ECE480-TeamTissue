@@ -1,11 +1,11 @@
 import wx
-import frames.back_end as back_end
+import gui_be as gui_be
 
 length = 800
 width = 480
 
-#--------------------------------------------------------------------------TEST SELECTION SCREEN---------------------------------------------
-# This is where the user can select which test (compression or tensile) to conduct on the previously selected capsule
+#--------------------------------------------------------------------------LOAD CELL CALIBRATION SUCCESS SCREEN---------------------------------------------
+# Screen showing indication of successful load cell calibration
 
 class CalibrationSuccess(wx.Frame):
        def __init__(self, name):
@@ -60,9 +60,9 @@ class CalibrationSuccess(wx.Frame):
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
-        button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
-        button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
-        button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
+        button_home.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_home_click(event, self.__class__.__name__))
+        button_jobs.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_jobs_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((28, 28, 59))
         button_jobs.SetBackgroundColour((28, 28, 59))

@@ -1,4 +1,3 @@
-
 # -------------MOTOR CONFIGURATION FILE-------------------------------------------------
 # SET UP MOTORS BASED ON THEIR GPIO PINS
 

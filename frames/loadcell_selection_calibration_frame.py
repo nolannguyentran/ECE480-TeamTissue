@@ -1,11 +1,11 @@
 import wx
-import frames.back_end as back_end
+import gui_be as gui_be
 
 length = 800
 width = 480
 
-#--------------------------------------------------------------------------SETTINGS SCREEN---------------------------------------------
-# This is where the user can select settings options (load cell callibration) they want to configure; serves as the 'Settings'
+#--------------------------------------------------------------------------LOAD CELL CALIBRATION SELECTION SCREEN---------------------------------------------
+# This is where the user can select which load cell to calibrate
 
 class LoadcellSelectionCalibration(wx.Frame):
        def __init__(self, name):
@@ -81,14 +81,14 @@ class LoadcellSelectionCalibration(wx.Frame):
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
         button_settings = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = settings_img)
 
-        loadcell_a.Bind(wx.EVT_BUTTON, lambda event: back_end.on_loadcell_click(event, self.__class__.__name__))
-        loadcell_b.Bind(wx.EVT_BUTTON, lambda event: back_end.on_loadcell_click(event, self.__class__.__name__))
-        loadcell_c.Bind(wx.EVT_BUTTON, lambda event: back_end.on_loadcell_click(event, self.__class__.__name__))
-        loadcell_d.Bind(wx.EVT_BUTTON, lambda event: back_end.on_loadcell_click(event, self.__class__.__name__))
+        loadcell_a.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_loadcell_click(event, self.__class__.__name__))
+        loadcell_b.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_loadcell_click(event, self.__class__.__name__))
+        loadcell_c.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_loadcell_click(event, self.__class__.__name__))
+        loadcell_d.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_loadcell_click(event, self.__class__.__name__))
 
-        button_home.Bind(wx.EVT_BUTTON, lambda event: back_end.on_home_click(event, self.__class__.__name__))
-        button_jobs.Bind(wx.EVT_BUTTON, lambda event: back_end.on_jobs_click(event, self.__class__.__name__))
-        button_settings.Bind(wx.EVT_BUTTON, lambda event: back_end.on_settings_click(event, self.__class__.__name__))
+        button_home.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_home_click(event, self.__class__.__name__))
+        button_jobs.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_jobs_click(event, self.__class__.__name__))
+        button_settings.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_settings_click(event, self.__class__.__name__))
         
         button_home.SetBackgroundColour((28, 28, 59))
         button_jobs.SetBackgroundColour((28, 28, 59))
