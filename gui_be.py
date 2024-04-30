@@ -491,15 +491,23 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name): 
         match motor_name[-1]:
             case 'A':
                 file_writer.writerows(capsule_a_list)
+                motor_a_flag.clear()
+                motor_a_lc_flag.clear()
                 capsule_a_list.clear()
             case 'B':
                 file_writer.writerows(capsule_b_list)
+                motor_b_flag.clear()
+                motor_b_lc_flag.clear()
                 capsule_b_list.clear()
             case 'C':
                 file_writer.writerows(capsule_c_list)
+                motor_c_flag.clear()
+                motor_c_lc_flag.clear()
                 capsule_c_list.clear()
             case 'D':
                 file_writer.writerows(capsule_d_list)
+                motor_d_flag.clear()
+                motor_d_lc_flag.clear()
                 capsule_d_list.clear()
     f.close()
     global data_plot_frame
