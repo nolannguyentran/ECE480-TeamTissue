@@ -119,7 +119,10 @@ def plot_data(filename):     #function to plot a graph based on exported .CSV da
             
             # Convert strain string to integer
             for item in strain_str:
-                strain_int = int(float(item))
+                if item=='False':
+                    strain_int = 0
+                else:
+                    strain_int = int(float(item))
                 # Append strain to list
                 strains.append(strain_int)
 
