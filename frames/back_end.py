@@ -9,6 +9,7 @@ from frames.loadcell_selection_calibration_frame import LoadcellSelectionCalibra
 from frames.attach_known_weight_frame import AttachWeightFrame
 from frames.loadcell_calibration_frame import Calibration
 from frames.loadcell_calibration_success_frame import CalibrationSuccess
+from frames.data_plot_frame import DataPlotFrame
 from frames.home_frame import HomeFrame
 
 
@@ -16,6 +17,8 @@ import wx
 import threading
 import time
 import csv
+import matplotlib.pyplot as plt
+from datetime import datetime
 
 import RPi.GPIO as GPIO
 from hx711 import HX711  # import the class HX711
@@ -41,17 +44,6 @@ motor_b_lc_flag = threading.Event()
 motor_c_lc_flag = threading.Event()
 motor_d_lc_flag = threading.Event() # flag used to stop load cell threads
 
-""" GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)        #Motor D enable pin
-GPIO.setup(19, GPIO.OUT)
-GPIO.output(19, GPIO.HIGH)
-GPIO.setup(37, GPIO.OUT)        #Motor C enable pin
-GPIO.output(37, GPIO.HIGH)
-GPIO.setup(21, GPIO.OUT)        #Motor B enable pin
-GPIO.output(21, GPIO.HIGH)
-GPIO.setup(23, GPIO.OUT)        #Motor A enable pin
-GPIO.output(23, GPIO.HIGH) """
-
 # Define Directions
 global CW
 global CCW
@@ -67,6 +59,9 @@ capsule_a_list = [] #list holding loadcell data
 capsule_b_list = []
 capsule_c_list = []
 capsule_d_list = []
+
+
+
 
 def start_program():
     global home_frame
@@ -103,6 +98,50 @@ def get_current_frame(frame_name):                       #function that determin
             current_frame = jobs_frame
         case 'HomeFrame':
             current_frame = home_frame
+        case 'DataPlotFrame':
+            current_frame = data_plot_frame
+
+
+def plot_data(filename):     #function to plot a graph based on exported .CSV data
+    # Lists to store time and strain .CSV data
+    times = []
+    strains = []
+    # Open the CSV file
+    with open(filename, 'r') as test_info:
+        csv_reader = csv.reader(test_info)
+        header = next(csv_reader)
+        for row in csv_reader:
+            # Split the row into time and strain
+            time_str = row[0].split(',')
+            strain_str = row[1].split(',')
+        
+            # Convert time string to datetime object
+            for item in time_str:
+                time_num = datetime.strptime(item, '%H:%M:%S:%f')
+                # Append the datetime object to the times list
+                times.append(time_num)
+            
+            # Convert strain string to integer
+            for item in strain_str:
+                strain_int = int(item)
+                # Append strain to list
+                strains.append(strain_int)
+
+    sorted_indices = sorted(range(len(times)), key=lambda i: times[i])
+    times_sorted = [times[i] for i in sorted_indices]
+    strains_sorted = [strains[i] for i in sorted_indices]
+
+    figure, ax = plt.subplots(figsize=(4,3))
+    # Plot time vs. strain
+    ax.plot(times_sorted, strains_sorted)
+    ax.set_xlabel('Time')
+    ax.set_ylabel('Strain (grams)')
+    ax.set_title('Strain vs. Time')
+    #ax.set_xticklabels(ax.get_xticks(),rotation=45)
+    ax.grid(True)
+    test_info.close()
+    return figure
+    
 
 def time_conversion(seconds):       #convert to format: H:M:S:milli
     minutes = seconds//60
@@ -113,11 +152,11 @@ def time_conversion(seconds):       #convert to format: H:M:S:milli
     converted_time = '{0}:{1}:{2}:{3}'.format(int(hours), int(minutes), int(seconds), milliseconds)
     return converted_time
 
-def step_conversion(distance):      #convert linear displacement in millimeters to motor step count
-    if distance>38.1 or distance<0:
+def step_conversion(displacement):      #convert linear displacement in millimeters to motor step count
+    if int(displacement)>38.1 or int(displacement)<0:
         raise ValueError("Input exceeds 38.1 mm or is less than 0 mm!")
     else:
-        return int(distance/0.003)
+        return int(int(displacement)/0.003)
 
 def on_motor_click(event):                          #function for each of the 'Capsule' buttons on the home screen
     identity = event.GetEventObject().GetLabel()    #Returns which capsule selected
@@ -154,6 +193,9 @@ def on_square_wave_test_click(event, motor_name, test_type):    #[strain input t
     square_wave_strain_test_frame.Show()
 
 def on_settings_click(event, frame_name):           #function for 'Settings' button 
+    if frame_name == 'DataPlotFrame':
+        DataPlotFrame.on_close()
+        data_plot_frame.Destroy()
     get_current_frame(frame_name)
     if current_frame != home_frame:
         current_frame.Destroy()
@@ -162,10 +204,12 @@ def on_settings_click(event, frame_name):           #function for 'Settings' but
     settings_frame.Show()
 
 def on_jobs_click(event, frame_name):               #function for 'Jobs' button
+    if frame_name == 'DataPlotFrame':
+        DataPlotFrame.on_close()
+        data_plot_frame.Destroy()
     get_current_frame(frame_name)
     if current_frame != home_frame:
         current_frame.Destroy()
-    
     jobs_frame.Show()
 
 def on_calibration_click(event, frame_name):        #function for "Calibration" button in Settings Page
@@ -216,7 +260,6 @@ def on_loadcell_click(event, frame_name):       #function for the four load cell
     attach_known_weight_frame = AttachWeightFrame(identity)
     attach_known_weight_frame.Show()
 
-    
 def on_next_click(event, frame_name, loadcell_name):        #function for next button after attaching known weight to loadcell to calibrate
     get_current_frame(frame_name)
     current_frame.Destroy()
@@ -288,8 +331,6 @@ def on_enter_known_weight_click(event, frame_name, loadcell_name, known_weight_v
     loadcell_calibration_success_frame = CalibrationSuccess(loadcell_name)
     loadcell_calibration_success_frame.Show()
 
-
-
 def on_start_test_click(event, motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, frame_name):                  #strain_input_1 is Minimum strain value for wave test or 0 for constant strain test
     identity = event.GetEventObject().GetLabel()                                                                                 #strain_input_2 is Maximum strain value for wave test or constant strain value for constant strain test
     get_current_frame(frame_name)
@@ -312,73 +353,74 @@ def on_start_test_click(event, motor_name, test_type, strain_type, strain_input_
     if strain_type=='Constant Strain':
         match motor_name[-1]:
             case 'A':
-                #thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input_2, time_input))
-                GPIO.setup(motor_dict['A']['enable_pin'])
+                """ thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input_2, time_input)) """
                 thread_a = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input_2, time_input, motor_a_flag))
                 thread_a.start()
                 thread_a_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
             case 'B':
-                #thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag, strain_input_2, time_input))
+                """ thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag, strain_input_2, time_input)) """
                 thread_b = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input_2, time_input, motor_b_flag))
                 thread_b.start()
                 thread_b_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
             case 'C':
-                #thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag, strain_input_2, time_input))
+                """ thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag, strain_input_2, time_input)) """
                 thread_c = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input_2, time_input, motor_c_flag))
                 thread_c.start()
                 thread_c_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
             case 'D':
-                #thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input_2, time_input))
+                """ thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input_2, time_input)) """
                 thread_d = threading.Thread(target = run_motor_constant, args=(motor_name, test_type, strain_type, strain_input_2, time_input, motor_d_flag))
                 thread_d.start()
                 thread_d_lc = threading.Thread(target = read_data, args=(motor_name, time_input))
     else:                                           #user chose square wave strain
         match motor_name[-1]:
             case 'A':
-                #thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input_2, time_input))
+                """ thread_a = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_a_flag, strain_input_2, time_input)) """
                 thread_a = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_a_flag))
                 thread_a.start()
                 thread_a_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
                 thread_a_lc.start()
             case 'B':
-                #thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag, strain_input_2, time_input))
+                """ thread_b = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_b_flag, strain_input_2, time_input)) """
                 thread_b = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_b_flag))
                 thread_b.start()
                 thread_b_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
                 thread_b_lc.start()
             case 'C':
-                #thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag, strain_input_2, time_input))
+                """ thread_c = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_c_flag, strain_input_2, time_input)) """
                 thread_c = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_c_flag))
                 thread_c.start()
                 thread_c_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
                 thread_c_lc.start()
             case 'D':
-                #thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input_2, time_input))
+                """ thread_d = threading.Thread(target = thread_test, args=(motor_name, test_type, strain_type, motor_d_flag, strain_input_2, time_input)) """
                 thread_d = threading.Thread(target = run_motor_wave, args=(motor_name, test_type, strain_type, strain_input_1, strain_input_2, time_input, motor_d_flag))
                 thread_d.start()
                 thread_d_lc = threading.Thread(target = read_data_wave, args=(motor_name, time_input))
                 thread_d_lc.start()       
             
 def on_home_click(event, frame_name):                   #function for 'Home' button
+    if frame_name == 'DataPlotFrame':
+        DataPlotFrame.on_close()
+        data_plot_frame.Destroy()
     get_current_frame(frame_name)
     if current_frame == jobs_frame:
         current_frame.Hide()
     else:
         current_frame.Destroy()
-    
 
 def thread_test(motor_name, test_type, strain_type, stop_flag, strain_input, duration):     #function that simulate a test (only used when not connected to bioreactor)
     time_target = float(duration)
     start_time = time.time()
-
+    #print(step_conversion(20))
     time_elapsed = 0
     while True:
         if stop_flag.is_set() or time_elapsed >= time_target:
             break
         end_time_increment = time.time()
         time_elapsed = end_time_increment - start_time
-        print(f"{motor_name} running with strain: {strain_input} grams...at time: {time_conversion(time_elapsed)}")
-        capsule_c_list.append([time_conversion(time_elapsed), strain_input])
+        print(f"{motor_name} running with strain: {step_conversion(strain_input)} grams...at time: {time_conversion(time_elapsed)}")
+        capsule_b_list.append([time_conversion(time_elapsed), strain_input])
     
     wx.CallAfter(jobs_frame.done_running, motor_name, test_type, strain_type)
     
@@ -406,7 +448,6 @@ def on_stop_test_click(event):              #function for 'Stop Test' buttons in
             case 'D':
                 motor_d_flag.set()
                 motor_d_lc_flag.set()
-
 
 def clear_test_results(event, motor_name, frame_name):      #function for 'Clear Test' after clicking on a completed task in the 'Jobs' page
     home_frame.done_running(motor_name)
@@ -442,8 +483,9 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name): 
     jobs_frame.clear_test(motor_name)
     get_current_frame(frame_name)
     current_frame.Destroy()
-    jobs_frame.Show()
+
     filename = "/home/Tissue_Cap/Desktop/Capsule_{capsule}_{test}_{strain}.csv".format(capsule = motor_name[-1], test = remove_space(test_type), strain = remove_space(strain_type))
+    """ filename = "Capsule_{capsule}_{test}_{strain}.csv".format(capsule = motor_name[-1], test = remove_space(test_type), strain = remove_space(strain_type)) """
     with open(filename, 'w', newline='') as f:
         file_writer = csv.writer(f)
         if strain_type=='Constant Strain':                                                              
@@ -465,7 +507,9 @@ def export_test_results(event, motor_name, test_type, strain_type, frame_name): 
                 file_writer.writerows(capsule_d_list)
                 capsule_d_list.clear()
     f.close()
-        
+    global data_plot_frame
+    data_plot_frame = DataPlotFrame(motor_name, test_type, strain_type)
+    data_plot_frame.Show()   
 
 def exit_application(event):        #function for 'X' button on Homescreen
     jobs_frame.Destroy()
@@ -652,7 +696,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
     
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
 
-    for step in range(int(strain_value)):                                           #capsule-specific motor will move in specified direction (compression or tensile) until it reaches specified linear displacement
+    for step in range(step_conversion(strain_value)):                                           #capsule-specific motor will move in specified direction (compression or tensile) until it reaches specified linear displacement
         if stop_flag.is_set():
             break
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
@@ -666,7 +710,7 @@ def run_motor_constant(motor_name, test_type, strain_type, strain_value, time_du
         stop_measuring(motor_name)      #after user-specified time duration passed, load cell will stop capturing data
 
     GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
-    for step in range(int(strain_value)):
+    for step in range(step_conversion(strain_value)):
         if stop_flag.is_set():
             break
         GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
@@ -693,7 +737,7 @@ def run_motor_wave(motor_name, test_type, strain_type, min_strain, max_strain, t
     while True:
         if stop_flag.is_set():
             break
-        for step in range(int(max_strain)):
+        for step in range(step_conversion(max_strain)):
             
             if stop_flag.is_set():
                 break
@@ -703,7 +747,7 @@ def run_motor_wave(motor_name, test_type, strain_type, min_strain, max_strain, t
             sleep(0.005)
 
         GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], returning_rotation)
-        for step in range(int(max_strain)):
+        for step in range(step_conversion(max_strain)):
             if stop_flag.is_set():
                 break
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
@@ -711,7 +755,7 @@ def run_motor_wave(motor_name, test_type, strain_type, min_strain, max_strain, t
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.LOW)
             sleep(0.005)
         
-        for step in range(int(min_strain)):
+        for step in range(step_conversion(min_strain)):
             if stop_flag.is_set():
                 break
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)
@@ -720,7 +764,7 @@ def run_motor_wave(motor_name, test_type, strain_type, min_strain, max_strain, t
             sleep(0.005)
 
         GPIO.output(motor_dict[motor_name[-1]]['dir_pin'], starting_rotation)
-        for step in range(int(min_strain)):
+        for step in range(step_conversion(min_strain)):
             if stop_flag.is_set():
                 break
             GPIO.output(motor_dict[motor_name[-1]]['step_pin'], GPIO.HIGH)

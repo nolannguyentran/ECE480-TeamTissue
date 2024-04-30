@@ -42,15 +42,15 @@ class WaveStrainTestInput(wx.Frame):
         t_2.SetFont(font_1)
         t_2.SetForegroundColour((255, 255, 255))
         
-        minimum_strain_text = wx.StaticText(panel_3, label = "Minimum Strain Value:")
+        minimum_strain_text = wx.StaticText(panel_3, label = "Minimum Linear Displacement Value (millimeters):\nValue must be between 0 mm to 38.1 mm!")
         minimum_strain_text.SetForegroundColour((255, 255, 255))
         
         wave_strain_min = wx.TextCtrl(panel_3)
-        maximum_strain_text = wx.StaticText(panel_3, label = "Maximum Strain Value:")
+        maximum_strain_text = wx.StaticText(panel_3, label = "Maximum Linear Displacement Value (millimeters):\nValue must be between 0 mm to 38.1 mm!")
         maximum_strain_text.SetForegroundColour((255, 255, 255))
         
         wave_strain_max = wx.TextCtrl(panel_3)
-        time_text = wx.StaticText(panel_3, label = "Time:")
+        time_text = wx.StaticText(panel_3, label = "Time (seconds):")
         time_text.SetForegroundColour((255, 255, 255))
         
         time_input = wx.TextCtrl(panel_3)
