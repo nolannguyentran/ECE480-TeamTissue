@@ -59,7 +59,7 @@ class StrainInputTypeFrame(wx.Frame):
 
         button_constant = wx.Button(panel_3, wx.ID_ANY, 'Constant Strain')
         
-        button_wave = wx.Button(panel_3, wx.ID_ANY, 'Square Wave')
+        button_wave = wx.Button(panel_3, wx.ID_ANY, 'Triangle Wave')
 
         button_constant.SetBackgroundColour((89, 99, 182))
         button_constant.SetForegroundColour((255,255,255))
