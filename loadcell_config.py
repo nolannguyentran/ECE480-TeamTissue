@@ -4,8 +4,8 @@
 
 loadcell_dict = {					#dictionary containing respective step/dir pin for each load cell configuration
 	'A':{
-		'dout_pin': 7,               #data pin
-		'pd_sck_pin': 11             #clock pin
+		'dout_pin': 7,              #data pin
+		'pd_sck_pin': 11            #clock pin
 	},
 	'B':{
 		'dout_pin':22,
