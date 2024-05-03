@@ -224,30 +224,30 @@ def on_loadcell_click(event, frame_name):       #function for the four load cell
     current_frame.Destroy()
     match identity[-1]:
         case 'A':
-            print("load cell A is tared!")
             error = loadcell_A.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
+            print("load cell A is tared!")
             raw_loadcell_reading = loadcell_A.get_raw_data_mean()
         case 'B':
-            print("load cell B is tared!")
             error = loadcell_B.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
+            print("load cell B is tared!")
             raw_loadcell_reading = loadcell_B.get_raw_data_mean()
         case 'C':
-            print("load cell C is tared!")
             error = loadcell_C.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
+            print("load cell C is tared!")
             raw_loadcell_reading = loadcell_C.get_raw_data_mean()
         case 'D':
-            print("load cell D is tared!")
             error = loadcell_D.zero()
             if error:
                 raise ValueError("Tare was unsuccessful")
+            print("load cell D is tared!")
             raw_loadcell_reading = loadcell_D.get_raw_data_mean()
-    
+            
     if raw_loadcell_reading:
         print("Data subtracted by offset but still not converted to units: ", raw_loadcell_reading)
     else:
