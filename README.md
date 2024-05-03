@@ -14,4 +14,4 @@ code that configures and assign all four load cells through their respective ADC
 frames folder
 contains all landing pages of the GUI such as those for displaying the home screen, current jobs running, settings page, test selection and input, etc.
 
-With Python modules, a module can be imported into another module, carrying all the functions and code with it. For example, in gui_be.py, at the top of the file, with a statement of “import motor.py” will inherit all of the function and code of motor.py into gui_be.py. This organization helps create modular code which not only satisfies one of the project’s needs but also conducive to best software development practices such as encapsulation and abstraction.
+With Python modules, a module can be imported into another module, carrying all the functions and code with it. This organization helps create modular code which not only satisfies one of the project’s needs but also conducive to best software development practices such as encapsulation and abstraction.
