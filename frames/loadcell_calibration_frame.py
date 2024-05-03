@@ -5,7 +5,7 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------LOAD CELL CALLIBRATION SCREEN---------------------------------------------
-# This is where the user callibrates load cells against a given, known weight to deliver accurate load cell readings
+# This is where the program calibrates the load cells against a given, known weight entered in by the user
 
 class Calibration(wx.Frame):
        def __init__(self, name):

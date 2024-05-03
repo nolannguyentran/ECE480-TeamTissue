@@ -5,8 +5,8 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------SQUARE WAVE STRAIN TYPE SCREEN---------------------------------------------
-# This is where the user has selected the 'square wave strain type' test where the user will enter a minimum and maximum strain value which will
-# serve as the 'low' and 'high' value for a periodic square wave to oscillate between, alongside with time duration that will be used for the test
+# This is where the user has selected the 'square wave strain type' test where the user will enter a minimum and maximum linear displacement value 
+# which will represent the 'low' and 'high' value for a periodic triangle wave to oscillate between
 
 class WaveStrainTestInput(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):

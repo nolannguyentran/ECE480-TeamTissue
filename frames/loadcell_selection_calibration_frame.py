@@ -5,7 +5,7 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------LOAD CELL CALIBRATION SELECTION SCREEN---------------------------------------------
-# This is where the user can select which load cell to calibrate
+# This is where the user selects which load cell to calibrate
 
 class LoadcellSelectionCalibration(wx.Frame):
        def __init__(self, name):

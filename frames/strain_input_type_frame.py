@@ -5,7 +5,7 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------STRAIN INPUT SCREEN---------------------------------------------
-# This is where the user can select which type of strain (constant, randomized, or square wavve) to be conducted on
+# This is where the user can select which type of strain (constant or triangle wave) to be conducted on
 
 class StrainInputTypeFrame(wx.Frame):
        def __init__(self, motor_name, test_type):

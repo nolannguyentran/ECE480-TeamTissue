@@ -7,7 +7,7 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------DATA PLOT SCREEN---------------------------------------------
-# This is where the user is presented a graph of the exported .CSV data
+# This is where the user is presented a graph of the exported .CSV data as a preliminary analysis
 
 class DataPlotFrame(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):
