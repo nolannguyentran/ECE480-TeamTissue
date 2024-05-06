@@ -5,8 +5,7 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------TEST OUTPUT SCREEN---------------------------------------------
-# This is where the user can see the progress of the test being ran on the capsule, user will also be able to export the load cell 
-# data into a .CSV file with a click of a button
+# This is where the user can select to whether clear the previous test results or export them to a .CSV file.
 
 class TestOutput(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):

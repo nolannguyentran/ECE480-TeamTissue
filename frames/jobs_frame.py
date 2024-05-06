@@ -5,8 +5,8 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------JOBS SCREEN---------------------------------------------
-# This is where the user is presented all four capsules and whether they are currently being experimented on or not; Green will
-# indicate 'currently in testing' no color will means it is available to be experimented
+# This is where the user is presented all four capsules and whether they are currently being experimented on or not; Red will
+# indicate 'currently in testing', Green will indicate 'testing has completed', no color will means it is available to be tested
 
 class Jobs(wx.Frame):
     def __init__(self):

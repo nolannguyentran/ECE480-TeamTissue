@@ -5,7 +5,7 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------STRAIN INPUT SCREEN---------------------------------------------
-# This is where the user can select which type of strain (constant, randomized, or square wavve) to be conducted on
+# This is where the user can select which type of strain (constant or triangle wave) to be conducted on
 
 class StrainInputTypeFrame(wx.Frame):
        def __init__(self, motor_name, test_type):
@@ -59,7 +59,7 @@ class StrainInputTypeFrame(wx.Frame):
 
         button_constant = wx.Button(panel_3, wx.ID_ANY, 'Constant Strain')
         
-        button_wave = wx.Button(panel_3, wx.ID_ANY, 'Square Wave')
+        button_wave = wx.Button(panel_3, wx.ID_ANY, 'Triangle Wave')
 
         button_constant.SetBackgroundColour((89, 99, 182))
         button_constant.SetForegroundColour((255,255,255))

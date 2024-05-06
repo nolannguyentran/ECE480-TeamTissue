@@ -5,8 +5,8 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------SQUARE WAVE STRAIN TYPE SCREEN---------------------------------------------
-# This is where the user has selected the 'square wave strain type' test where the user will enter a minimum and maximum strain value which will
-# serve as the 'low' and 'high' value for a periodic square wave to oscillate between, alongside with time duration that will be used for the test
+# This is where the user has selected the 'square wave strain type' test where the user will enter a minimum and maximum linear displacement value 
+# which will represent the 'low' and 'high' value for a periodic triangle wave to oscillate between
 
 class WaveStrainTestInput(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):
@@ -44,16 +44,15 @@ class WaveStrainTestInput(wx.Frame):
         
         minimum_strain_text = wx.StaticText(panel_3, label = "Minimum Linear Displacement Value (millimeters):\nValue must be between 0 mm to 38.1 mm!")
         minimum_strain_text.SetForegroundColour((255, 255, 255))
-        
         wave_strain_min = wx.TextCtrl(panel_3)
+        
         maximum_strain_text = wx.StaticText(panel_3, label = "Maximum Linear Displacement Value (millimeters):\nValue must be between 0 mm to 38.1 mm!")
         maximum_strain_text.SetForegroundColour((255, 255, 255))
-        
         wave_strain_max = wx.TextCtrl(panel_3)
-        time_text = wx.StaticText(panel_3, label = "Time (seconds):")
-        time_text.SetForegroundColour((255, 255, 255))
-        
-        time_input = wx.TextCtrl(panel_3)
+
+        #time_text = wx.StaticText(panel_3, label = "Time (seconds):")
+        #time_text.SetForegroundColour((255, 255, 255))
+        #time_input = wx.TextCtrl(panel_3)
 
         text_sizer_1 = wx.BoxSizer(wx.HORIZONTAL)     #Aligning date and time right
         text_sizer_1.Add(logo)
@@ -68,7 +67,7 @@ class WaveStrainTestInput(wx.Frame):
         button_start.SetBackgroundColour((190, 37, 66))
         button_start.SetForegroundColour((255,255,255))
         
-        button_start.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type, wave_strain_min.GetValue(), wave_strain_max.GetValue(), time_input.GetValue(), self.__class__.__name__))
+        button_start.Bind(wx.EVT_BUTTON, lambda event: gui_be.on_start_test_click(event, self.motor_name, self.test_type, self.strain_type, wave_strain_min.GetValue(), wave_strain_max.GetValue(), 1, self.__class__.__name__))
 
         button_home = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = dashboard_img)
         button_jobs = wx.BitmapButton(panel_5, wx.ID_ANY, bitmap = jobs_img)
@@ -92,8 +91,8 @@ class WaveStrainTestInput(wx.Frame):
         user_field_sizer.Add(maximum_strain_text, 1, wx.EXPAND)
         user_field_sizer.Add(wave_strain_max, 0, wx.EXPAND)
         user_field_sizer.Add((0,0), 1, wx.EXPAND)
-        user_field_sizer.Add(time_text, 1, wx.EXPAND)
-        user_field_sizer.Add(time_input, 0, wx.EXPAND)
+        #user_field_sizer.Add(time_text, 1, wx.EXPAND)
+        #user_field_sizer.Add(time_input, 0, wx.EXPAND)
         user_field_sizer.Add((0,0), 1, wx.EXPAND)
 
         middle_sizer.Add(panel_3, 1, wx.EXPAND)

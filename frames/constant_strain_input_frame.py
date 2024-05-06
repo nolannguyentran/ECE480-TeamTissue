@@ -5,8 +5,8 @@ length = 800
 width = 480
 
 #--------------------------------------------------------------------------CONSTANT STRAIN TYPE SCREEN---------------------------------------------
-# This is where the user has selected the 'constant strain type' test where the user will enter a constant strain value alongside with time duration
-# that will be used for the test
+# This is where the user has selected the 'constant strain type' test where the user will enter a linear displacement value alongside with a time 
+# duration value that will be used for the test.
 
 class ConstantStrainTestInput(wx.Frame):
     def __init__(self, motor_name, test_type, strain_type):
