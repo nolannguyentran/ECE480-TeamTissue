@@ -154,7 +154,7 @@ def step_conversion(displacement):      #convert linear displacement in millimet
     if int(displacement)>38.1 or int(displacement)<0:
         raise ValueError("Input exceeds 38.1 mm or is less than 0 mm!")
     else:
-        return int(int(displacement)/0.003)
+        return int(float(displacement)/0.003)
 
 def on_motor_click(event):                          #function for each of the 'Capsule' buttons on the home screen
     identity = event.GetEventObject().GetLabel()    #Returns which capsule selected
